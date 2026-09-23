@@ -4,393 +4,602 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quarto dos Sonhos ✨</title>
+<title>Dream Room ✨</title>
 
 <style>
-* {
-    box-sizing: border-box;
-    user-select: none;
+*{box-sizing:border-box}
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:#15151d;
+ color:white;
+ overflow:hidden
+}
+button{font:inherit;border:0;cursor:pointer}
+
+header{
+ height:72px;
+ background:#20202b;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ padding:0 22px;
+ border-bottom:1px solid #3b3b4d;
+ z-index:20
+}
+.logo{font-size:25px;font-weight:800}
+.logo span{color:#c39aff}
+.topBtns{display:flex;gap:8px}
+.topBtns button{
+ padding:10px 15px;
+ border-radius:10px;
+ color:white;
+ background:#343446
+}
+.topBtns button:hover{background:#48485e}
+
+.game{
+ height:calc(100vh - 72px);
+ display:flex
 }
 
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #151522;
-    color: white;
-    overflow: hidden;
+/* MENU */
+
+.menu{
+ width:270px;
+ background:#1b1b25;
+ border-right:1px solid #3a3a48;
+ overflow:auto;
+ padding:16px
+}
+.menu h2{margin:4px 0 14px}
+.category{
+ margin:20px 0 9px;
+ color:#a8a8b7;
+ font-size:12px;
+ text-transform:uppercase;
+ letter-spacing:1px
+}
+.items{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:8px
+}
+.item{
+ background:#292936;
+ border:1px solid #3a3a49;
+ border-radius:12px;
+ padding:10px 5px;
+ text-align:center;
+ cursor:grab;
+ transition:.15s
+}
+.item:hover{
+ transform:translateY(-3px);
+ background:#363647
+}
+.preview{
+ height:58px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:38px
+}
+.item span{
+ display:block;
+ font-size:12px;
+ color:#ddd
 }
 
-header {
-    height: 70px;
-    background: #202033;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 25px;
-    border-bottom: 2px solid #343450;
+/* ROOM */
+
+.roomArea{
+ flex:1;
+ position:relative;
+ background:#111118;
+ overflow:hidden
+}
+.room{
+ position:absolute;
+ left:25px;
+ right:25px;
+ top:25px;
+ bottom:25px;
+ border-radius:18px;
+ overflow:hidden;
+ box-shadow:0 15px 50px #0008;
+ background:#cdb9a8
 }
 
-.logo {
-    font-size: 24px;
-    font-weight: bold;
+/* PAREDE */
+
+.wall{
+ position:absolute;
+ top:0;
+ left:0;
+ right:0;
+ height:67%;
+ background:#e7d5df;
+ transition:.3s
 }
 
-.logo span {
-    color: #b58cff;
-}
+/* textura parede */
 
-button {
-    border: none;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-#reset {
-    background: #ff5d7d;
-    color: white;
-    padding: 12px 18px;
-    border-radius: 12px;
-}
-
-.game {
-    height: calc(100vh - 70px);
-    display: flex;
-}
-
-/* PAINEL */
-
-.sidebar {
-    width: 250px;
-    background: #1b1b2b;
-    padding: 18px;
-    overflow-y: auto;
-    border-right: 2px solid #343450;
-}
-
-.sidebar h2 {
-    margin-top: 0;
-}
-
-.category {
-    color: #aaa;
-    font-size: 13px;
-    margin: 20px 0 8px;
-    text-transform: uppercase;
-}
-
-.item {
-    background: #292941;
-    padding: 13px;
-    border-radius: 12px;
-    margin-bottom: 9px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    cursor: grab;
-    transition: .2s;
-}
-
-.item:hover {
-    transform: translateX(5px);
-    background: #353554;
-}
-
-.item .emoji {
-    font-size: 30px;
-}
-
-.item small {
-    color: #aaa;
-}
-
-/* QUARTO */
-
-.room-area {
-    flex: 1;
-    position: relative;
-    overflow: hidden;
-    background: #11111b;
-}
-
-.room {
-    position: absolute;
-    inset: 25px;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 0 40px #0008;
-    background: #e8d9ff;
-}
-
-/* parede */
-
-.wall {
-    position: absolute;
-    inset: 0 0 32% 0;
-    background:
-        linear-gradient(#d9c4f0cc, #d9c4f0cc),
-        repeating-linear-gradient(
-            90deg,
-            transparent 0,
-            transparent 80px,
-            #ffffff22 81px,
-            #ffffff22 82px
-        );
-}
-
-/* janela */
-
-.window {
-    position: absolute;
-    top: 45px;
-    right: 80px;
-    width: 180px;
-    height: 125px;
-    background: linear-gradient(135deg,#8ed8ff,#d7f5ff);
-    border: 12px solid white;
-    box-shadow: 0 5px 20px #0003;
-}
-
-.window::before {
-    content: "";
-    position: absolute;
-    left: 50%;
-    top: 0;
-    bottom: 0;
-    width: 8px;
-    background: white;
-    transform: translateX(-50%);
-}
-
-.window::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 50%;
-    height: 8px;
-    background: white;
-    transform: translateY(-50%);
+.wall:after{
+ content:"";
+ position:absolute;
+ inset:0;
+ opacity:.16;
+ background:
+ repeating-linear-gradient(
+  90deg,
+  transparent 0,
+  transparent 78px,
+  #fff 79px,
+  transparent 81px
+ )
 }
 
 /* piso */
 
-.floor {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 32%;
-    background:
-        repeating-linear-gradient(
-            0deg,
-            #b98255 0px,
-            #b98255 28px,
-            #a96f45 30px
-        );
+.floor{
+ position:absolute;
+ bottom:0;
+ left:0;
+ right:0;
+ height:33%;
+ background:
+ repeating-linear-gradient(
+  90deg,
+  #b77b4e 0px,
+  #b77b4e 95px,
+  #9d643e 96px,
+  #9d643e 100px
+ );
+}
+.floor:after{
+ content:"";
+ position:absolute;
+ inset:0;
+ background:
+ repeating-linear-gradient(
+  0deg,
+  transparent 0,
+  transparent 29px,
+  #71472e44 30px
+ )
 }
 
-/* objetos */
+/* janela */
 
-.object {
-    position: absolute;
-    cursor: grab;
-    z-index: 10;
-    transform: translate(-50%, -50%);
-    transition: filter .15s;
+.window{
+ position:absolute;
+ width:185px;
+ height:145px;
+ right:90px;
+ top:55px;
+ background:#8ed3f7;
+ border:12px solid #f4f0e9;
+ box-shadow:0 8px 20px #0003;
+ z-index:2
+}
+.window:before{
+ content:"";
+ position:absolute;
+ left:50%;
+ top:0;
+ bottom:0;
+ width:7px;
+ background:#fff
+}
+.window:after{
+ content:"";
+ position:absolute;
+ top:50%;
+ left:0;
+ right:0;
+ height:7px;
+ background:#fff
+}
+.sun{
+ position:absolute;
+ width:35px;
+ height:35px;
+ border-radius:50%;
+ background:#ffe58a;
+ right:22px;
+ top:18px
 }
 
-.object:hover {
-    filter: brightness(1.12);
+/* cortinas */
+
+.curtain{
+ position:absolute;
+ top:45px;
+ right:72px;
+ width:220px;
+ height:165px;
+ pointer-events:none;
+ z-index:3
+}
+.curtain:before,.curtain:after{
+ content:"";
+ position:absolute;
+ top:0;
+ width:45px;
+ height:155px;
+ background:#d7a5bd;
+}
+.curtain:before{left:0;border-radius:0 0 20px 20px}
+.curtain:after{right:0;border-radius:0 0 20px 20px}
+
+/* porta */
+
+.door{
+ position:absolute;
+ left:55px;
+ top:95px;
+ width:105px;
+ height:235px;
+ background:#875d43;
+ border:8px solid #62412f;
+ border-radius:6px 6px 0 0;
+ z-index:2
+}
+.door:before{
+ content:"";
+ position:absolute;
+ left:12px;
+ top:18px;
+ width:65px;
+ height:85px;
+ border:5px solid #674431
+}
+.door:after{
+ content:"";
+ position:absolute;
+ right:12px;
+ top:130px;
+ width:10px;
+ height:10px;
+ border-radius:50%;
+ background:#e6c36a
 }
 
-.object.selected {
-    outline: 3px dashed white;
-    outline-offset: 5px;
+/* OBJETOS */
+
+.object{
+ position:absolute;
+ transform:translate(-50%,-50%);
+ z-index:8;
+ cursor:grab;
+ touch-action:none
+}
+.object.selected{
+ outline:2px dashed white;
+ outline-offset:6px
+}
+.delete{
+ display:none;
+ position:absolute;
+ top:-14px;
+ right:-14px;
+ width:27px;
+ height:27px;
+ border-radius:50%;
+ background:#ef536c;
+ color:#fff;
+ z-index:100
+}
+.object.selected .delete{display:block}
+
+/* CAMA */
+
+.bed{
+ width:250px;
+ height:150px;
+ background:#e8e0da;
+ border-radius:18px;
+ border:7px solid #74574b;
+ box-shadow:0 13px 18px #0005
+}
+.bed .headboard{
+ position:absolute;
+ left:-7px;
+ top:-27px;
+ width:250px;
+ height:42px;
+ background:#795a4d;
+ border-radius:15px 15px 4px 4px
+}
+.bed .pillow{
+ position:absolute;
+ top:15px;
+ left:22px;
+ width:72px;
+ height:38px;
+ border-radius:13px;
+ background:#fff
+}
+.bed .blanket{
+ position:absolute;
+ right:10px;
+ top:15px;
+ width:115px;
+ height:112px;
+ border-radius:12px;
+ background:#b895d7
 }
 
-.object:active {
-    cursor: grabbing;
+/* SOFÁ */
+
+.sofa{
+ width:225px;
+ height:95px;
+ background:#70839a;
+ border-radius:18px;
+ box-shadow:0 12px 16px #0005
+}
+.sofa:before{
+ content:"";
+ position:absolute;
+ left:0;
+ right:0;
+ top:-28px;
+ height:48px;
+ background:#8296ad;
+ border-radius:20px 20px 8px 8px
+}
+.sofa:after{
+ content:"";
+ position:absolute;
+ left:18px;
+ right:18px;
+ bottom:-14px;
+ height:18px;
+ background:#465466;
+ border-radius:5px
 }
 
-.object .delete {
-    display: none;
-    position: absolute;
-    top: -15px;
-    right: -15px;
-    background: #ff4e6d;
-    color: white;
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    font-size: 15px;
+/* MESA */
+
+.table{
+ width:155px;
+ height:70px;
+ background:#a96f45;
+ border-radius:8px;
+ box-shadow:0 9px 13px #0005
+}
+.table:before{
+ content:"";
+ position:absolute;
+ left:15px;
+ right:15px;
+ bottom:-45px;
+ height:50px;
+ background:
+ linear-gradient(
+  90deg,
+  #765037 0 14px,
+  transparent 14px calc(100% - 14px),
+  #765037 calc(100% - 14px)
+ )
+}
+.monitor{
+ position:absolute;
+ left:50%;
+ top:-65px;
+ transform:translateX(-50%);
+ width:90px;
+ height:58px;
+ background:#20232c;
+ border:6px solid #4b4e59;
+ border-radius:7px
+}
+.monitor:after{
+ content:"";
+ position:absolute;
+ width:35px;
+ height:5px;
+ background:#4b4e59;
+ bottom:-15px;
+ left:50%;
+ transform:translateX(-50%)
 }
 
-.object.selected .delete {
-    display: block;
+/* CADEIRA */
+
+.chair{
+ width:62px;
+ height:65px;
+ background:#9a72b5;
+ border-radius:13px;
+ box-shadow:0 8px 12px #0005
+}
+.chair:before{
+ content:"";
+ position:absolute;
+ width:62px;
+ height:58px;
+ background:#a981c0;
+ border-radius:15px 15px 8px 8px;
+ top:-40px
+}
+.chair:after{
+ content:"";
+ position:absolute;
+ left:10px;
+ right:10px;
+ bottom:-35px;
+ height:35px;
+ border-left:6px solid #55405e;
+ border-right:6px solid #55405e
 }
 
-/* móveis */
+/* CÔMODA */
 
-.bed {
-    width: 240px;
-    height: 145px;
-    background: #f4edf9;
-    border: 7px solid #6d527f;
-    border-radius: 18px;
-    box-shadow: 0 10px 15px #0004;
+.dresser{
+ width:155px;
+ height:105px;
+ background:#9a694a;
+ border-radius:8px;
+ box-shadow:0 10px 14px #0005
+}
+.dresser:before{
+ content:"";
+ position:absolute;
+ left:13px;
+ right:13px;
+ top:15px;
+ height:21px;
+ background:#b98562;
+ border-radius:4px;
+ box-shadow:0 30px #b98562,0 60px #b98562
+}
+.dresser:after{
+ content:"•  •  •";
+ position:absolute;
+ top:14px;
+ left:50%;
+ transform:translateX(-50%);
+ color:#e8d3ad;
+ letter-spacing:24px
 }
 
-.bed::before {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 48px;
-    top: 0;
-    background: #b58cff;
-    border-radius: 10px 10px 0 0;
+/* ESTANTE */
+
+.shelf{
+ width:125px;
+ height:170px;
+ background:#704a35;
+ border:7px solid #563827;
+ box-shadow:0 12px 15px #0005
+}
+.shelf:before{
+ content:"📚  📚  📚";
+ position:absolute;
+ top:20px;
+ left:7px;
+ font-size:24px;
+}
+.shelf:after{
+ content:"📚  🪴";
+ position:absolute;
+ bottom:22px;
+ left:12px;
+ font-size:27px
 }
 
-.bed::after {
-    content: "🛏️";
-    position: absolute;
-    font-size: 55px;
-    left: 50%;
-    top: 55%;
-    transform: translate(-50%,-50%);
+/* ESPELHO */
+
+.mirror{
+ width:90px;
+ height:150px;
+ border:10px solid #9a785d;
+ border-radius:45px;
+ background:linear-gradient(135deg,#d8f5ff,#8db9c9);
+ box-shadow:0 8px 15px #0004
 }
 
-.desk {
-    width: 180px;
-    height: 85px;
-    background: #8c5f43;
-    border-radius: 8px;
-    box-shadow: 0 10px 15px #0004;
+/* TAPETE */
+
+.rug{
+ width:280px;
+ height:150px;
+ border-radius:50%;
+ background:#d9a4bd;
+ border:10px solid #c487a3;
+ box-shadow:0 9px 12px #0005
 }
 
-.desk::before {
-    content: "💻";
-    position: absolute;
-    font-size: 48px;
-    left: 50%;
-    top: -45px;
-    transform: translateX(-50%);
+/* OBJETOS DECORATIVOS */
+
+.plant{font-size:78px}
+.lamp{font-size:72px}
+.picture{font-size:65px}
+.teddy{font-size:67px}
+.books{font-size:58px}
+.console{font-size:63px}
+.tv{
+ width:175px;
+ height:105px;
+ background:#161820;
+ border:9px solid #343740;
+ border-radius:8px;
+ box-shadow:0 10px 14px #0005
+}
+.tv:after{
+ content:"";
+ position:absolute;
+ left:50%;
+ bottom:-28px;
+ width:65px;
+ height:20px;
+ background:#292b32;
+ transform:translateX(-50%);
+ clip-path:polygon(20% 0,80% 0,100% 100%,0 100%)
 }
 
-.chair {
-    width: 70px;
-    height: 70px;
-    background: #7d65aa;
-    border-radius: 15px;
-    box-shadow: 0 8px 10px #0004;
-}
+/* PAINEL INFERIOR */
 
-.chair::before {
-    content: "🪑";
-    position: absolute;
-    font-size: 55px;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%,-50%);
-}
-
-.rug {
-    width: 230px;
-    height: 130px;
-    border-radius: 50%;
-    background: #ff9ec4;
-    box-shadow: 0 8px 15px #0004;
-}
-
-.plant {
-    font-size: 75px;
-}
-
-.lamp {
-    font-size: 70px;
-}
-
-.picture {
-    font-size: 65px;
-}
-
-.teddy {
-    font-size: 70px;
-}
-
-.books {
-    font-size: 65px;
-}
-
-.clock {
-    font-size: 60px;
-}
-
-/* HUD */
-
-.info {
-    position: absolute;
-    bottom: 15px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #202033ee;
-    padding: 10px 18px;
-    border-radius: 30px;
-    z-index: 100;
-    color: #ddd;
-}
-
-#score {
-    color: #d5b5ff;
-    font-weight: bold;
+.help{
+ position:absolute;
+ bottom:15px;
+ left:50%;
+ transform:translateX(-50%);
+ padding:10px 18px;
+ border-radius:25px;
+ background:#22222de8;
+ color:#ddd;
+ font-size:13px;
+ z-index:200
 }
 
 /* PALETA */
 
-.palette {
-    display: flex;
-    gap: 7px;
-    flex-wrap: wrap;
+.palette{
+ display:grid;
+ grid-template-columns:repeat(5,1fr);
+ gap:7px
+}
+.color{
+ height:27px;
+ border-radius:7px;
+ border:2px solid #777;
+ cursor:pointer
 }
 
-.color {
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    border: 3px solid white;
-    cursor: pointer;
+/* MODAL */
+
+.modal{
+ display:none;
+ position:fixed;
+ inset:0;
+ background:#0009;
+ z-index:999;
+ align-items:center;
+ justify-content:center
+}
+.modalBox{
+ width:min(430px,90%);
+ background:#242431;
+ padding:25px;
+ border-radius:18px;
+ text-align:center
+}
+.modalBox button{
+ background:#a87ee0;
+ color:#fff;
+ padding:11px 20px;
+ border-radius:10px
 }
 
-.color:hover {
-    transform: scale(1.1);
-}
-
-/* MOBILE */
-
-@media(max-width:700px) {
-    .sidebar {
-        width: 150px;
-        padding: 10px;
-    }
-
-    .logo {
-        font-size: 17px;
-    }
-
-    .sidebar h2 {
-        font-size: 18px;
-    }
-
-    .item {
-        padding: 8px;
-    }
-
-    .item .emoji {
-        font-size: 23px;
-    }
-
-    .room {
-        inset: 10px;
-    }
+@media(max-width:800px){
+ .menu{width:190px}
+ .items{grid-template-columns:1fr}
+ .window{right:30px}
+ .curtain{right:12px}
+ .room{left:10px;right:10px;top:10px;bottom:10px}
 }
 </style>
 </head>
@@ -398,326 +607,366 @@ button {
 <body>
 
 <header>
-    <div class="logo">✨ Quarto <span>dos Sonhos</span></div>
-    <button id="reset">🔄 Limpar quarto</button>
+ <div class="logo">✨ Dream <span>Room</span></div>
+
+ <div class="topBtns">
+  <button onclick="saveRoom()">💾 Salvar</button>
+  <button onclick="loadRoom()">📂 Carregar</button>
+  <button onclick="clearRoom()">🗑️ Limpar</button>
+ </div>
 </header>
 
 <div class="game">
 
-    <aside class="sidebar">
+<aside class="menu">
 
-        <h2>🎨 Decorar</h2>
+<h2>🏠 Decorar</h2>
 
-        <div class="category">Móveis</div>
+<div class="category">Móveis</div>
 
-        <div class="item" draggable="true" data-type="bed">
-            <div class="emoji">🛏️</div>
-            <div>Cama<br><small>Arraste para o quarto</small></div>
-        </div>
+<div class="items">
 
-        <div class="item" draggable="true" data-type="desk">
-            <div class="emoji">🖥️</div>
-            <div>Escrivaninha</div>
-        </div>
+<div class="item" draggable="true" data-type="bed">
+ <div class="preview">🛏️</div><span>Cama</span>
+</div>
 
-        <div class="item" draggable="true" data-type="chair">
-            <div class="emoji">🪑</div>
-            <div>Cadeira</div>
-        </div>
+<div class="item" draggable="true" data-type="sofa">
+ <div class="preview">🛋️</div><span>Sofá</span>
+</div>
 
-        <div class="item" draggable="true" data-type="rug">
-            <div class="emoji">🟣</div>
-            <div>Tapete</div>
-        </div>
+<div class="item" draggable="true" data-type="table">
+ <div class="preview">🖥️</div><span>Escrivaninha</span>
+</div>
 
-        <div class="category">Decoração</div>
+<div class="item" draggable="true" data-type="chair">
+ <div class="preview">🪑</div><span>Cadeira</span>
+</div>
 
-        <div class="item" draggable="true" data-type="plant">
-            <div class="emoji">🪴</div>
-            <div>Planta</div>
-        </div>
+<div class="item" draggable="true" data-type="dresser">
+ <div class="preview">🗄️</div><span>Cômoda</span>
+</div>
 
-        <div class="item" draggable="true" data-type="lamp">
-            <div class="emoji">💡</div>
-            <div>Luminária</div>
-        </div>
+<div class="item" draggable="true" data-type="shelf">
+ <div class="preview">📚</div><span>Estante</span>
+</div>
 
-        <div class="item" draggable="true" data-type="picture">
-            <div class="emoji">🖼️</div>
-            <div>Quadro</div>
-        </div>
+<div class="item" draggable="true" data-type="mirror">
+ <div class="preview">🪞</div><span>Espelho</span>
+</div>
 
-        <div class="item" draggable="true" data-type="teddy">
-            <div class="emoji">🧸</div>
-            <div>Ursinho</div>
-        </div>
+<div class="item" draggable="true" data-type="rug">
+ <div class="preview">🟣</div><span>Tapete</span>
+</div>
 
-        <div class="item" draggable="true" data-type="books">
-            <div class="emoji">📚</div>
-            <div>Livros</div>
-        </div>
+<div class="item" draggable="true" data-type="tv">
+ <div class="preview">📺</div><span>TV</span>
+</div>
 
-        <div class="item" draggable="true" data-type="clock">
-            <div class="emoji">🕐</div>
-            <div>Relógio</div>
-        </div>
+</div>
 
-        <div class="category">🎨 Parede</div>
+<div class="category">Decoração</div>
 
-        <div class="palette">
-            <div class="color" style="background:#d9c4f0" data-color="#d9c4f0"></div>
-            <div class="color" style="background:#ffc8dd" data-color="#ffc8dd"></div>
-            <div class="color" style="background:#cde8ff" data-color="#cde8ff"></div>
-            <div class="color" style="background:#c9f7d5" data-color="#c9f7d5"></div>
-            <div class="color" style="background:#fff0b5" data-color="#fff0b5"></div>
-            <div class="color" style="background:#ddd" data-color="#dddddd"></div>
-        </div>
+<div class="items">
 
-    </aside>
+<div class="item" draggable="true" data-type="plant">
+ <div class="preview">🪴</div><span>Planta</span>
+</div>
 
-    <main class="room-area">
+<div class="item" draggable="true" data-type="lamp">
+ <div class="preview">💡</div><span>Luminária</span>
+</div>
 
-        <div class="room" id="room">
+<div class="item" draggable="true" data-type="picture">
+ <div class="preview">🖼️</div><span>Quadro</span>
+</div>
 
-            <div class="wall" id="wall"></div>
+<div class="item" draggable="true" data-type="teddy">
+ <div class="preview">🧸</div><span>Pelúcia</span>
+</div>
 
-            <div class="window"></div>
+<div class="item" draggable="true" data-type="books">
+ <div class="preview">📚</div><span>Livros</span>
+</div>
 
-            <div class="floor"></div>
+<div class="item" draggable="true" data-type="console">
+ <div class="preview">🎮</div><span>Console</span>
+</div>
 
-        </div>
+</div>
 
-        <div class="info">
-            🖱️ Arraste os móveis • Clique para selecionar •
-            Pontos: <span id="score">0</span>
-        </div>
+<div class="category">🎨 Parede</div>
 
-    </main>
+<div class="palette">
+ <div class="color" style="background:#e7d5df" data-color="#e7d5df"></div>
+ <div class="color" style="background:#d5e4f2" data-color="#d5e4f2"></div>
+ <div class="color" style="background:#e7e0c7" data-color="#e7e0c7"></div>
+ <div class="color" style="background:#d3e4d0" data-color="#d3e4d0"></div>
+ <div class="color" style="background:#d6c9e9" data-color="#d6c9e9"></div>
+</div>
+
+<div class="category">💡 Dica</div>
+<p style="font-size:12px;color:#aaa">
+Arraste os móveis para dentro do quarto.
+Clique em um objeto para selecioná-lo.
+</p>
+
+</aside>
+
+<main class="roomArea">
+
+<div class="room" id="room">
+
+ <div class="wall" id="wall"></div>
+
+ <div class="door"></div>
+
+ <div class="window">
+   <div class="sun"></div>
+ </div>
+
+ <div class="curtain"></div>
+
+ <div class="floor"></div>
+
+</div>
+
+<div class="help">
+🖱️ Arraste • Clique para selecionar • × para remover
+</div>
+
+</main>
 
 </div>
 
 <script>
 
-const room = document.getElementById("room");
-const wall = document.getElementById("wall");
-const scoreText = document.getElementById("score");
+const room=document.getElementById("room");
+const wall=document.getElementById("wall");
 
-let score = 0;
-let draggedType = null;
-let selected = null;
+let draggedType=null;
 
-/* ARRASTAR ITEM DO MENU */
+/* DRAG DO MENU */
 
-document.querySelectorAll(".item").forEach(item => {
+document.querySelectorAll(".item").forEach(item=>{
 
-    item.addEventListener("dragstart", e => {
-        draggedType = item.dataset.type;
-    });
+ item.addEventListener("dragstart",()=>{
+  draggedType=item.dataset.type;
+ });
 
 });
 
-/* SOLTAR NO QUARTO */
+/* DROP */
 
-room.addEventListener("dragover", e => {
-    e.preventDefault();
-});
+room.addEventListener("dragover",e=>e.preventDefault());
 
-room.addEventListener("drop", e => {
+room.addEventListener("drop",e=>{
 
-    e.preventDefault();
+ e.preventDefault();
 
-    if(!draggedType) return;
+ if(!draggedType)return;
 
-    const rect = room.getBoundingClientRect();
+ const r=room.getBoundingClientRect();
 
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+ createObject(
+  draggedType,
+  e.clientX-r.left,
+  e.clientY-r.top
+ );
 
-    createObject(draggedType, x, y);
-
-    draggedType = null;
+ draggedType=null;
 });
 
 /* CRIAR OBJETO */
 
-function createObject(type, x, y) {
+function createObject(type,x,y){
 
-    const object = document.createElement("div");
+ const o=document.createElement("div");
 
-    object.className = "object " + type;
+ o.className="object "+type;
 
-    if(type === "plant") object.textContent = "🪴";
-    if(type === "lamp") object.textContent = "💡";
-    if(type === "picture") object.textContent = "🖼️";
-    if(type === "teddy") object.textContent = "🧸";
-    if(type === "books") object.textContent = "📚";
-    if(type === "clock") object.textContent = "🕐";
+ if(type==="bed"){
+  o.innerHTML=
+  `<div class="headboard"></div>
+   <div class="pillow"></div>
+   <div class="blanket"></div>`;
+ }
 
-    if(type === "bed" ||
-       type === "desk" ||
-       type === "chair" ||
-       type === "rug") {
+ if(type==="table"){
+  o.innerHTML=`<div class="monitor"></div>`;
+ }
 
-        object.innerHTML = "";
-    }
+ const emojis={
+  plant:"🪴",
+  lamp:"💡",
+  picture:"🖼️",
+  teddy:"🧸",
+  books:"📚",
+  console:"🎮"
+ };
 
-    object.style.left = x + "px";
-    object.style.top = y + "px";
+ if(emojis[type])o.innerHTML=emojis[type];
 
-    const deleteButton = document.createElement("button");
+ const del=document.createElement("button");
+ del.className="delete";
+ del.textContent="×";
 
-    deleteButton.className = "delete";
-    deleteButton.textContent = "×";
+ del.onclick=e=>{
+  e.stopPropagation();
+  o.remove();
+ };
 
-    deleteButton.onclick = function(e) {
+ o.appendChild(del);
 
-        e.stopPropagation();
+ o.style.left=x+"px";
+ o.style.top=y+"px";
 
-        object.remove();
+ room.appendChild(o);
 
-        score = Math.max(0, score - 5);
-
-        updateScore();
-    };
-
-    object.appendChild(deleteButton);
-
-    room.appendChild(object);
-
-    makeDraggable(object);
-
-    object.addEventListener("click", e => {
-
-        e.stopPropagation();
-
-        selectObject(object);
-    });
-
-    score += 10;
-
-    updateScore();
+ dragObject(o);
 }
 
-/* SELECIONAR */
+/* ARRASTAR OBJETO */
 
-function selectObject(object) {
+function dragObject(el){
 
-    document.querySelectorAll(".object").forEach(o => {
-        o.classList.remove("selected");
-    });
+ let moving=false;
 
-    object.classList.add("selected");
+ el.addEventListener("pointerdown",e=>{
 
-    selected = object;
+  if(e.target.classList.contains("delete"))return;
+
+  moving=true;
+
+  el.setPointerCapture(e.pointerId);
+
+  el.classList.add("selected");
+ });
+
+ el.addEventListener("pointermove",e=>{
+
+  if(!moving)return;
+
+  const r=room.getBoundingClientRect();
+
+  let x=e.clientX-r.left;
+  let y=e.clientY-r.top;
+
+  x=Math.max(20,Math.min(room.clientWidth-20,x));
+  y=Math.max(20,Math.min(room.clientHeight-20,y));
+
+  el.style.left=x+"px";
+  el.style.top=y+"px";
+ });
+
+ el.addEventListener("pointerup",()=>{
+  moving=false;
+ });
+ 
+ el.addEventListener("click",e=>{
+  e.stopPropagation();
+
+  document.querySelectorAll(".object")
+   .forEach(x=>x.classList.remove("selected"));
+
+  el.classList.add("selected");
+ });
 }
 
-/* ARRASTAR OBJETOS */
+/* DESELECIONAR */
 
-function makeDraggable(element) {
-
-    let dragging = false;
-    let offsetX = 0;
-    let offsetY = 0;
-
-    element.addEventListener("pointerdown", e => {
-
-        if(e.target.classList.contains("delete")) return;
-
-        dragging = true;
-
-        const rect = element.getBoundingClientRect();
-
-        offsetX = e.clientX - rect.left - rect.width / 2;
-        offsetY = e.clientY - rect.top - rect.height / 2;
-
-        element.setPointerCapture(e.pointerId);
-
-        selectObject(element);
-    });
-
-    element.addEventListener("pointermove", e => {
-
-        if(!dragging) return;
-
-        const roomRect = room.getBoundingClientRect();
-
-        let x = e.clientX - roomRect.left - offsetX;
-        let y = e.clientY - roomRect.top - offsetY;
-
-        x = Math.max(10, Math.min(room.clientWidth - 10, x));
-        y = Math.max(10, Math.min(room.clientHeight - 10, y));
-
-        element.style.left = x + "px";
-        element.style.top = y + "px";
-    });
-
-    element.addEventListener("pointerup", () => {
-
-        dragging = false;
-    });
-}
-
-/* CLICAR NO FUNDO */
-
-room.addEventListener("click", () => {
-
-    document.querySelectorAll(".object").forEach(o => {
-        o.classList.remove("selected");
-    });
-
-    selected = null;
+room.addEventListener("click",()=>{
+ document.querySelectorAll(".object")
+ .forEach(x=>x.classList.remove("selected"));
 });
 
-/* MUDAR COR DA PAREDE */
+/* CORES */
 
-document.querySelectorAll(".color").forEach(color => {
+document.querySelectorAll(".color").forEach(c=>{
 
-    color.addEventListener("click", () => {
+ c.onclick=()=>{
 
-        wall.style.background =
-            `linear-gradient(${color.dataset.color}cc, ${color.dataset.color}cc),
-             repeating-linear-gradient(
-                90deg,
-                transparent 0,
-                transparent 80px,
-                #ffffff22 81px,
-                #ffffff22 82px
-             )`;
+  wall.style.background=c.dataset.color;
 
-        score += 5;
-
-        updateScore();
-    });
-
+  localStorage.setItem(
+   "dreamWall",
+   c.dataset.color
+  );
+ };
 });
 
-/* RESET */
+/* SALVAR */
 
-document.getElementById("reset").onclick = () => {
+function saveRoom(){
 
-    document.querySelectorAll(".object").forEach(o => o.remove());
+ const objects=[];
 
-    score = 0;
+ document.querySelectorAll(".object").forEach(o=>{
 
-    updateScore();
+  objects.push({
+   type:o.className.replace("object ","").replace(" selected",""),
+   x:o.style.left,
+   y:o.style.top
+  });
 
-    wall.style.background =
-        `linear-gradient(#d9c4f0cc, #d9c4f0cc),
-         repeating-linear-gradient(
-            90deg,
-            transparent 0,
-            transparent 80px,
-            #ffffff22 81px,
-            #ffffff22 82px
-         )`;
-};
+ });
 
-/* PONTOS */
+ localStorage.setItem(
+  "dreamRoom",
+  JSON.stringify(objects)
+ );
 
-function updateScore() {
-
-    scoreText.textContent = score;
+ alert("✨ Quarto salvo!");
 }
+
+/* CARREGAR */
+
+function loadRoom(){
+
+ const data=localStorage.getItem("dreamRoom");
+
+ if(!data){
+  alert("Nenhuma decoração salva ainda!");
+  return;
+ }
+
+ document.querySelectorAll(".object").forEach(o=>o.remove());
+
+ JSON.parse(data).forEach(o=>{
+
+  createObject(
+   o.type,
+   parseFloat(o.x),
+   parseFloat(o.y)
+  );
+
+ });
+
+ const wallColor=localStorage.getItem("dreamWall");
+
+ if(wallColor)
+  wall.style.background=wallColor;
+
+ alert("🏠 Decoração carregada!");
+}
+
+/* LIMPAR */
+
+function clearRoom(){
+
+ if(!confirm("Tem certeza que quer limpar o quarto?"))return;
+
+ document.querySelectorAll(".object").forEach(o=>o.remove());
+
+ localStorage.removeItem("dreamRoom");
+
+}
+
+/* RESTAURAR COR */
+
+const savedWall=localStorage.getItem("dreamWall");
+
+if(savedWall)
+ wall.style.background=savedWall;
 
 </script>
 

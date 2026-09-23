@@ -1,28 +1,883 @@
 ```html
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>O Mistério de Josefa</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at center, #252525 0%, #080808 70%);
+            color: white;
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+        }
+
+        #jogo {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* TELA INICIAL */
+
+        #inicio {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .inicio-caixa {
+            max-width: 750px;
+        }
+
+        .inicio-caixa h1 {
+            font-size: 52px;
+            color: #e5e5e5;
+            text-shadow: 0 0 20px #ffffff55;
+            margin-bottom: 10px;
+        }
+
+        .inicio-caixa p {
+            color: #bbbbbb;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        .botao {
+            background: #b91c1c;
+            color: white;
+            border: none;
+            padding: 16px 35px;
+            border-radius: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: 0.2s;
+        }
+
+        .botao:hover {
+            background: #dc2626;
+            transform: scale(1.05);
+        }
+
+        /* JOGO */
+
+        #jogoPrincipal {
+            display: none;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        .topo {
+            padding: 15px 25px;
+            background: #0b0b0b;
+            border-bottom: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .titulo-jogo {
+            font-weight: bold;
+            color: #ddd;
+        }
+
+        #capitulo {
+            color: #888;
+        }
+
+        /* CENÁRIO */
+
+        #cenario {
+            flex: 1;
+            min-height: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 80px;
+            padding: 50px 20px 20px;
+
+            background:
+                linear-gradient(#00000055, #000000dd),
+                radial-gradient(circle at center, #3b3b3b, #101010 70%);
+        }
+
+        .personagem {
+            width: 170px;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .personagem.ativo {
+            transform: translateY(-12px) scale(1.05);
+        }
+
+        .emoji-personagem {
+            font-size: 105px;
+            filter: grayscale(0.3);
+        }
+
+        .nome-personagem {
+            background: #111;
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 7px;
+            margin-top: 8px;
+            font-weight: bold;
+        }
+
+        /* DIÁLOGO */
+
+        .dialogo-area {
+            background: #090909;
+            border-top: 2px solid #444;
+            padding: 20px;
+        }
+
+        .caixa-dialogo {
+            max-width: 950px;
+            margin: auto;
+        }
+
+        #nomeFalante {
+            color: #ef4444;
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        #texto {
+            background: #171717;
+            border: 1px solid #444;
+            border-radius: 10px;
+            padding: 18px;
+            min-height: 75px;
+            font-size: 18px;
+            line-height: 1.5;
+        }
+
+        /* ESCOLHAS */
+
+        #escolhas {
+            max-width: 950px;
+            margin: 15px auto 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .escolha {
+            background: #222;
+            color: white;
+            border: 1px solid #555;
+            border-radius: 8px;
+            padding: 14px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 16px;
+            transition: 0.2s;
+        }
+
+        .escolha:hover {
+            background: #333;
+            border-color: #aaa;
+            transform: translateX(5px);
+        }
+
+        /* FINAL */
+
+        #final {
+            display: none;
+            min-height: 100vh;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .final-caixa {
+            max-width: 700px;
+        }
+
+        #tituloFinal {
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+
+        #textoFinal {
+            color: #ccc;
+            font-size: 18px;
+            line-height: 1.7;
+        }
+
+        .final-caixa .emoji-final {
+            font-size: 100px;
+        }
+
+        @media (max-width: 700px) {
+
+            .inicio-caixa h1 {
+                font-size: 35px;
+            }
+
+            #cenario {
+                gap: 15px;
+                padding-top: 40px;
+            }
+
+            .personagem {
+                width: 120px;
+            }
+
+            .emoji-personagem {
+                font-size: 75px;
+            }
+
+            #texto {
+                font-size: 16px;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-    <h1>O Mistério de Josefa</h1>
+    <div id="jogo">
 
-    <h2>Você teria coragem de continuar?</h2>
+        <!-- TELA INICIAL -->
 
-    <p>
-        Josefa estava sozinha quando ouviu
-        um barulho vindo do corredor.
-    </p>
+        <section id="inicio">
 
-    <p>
-        A porta estava aberta,
-        mas não havia ninguém do outro lado.
-    </p>
+            <div class="inicio-caixa">
 
-    <h2>O que será que aconteceu?</h2>
+                <div style="font-size: 90px;">🏚️</div>
+
+                <h1>O Mistério de Josefa</h1>
+
+                <p>
+                    Há muitos anos, uma casa abandonada guarda
+                    um segredo que ninguém conseguiu descobrir.
+                </p>
+
+                <p>
+                    Hoje, a neta decidiu visitar seu avô.
+                    Mas alguma coisa está diferente...
+                </p>
+
+                <button class="botao" onclick="iniciarJogo()">
+                    ▶ COMEÇAR
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- JOGO -->
+
+        <section id="jogoPrincipal">
+
+            <div class="topo">
+                <div class="titulo-jogo">
+                    👻 O Mistério de Josefa
+                </div>
+
+                <div id="capitulo">
+                    Capítulo 1
+                </div>
+            </div>
+
+
+            <!-- PERSONAGENS -->
+
+            <div id="cenario">
+
+                <div class="personagem" id="vo">
+
+                    <div class="emoji-personagem">
+                        👴
+                    </div>
+
+                    <div class="nome-personagem">
+                        Vô
+                    </div>
+
+                </div>
+
+
+                <div class="personagem" id="neta">
+
+                    <div class="emoji-personagem">
+                        👧
+                    </div>
+
+                    <div class="nome-personagem">
+                        Neta
+                    </div>
+
+                </div>
+
+
+                <div class="personagem" id="josefa">
+
+                    <div class="emoji-personagem">
+                        👩
+                    </div>
+
+                    <div class="nome-personagem">
+                        Josefa
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- DIÁLOGO -->
+
+            <div class="dialogo-area">
+
+                <div class="caixa-dialogo">
+
+                    <div id="nomeFalante">
+                        Narrador
+                    </div>
+
+                    <div id="texto">
+                        ...
+                    </div>
+
+                    <div id="escolhas"></div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- FINAL -->
+
+        <section id="final">
+
+            <div class="final-caixa">
+
+                <div class="emoji-final" id="emojiFinal">
+                    👻
+                </div>
+
+                <h1 id="tituloFinal">
+                    Final
+                </h1>
+
+                <p id="textoFinal">
+                    ...
+                </p>
+
+                <button class="botao" onclick="location.reload()">
+                    🔄 Jogar novamente
+                </button>
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+    <script>
+
+        let etapa = 0;
+
+        const cenas = [
+
+            {
+                capitulo: "Capítulo 1 — A chegada",
+
+                personagem: "Narrador",
+
+                texto:
+                    "Depois de uma longa viagem, a neta chega à antiga casa do avô. A porta está entreaberta.",
+
+                escolhas: [
+                    {
+                        texto: "🚪 Entrar na casa",
+                        proxima: 1
+                    },
+                    {
+                        texto: "📢 Chamar pelo avô",
+                        proxima: 2
+                    }
+                ]
+            },
+
+
+            {
+                capitulo: "Capítulo 1 — Dentro da casa",
+
+                personagem: "Neta",
+
+                texto:
+                    "Vô? Eu cheguei! Por que está tudo tão escuro?",
+
+                escolhas: [
+                    {
+                        texto: "🔦 Procurar o interruptor",
+                        proxima: 3
+                    },
+                    {
+                        texto: "👣 Seguir o barulho no corredor",
+                        proxima: 4
+                    }
+                ]
+            },
+
+
+            {
+                capitulo: "Capítulo 1 — A resposta",
+
+                personagem: "Vô",
+
+                texto:
+                    "Você finalmente chegou... Eu estava esperando por você.",
+
+                escolhas: [
+                    {
+                        texto: "❓ Perguntar o que aconteceu",
+                        proxima: 5
+                    },
+                    {
+                        texto: "😰 Perguntar sobre a casa",
+                        proxima: 6
+                    }
+                ]
+            },
+
+
+            {
+                capitulo: "Capítulo 2 — A luz",
+
+                personagem: "Neta",
+
+                texto:
+                    "O interruptor não funciona. De repente, alguma coisa cai no andar de cima.",
+
+                escolhas: [
+                    {
+                        texto: "⬆️ Subir as escadas",
+                        proxima: 7
+                    },
+                    {
+                        texto: "🏃 Voltar para a porta",
+                        proxima: 8
+                    }
+                ]
+            },
+
+
+            {
+                capitulo: "Capítulo 2 — O corredor",
+
+                personagem: "Neta",
+
+                texto:
+                    "O corredor parece mais comprido do que antes. No fim dele há uma porta com o número 13.",
+
+                escolhas: [
+                    {
+                        texto: "🚪 Abrir a porta 13",
+                        proxima: 9
+                    },
+                    {
+                        texto: "🔙 Voltar",
+                        proxima: 3
+                    }
+                ]
+            },
+
+
+            {
+                capitulo: "Capítulo 2 — O segredo",
+
+                personagem: "Vô",
+
+                texto:
+                    "Há muitos anos, Josefa desapareceu depois de entrar naquela casa. Ninguém sabe exatamente o que aconteceu.",
+
+                escolhas: [
+                    {
+                        texto: "😮 Perguntar quem é Josefa",
+                        proxima: 10
+                    },
+                    {
+                        texto: "🔎 Perguntar onde ela está",
+                        proxima: 11
+                    }
+                ]
+            },
+
+
+            {
+                capitulo: "Capítulo 2 — A casa",
+
+                personagem: "Vô",
+
+                texto:
+                    "Essa casa não é como as outras. Algumas coisas aqui parecem lembrar das pessoas que passaram por ela.",
+
+                escolhas: [
+                    {
+                        texto: "🕵️ Investigar",
+                        proxima: 10
+                    },
+                    {
+                        texto: "🚪 Ir embora",
+                        proxima: 8
+                    }
+                ]
+            },
+
+
+            {
+                capitulo: "Capítulo 3 — O andar de cima",
+
+                personagem: "Neta",
+
+                texto:
+                    "No quarto há uma fotografia antiga. Nela aparecem o vô e uma mulher que a neta nunca viu.",
+
+                escolhas: [
+                    {
+                        texto: "🖼️ Pegar a fotografia",
+                        proxima: 10
+                    },
+                    {
+                        texto: "🔦 Procurar outra pista",
+                        proxima: 12
+                    }
+                ]
+            },
+
+
+            {
+                capitulo: "Final — A fuga",
+
+                personagem: "Narrador",
+
+                texto:
+                    "A neta decide sair da casa. Antes de fechar a porta, escuta alguém sussurrar seu nome.",
+
+                escolhas: [
+                    {
+                        texto: "🏃 Ir embora",
+                        proxima: 13
+                    }
+                ]
+            },
+
+
+            {
+                capitulo: "Capítulo 3 — A Sala 13",
+
+                personagem: "Neta",
+
+                texto:
+                    "Atrás da porta existe uma pequena sala. No centro há uma cadeira e uma fotografia de Josefa.",
+
+                escolhas: [
+                    {
+                        texto: "👩 Perguntar quem é Josefa",
+                        proxima: 11
+                    },
+                    {
+                        texto: "🔍 Procurar pistas na sala",
+                        proxima: 12
+                    }
+                ]
+            },
+
+
+            {
+                capitulo: "Capítulo 3 — Josefa",
+
+                personagem: "Josefa",
+
+                texto:
+                    "Meu nome é Josefa. Eu conheço esse lugar melhor do que qualquer pessoa.",
+
+                escolhas: [
+                    {
+                        texto: "❓ Perguntar o que aconteceu",
+                        proxima: 14
+                    },
+                    {
+                        texto: "😨 Perguntar por que ela está ali",
+                        proxima: 15
+                    }
+                ]
+            },
+
+
+            {
+                capitulo: "Capítulo 4 — A verdade",
+
+                personagem: "Josefa",
+
+                texto:
+                    "Eu não desapareci. Eu fui embora porque descobri um segredo que ninguém deveria encontrar.",
+
+                escolhas: [
+                    {
+                        texto: "🔎 Perguntar qual é o segredo",
+                        proxima: 16
+                    },
+                    {
+                        texto: "🚪 Pedir para sair dali",
+                        proxima: 17
+                    }
+                ]
+            },
+
+
+            {
+                capitulo: "Capítulo 4 — A pista",
+
+                personagem: "Narrador",
+
+                texto:
+                    "Debaixo da fotografia existe um pequeno papel. Nele está escrito: 13 - 07 - 21.",
+
+                escolhas: [
+                    {
+                        texto: "🧠 Memorizar o código",
+                        proxima: 14
+                    },
+                    {
+                        texto: "📜 Ler novamente",
+                        proxima: 14
+                    }
+                ]
+            },
+
+
+            {
+                capitulo: "Final — O segredo",
+
+                personagem: "Narrador",
+
+                texto:
+                    "A neta descobre que Josefa estava protegendo a família de um segredo antigo. O avô finalmente conta toda a verdade.",
+
+                escolhas: [
+                    {
+                        texto: "🏠 Voltar para casa",
+                        proxima: 18
+                    }
+                ]
+            },
+
+
+            {
+                capitulo: "Final — A pergunta",
+
+                personagem: "Josefa",
+
+                texto:
+                    "Alguns mistérios existem para continuar sendo mistérios.",
+
+                escolhas: [
+                    {
+                        texto: "❓ Perguntar mais uma vez",
+                        proxima: 16
+                    },
+                    {
+                        texto: "🤫 Ficar em silêncio",
+                        proxima: 18
+                    }
+                ]
+            },
+
+
+            {
+                capitulo: "Final — A verdade escondida",
+
+                personagem: "Josefa",
+
+                texto:
+                    "O segredo estava escondido na casa há décadas. Agora você sabe onde procurar.",
+
+                escolhas: [
+                    {
+                        texto: "🔐 Guardar o segredo",
+                        proxima: 18
+                    }
+                ]
+            },
+
+
+            {
+                capitulo: "Final — A saída",
+
+                personagem: "Neta",
+
+                texto:
+                    "Josefa abre a porta. A neta sai da casa e olha para trás. A janela do segundo andar se fecha sozinha.",
+
+                escolhas: [
+                    {
+                        texto: "🌙 Continuar caminhando",
+                        proxima: 18
+                    }
+                ]
+            }
+
+        ];
+
+
+        function iniciarJogo() {
+
+            document.getElementById("inicio").style.display = "none";
+
+            document.getElementById("jogoPrincipal").style.display = "flex";
+
+            etapa = 0;
+
+            mostrarCena();
+
+        }
+
+
+        function mostrarCena() {
+
+            const cena = cenas[etapa];
+
+            document.getElementById("capitulo").innerText =
+                cena.capitulo;
+
+            document.getElementById("nomeFalante").innerText =
+                cena.personagem;
+
+            document.getElementById("texto").innerText =
+                cena.texto;
+
+
+            const escolhas =
+                document.getElementById("escolhas");
+
+            escolhas.innerHTML = "";
+
+
+            atualizarPersonagem(cena.personagem);
+
+
+            cena.escolhas.forEach(function (escolha) {
+
+                const botao =
+                    document.createElement("button");
+
+                botao.className = "escolha";
+
+                botao.innerText = escolha.texto;
+
+                botao.onclick = function () {
+
+                    etapa = escolha.proxima;
+
+                    if (etapa === 18) {
+
+                        mostrarFinal();
+
+                    } else {
+
+                        mostrarCena();
+
+                    }
+
+                };
+
+                escolhas.appendChild(botao);
+
+            });
+
+        }
+
+
+        function atualizarPersonagem(nome) {
+
+            document
+                .querySelectorAll(".personagem")
+                .forEach(function (personagem) {
+
+                    personagem.classList.remove("ativo");
+
+                });
+
+
+            if (nome === "Vô") {
+
+                document
+                    .getElementById("vo")
+                    .classList.add("ativo");
+
+            }
+
+            if (nome === "Neta") {
+
+                document
+                    .getElementById("neta")
+                    .classList.add("ativo");
+
+            }
+
+            if (nome === "Josefa") {
+
+                document
+                    .getElementById("josefa")
+                    .classList.add("ativo");
+
+            }
+
+        }
+
+
+        function mostrarFinal() {
+
+            document
+                .getElementById("jogoPrincipal")
+                .style.display = "none";
+
+            document
+                .getElementById("final")
+                .style.display = "flex";
+
+
+            document
+                .getElementById("tituloFinal")
+                .innerText =
+                "👻 O mistério continua...";
+
+            document
+                .getElementById("textoFinal")
+                .innerText =
+                "Você descobriu parte da história de Josefa, mas ainda existem perguntas sem resposta. Talvez a casa ainda esconda outros segredos.";
+
+        }
+
+    </script>
 
 </body>
 

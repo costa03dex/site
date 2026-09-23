@@ -23,20 +23,154 @@ canvas {
     display: block;
     width: 100vw;
     height: 100vh;
-    background:
-        radial-gradient(circle at center, #06345c, #01111f 75%);
 }
+
+/* =========================
+   HUD ORIGINAL
+========================= */
+
+#hud {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    z-index: 5;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    pointer-events: none;
+}
+
+.hudBox {
+    background: rgba(0, 15, 30, .75);
+    border: 1px solid rgba(100, 200, 255, .3);
+    padding: 10px 15px;
+    border-radius: 12px;
+
+    backdrop-filter: blur(5px);
+
+    font-size: 15px;
+}
+
+/* =========================
+   BARRA DE IMPULSO
+========================= */
+
+#boostContainer {
+    position: fixed;
+    top: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: min(360px, 70vw);
+
+    z-index: 5;
+
+    pointer-events: none;
+}
+
+#boostLabel {
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+
+    margin-bottom: 5px;
+
+    color: #a9eaff;
+    text-shadow: 0 0 8px #00bfff;
+}
+
+#boostBar {
+    height: 12px;
+
+    background: rgba(0, 15, 30, .8);
+
+    border: 1px solid rgba(100, 220, 255, .5);
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 0 10px rgba(0, 170, 255, .2);
+}
+
+#boostFill {
+    height: 100%;
+    width: 0%;
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #00aaff,
+            #55eaff,
+            #ffffff
+        );
+
+    box-shadow:
+        0 0 15px #00c8ff;
+
+    transition: width .12s linear;
+}
+
+#boostText {
+    text-align: center;
+
+    margin-top: 4px;
+
+    font-size: 11px;
+
+    color: #78dfff;
+}
+
+/* =========================
+   CONTROLES
+========================= */
+
+#controls {
+    position: fixed;
+
+    bottom: 15px;
+    left: 15px;
+
+    color: #9edcff;
+
+    font-size: 13px;
+
+    background: rgba(0, 15, 30, .6);
+
+    padding: 8px 12px;
+
+    border-radius: 8px;
+
+    z-index: 5;
+}
+
+/* =========================
+   MENU
+========================= */
 
 #menu,
 #gameOver {
     position: fixed;
+
     inset: 0;
+
     display: flex;
+
     align-items: center;
     justify-content: center;
+
     flex-direction: column;
-    background: rgba(0, 8, 18, 0.9);
+
+    background: rgba(0, 8, 18, .9);
+
     z-index: 10;
+
     text-align: center;
 }
 
@@ -46,71 +180,93 @@ canvas {
 
 h1 {
     font-size: clamp(42px, 8vw, 90px);
+
     color: #ff7b21;
-    text-shadow: 0 0 25px #ff4d00;
+
+    text-shadow:
+        0 0 25px #ff4d00;
+
     margin-bottom: 10px;
 }
 
 .subtitle {
     font-size: 18px;
+
     color: #a9dfff;
+
     margin-bottom: 30px;
 }
 
 button {
     border: none;
+
     padding: 15px 35px;
+
     border-radius: 12px;
+
     background: #ff6a00;
+
     color: white;
+
     font-size: 18px;
+
     font-weight: bold;
+
     cursor: pointer;
-    box-shadow: 0 0 20px rgba(255, 106, 0, 0.5);
+
+    box-shadow:
+        0 0 20px rgba(255, 106, 0, .5);
+
     transition: .2s;
 }
 
 button:hover {
     transform: scale(1.06);
+
     background: #ff7f24;
-}
-
-#hud {
-    position: fixed;
-    top: 15px;
-    left: 15px;
-    right: 15px;
-    z-index: 5;
-    display: flex;
-    justify-content: space-between;
-    pointer-events: none;
-}
-
-.hudBox {
-    background: rgba(0, 15, 30, .75);
-    border: 1px solid rgba(100, 200, 255, .3);
-    padding: 10px 15px;
-    border-radius: 12px;
-    backdrop-filter: blur(5px);
-    font-size: 15px;
-}
-
-#controls {
-    position: fixed;
-    bottom: 15px;
-    left: 15px;
-    color: #9edcff;
-    font-size: 13px;
-    background: rgba(0, 15, 30, .6);
-    padding: 8px 12px;
-    border-radius: 8px;
-    z-index: 5;
 }
 
 .warning {
     margin-top: 20px;
+
     color: #ffb06c;
+
     font-size: 13px;
+}
+
+/* =========================
+   EFEITO DE IMPULSO
+========================= */
+
+#boostEffect {
+    position: fixed;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    z-index: 4;
+
+    opacity: 0;
+
+    background:
+        radial-gradient(
+            circle,
+            transparent 35%,
+            rgba(0, 180, 255, .12)
+        );
+}
+
+.boosting #boostEffect {
+    opacity: 1;
+}
+
+.boosting #boostLabel {
+    color: white;
+
+    text-shadow:
+        0 0 10px #00d9ff,
+        0 0 25px #00d9ff;
 }
 </style>
 </head>
@@ -119,23 +275,67 @@ button:hover {
 
 <canvas id="game"></canvas>
 
+<!-- EFEITO -->
+<div id="boostEffect"></div>
+
+<!-- =========================
+     HUD ORIGINAL
+========================= -->
+
 <div id="hud">
+
     <div class="hudBox">
-        🐟 Tamanho: <span id="size">35</span>
+        🐟 Tamanho:
+        <span id="size">35</span>
     </div>
 
     <div class="hudBox">
-        ⭐ Pontos: <span id="score">0</span>
+        ⭐ Pontos:
+        <span id="score">0</span>
     </div>
 
     <div class="hudBox">
-        ❤️ Vidas: <span id="life">3</span>
+        ❤️ Vidas:
+        <span id="life">3</span>
     </div>
+
 </div>
+
+
+<!-- =========================
+     IMPULSO
+========================= -->
+
+<div id="boostContainer">
+
+    <div id="boostLabel">
+        ⚡ IMPULSO
+    </div>
+
+    <div id="boostBar">
+        <div id="boostFill"></div>
+    </div>
+
+    <div id="boostText">
+        <span id="boostValue">0</span>% —
+        <span id="boostStatus">coma peixes para carregar</span>
+    </div>
+
+</div>
+
+
+<!-- CONTROLES -->
 
 <div id="controls">
-    🎮 WASD ou setas para nadar
+    🎮 WASD / Setas para nadar
+    &nbsp; • &nbsp;
+    ⚡ Espaço para impulso
 </div>
+
+
+<!-- =========================
+     MENU
+========================= -->
 
 <div id="menu">
 
@@ -155,6 +355,11 @@ button:hover {
 
 </div>
 
+
+<!-- =========================
+     GAME OVER
+========================= -->
+
 <div id="gameOver">
 
     <h1>💀 FIM</h1>
@@ -164,7 +369,8 @@ button:hover {
     </div>
 
     <div style="font-size:22px;margin-bottom:25px;">
-        Pontuação: <b id="finalScore">0</b>
+        Pontuação:
+        <b id="finalScore">0</b>
     </div>
 
     <button onclick="startGame()">
@@ -173,38 +379,73 @@ button:hover {
 
 </div>
 
+
 <script>
 
-const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
+// ======================================================
+// CANVAS
+// ======================================================
+
+const canvas =
+    document.getElementById("game");
+
+const ctx =
+    canvas.getContext("2d");
 
 let W, H;
 
 function resize() {
 
-    W = canvas.width = window.innerWidth;
-    H = canvas.height = window.innerHeight;
+    W =
+        canvas.width =
+        window.innerWidth;
+
+    H =
+        canvas.height =
+        window.innerHeight;
 
 }
 
-window.addEventListener("resize", resize);
+window.addEventListener(
+    "resize",
+    resize
+);
+
 resize();
 
 
 // ======================================================
-// ESTADO DO JOGO
+// ESTADO
 // ======================================================
 
 let gameRunning = false;
 
 let score = 0;
+
 let life = 3;
 
 let worldTime = 0;
+
 let spawnTimer = 0;
 
 let entities = [];
+
 let bubbles = [];
+
+
+// ======================================================
+// IMPULSO
+// ======================================================
+
+let boost = 0;
+
+const MAX_BOOST = 100;
+
+let boosting = false;
+
+let boostTimer = 0;
+
+const BOOST_DURATION = 120;
 
 
 // ======================================================
@@ -213,24 +454,44 @@ let bubbles = [];
 
 const keys = {};
 
-window.addEventListener("keydown", e => {
+window.addEventListener(
+    "keydown",
+    e => {
 
-    keys[e.key.toLowerCase()] = true;
+        keys[
+            e.key.toLowerCase()
+        ] = true;
 
-    if (
-        ["arrowup", "arrowdown", "arrowleft", "arrowright", " "]
-        .includes(e.key.toLowerCase())
-    ) {
-        e.preventDefault();
+        if (
+            [
+                "arrowup",
+                "arrowdown",
+                "arrowleft",
+                "arrowright",
+                " "
+            ].includes(
+                e.key.toLowerCase()
+            )
+        ) {
+
+            e.preventDefault();
+
+        }
+
     }
+);
 
-});
 
-window.addEventListener("keyup", e => {
+window.addEventListener(
+    "keyup",
+    e => {
 
-    keys[e.key.toLowerCase()] = false;
+        keys[
+            e.key.toLowerCase()
+        ] = false;
 
-});
+    }
+);
 
 
 // ======================================================
@@ -240,26 +501,23 @@ window.addEventListener("keyup", e => {
 let player = {
 
     x: W / 2,
+
     y: H / 2,
 
     size: 35,
 
-    // Velocidade atual
     vx: 0,
+
     vy: 0,
 
-    // Velocidade máxima
     maxSpeed: 3.2,
 
-    // Quanto acelera
-    acceleration: 0.12,
+    acceleration: .12,
 
-    // Quanto desacelera
-    friction: 0.94,
+    friction: .94,
 
     direction: 1,
 
-    // Animação da natação
     swimTime: 0,
 
     invincible: 0
@@ -274,17 +532,29 @@ let player = {
 function startGame() {
 
     score = 0;
+
     life = 3;
 
+    boost = 0;
+
+    boosting = false;
+
+    boostTimer = 0;
+
     entities = [];
+
     bubbles = [];
 
-    player.x = W / 2;
-    player.y = H / 2;
+    player.x =
+        W / 2;
+
+    player.y =
+        H / 2;
 
     player.size = 35;
 
     player.vx = 0;
+
     player.vy = 0;
 
     player.direction = 1;
@@ -294,72 +564,194 @@ function startGame() {
     player.invincible = 0;
 
     spawnTimer = 0;
+
     worldTime = 0;
 
     gameRunning = true;
 
-    document.getElementById("menu").style.display = "none";
-    document.getElementById("gameOver").style.display = "none";
+    document
+        .getElementById("menu")
+        .style.display = "none";
+
+    document
+        .getElementById("gameOver")
+        .style.display = "none";
+
+    document.body
+        .classList
+        .remove("boosting");
 
     updateHUD();
 
-    for (let i = 0; i < 12; i++) {
+    for (
+        let i = 0;
+        i < 12;
+        i++
+    ) {
+
         spawnEntity();
+
     }
 
 }
 
 
 // ======================================================
-// CRIAR CRIATURAS
+// ADICIONAR IMPULSO
+// ======================================================
+
+function addBoost(amount) {
+
+    boost =
+        Math.min(
+            MAX_BOOST,
+            boost + amount
+        );
+
+}
+
+
+// ======================================================
+// ATIVAR IMPULSO
+// ======================================================
+
+function activateBoost() {
+
+    if (
+        boost < 100 ||
+        boosting ||
+        !gameRunning
+    ) {
+
+        return;
+
+    }
+
+    boosting = true;
+
+    boostTimer =
+        BOOST_DURATION;
+
+    boost = 100;
+
+    document.body
+        .classList
+        .add("boosting");
+
+}
+
+
+// ======================================================
+// ATUALIZAR IMPULSO
+// ======================================================
+
+function updateBoost() {
+
+    if (
+        !boosting
+    ) {
+
+        return;
+
+    }
+
+    boostTimer--;
+
+    // Consome a barra
+    boost =
+        Math.max(
+            0,
+            boostTimer /
+            BOOST_DURATION *
+            100
+        );
+
+    if (
+        boostTimer <= 0
+    ) {
+
+        boosting = false;
+
+        boost = 0;
+
+        document.body
+            .classList
+            .remove("boosting");
+
+    }
+
+}
+
+
+// ======================================================
+// CRIAR ENTIDADES
 // ======================================================
 
 function spawnEntity() {
 
     const types = [
+
+        "fish",
         "fish",
         "fish",
         "fish",
         "human",
         "shark",
         "mine"
+
     ];
 
     const type =
-        types[Math.floor(Math.random() * types.length)];
+        types[
+            Math.floor(
+                Math.random() *
+                types.length
+            )
+        ];
 
     let size;
+
     let speed;
 
-    if (type === "fish") {
+
+    if (
+        type === "fish"
+    ) {
 
         size =
             10 +
-            Math.random() * 20;
+            Math.random() *
+            20;
 
         speed =
-            0.5 +
-            Math.random() * 1;
+            .5 +
+            Math.random();
 
     }
 
-    else if (type === "human") {
+    else if (
+        type === "human"
+    ) {
 
         size = 17;
 
         speed =
-            0.4 +
-            Math.random() * .6;
+            .4 +
+            Math.random() *
+            .6;
 
     }
 
-    else if (type === "shark") {
+    else if (
+        type === "shark"
+    ) {
 
         size = 45;
 
         speed =
-            0.7 +
-            Math.random() * .5;
+            .7 +
+            Math.random() *
+            .5;
 
     }
 
@@ -371,46 +763,67 @@ function spawnEntity() {
 
     }
 
+
     let x;
+
     let y;
 
-    // Nasce fora da tela
-    const side =
-        Math.floor(Math.random() * 4);
 
-    if (side === 0) {
+    const side =
+        Math.floor(
+            Math.random() * 4
+        );
+
+
+    if (
+        side === 0
+    ) {
 
         x = -100;
-        y = Math.random() * H;
+
+        y =
+            Math.random() * H;
 
     }
 
-    else if (side === 1) {
+    else if (
+        side === 1
+    ) {
 
         x = W + 100;
-        y = Math.random() * H;
+
+        y =
+            Math.random() * H;
 
     }
 
-    else if (side === 2) {
+    else if (
+        side === 2
+    ) {
 
-        x = Math.random() * W;
+        x =
+            Math.random() * W;
+
         y = -100;
 
     }
 
     else {
 
-        x = Math.random() * W;
+        x =
+            Math.random() * W;
+
         y = H + 100;
 
     }
+
 
     entities.push({
 
         type,
 
         x,
+
         y,
 
         size,
@@ -423,7 +836,8 @@ function spawnEntity() {
                 : -1,
 
         phase:
-            Math.random() * Math.PI * 2
+            Math.random() *
+            Math.PI * 2
 
     });
 
@@ -438,87 +852,151 @@ function update() {
 
     worldTime++;
 
-    // ==================================================
+
+    // ==============================================
+    // IMPULSO
+    // ==============================================
+
+    if (
+        keys[" "] &&
+        boost >= 100
+    ) {
+
+        activateBoost();
+
+        keys[" "] = false;
+
+    }
+
+    updateBoost();
+
+
+    // ==============================================
     // CONTROLES
-    // ==================================================
+    // ==============================================
 
     let dx = 0;
+
     let dy = 0;
+
 
     if (
         keys["arrowleft"] ||
         keys["a"]
     ) {
-        dx -= 1;
+
+        dx--;
+
     }
+
 
     if (
         keys["arrowright"] ||
         keys["d"]
     ) {
-        dx += 1;
+
+        dx++;
+
     }
+
 
     if (
         keys["arrowup"] ||
         keys["w"]
     ) {
-        dy -= 1;
+
+        dy--;
+
     }
+
 
     if (
         keys["arrowdown"] ||
         keys["s"]
     ) {
-        dy += 1;
+
+        dy++;
+
     }
 
 
-    // ==================================================
+    // ==============================================
     // ACELERAÇÃO
-    // ==================================================
+    // ==============================================
 
-    if (dx !== 0 || dy !== 0) {
+    if (
+        dx !== 0 ||
+        dy !== 0
+    ) {
 
         const tamanho =
-            Math.hypot(dx, dy);
+            Math.hypot(
+                dx,
+                dy
+            );
 
         dx /= tamanho;
+
         dy /= tamanho;
 
+
         player.vx +=
-            dx * player.acceleration;
+            dx *
+            player.acceleration;
 
         player.vy +=
-            dy * player.acceleration;
+            dy *
+            player.acceleration;
 
-        // Vira para onde está nadando
-        if (dx !== 0) {
+
+        if (
+            dx !== 0
+        ) {
 
             player.direction =
-                dx > 0 ? 1 : -1;
+                dx > 0
+                    ? 1
+                    : -1;
 
         }
 
-        // Aumenta animação
-        player.swimTime += 0.25;
+
+        player.swimTime +=
+            .25;
 
     }
 
     else {
 
-        // Desaceleração natural
-        player.vx *= player.friction;
-        player.vy *= player.friction;
+        player.vx *=
+            player.friction;
 
-        player.swimTime += 0.08;
+        player.vy *=
+            player.friction;
+
+        player.swimTime +=
+            .08;
 
     }
 
 
-    // ==================================================
-    // LIMITAR VELOCIDADE
-    // ==================================================
+    // ==============================================
+    // VELOCIDADE
+    // ==============================================
+
+    let maxSpeed =
+        player.maxSpeed;
+
+
+    if (
+        boosting
+    ) {
+
+        maxSpeed =
+            8;
+
+    }
+
 
     const velocidade =
         Math.hypot(
@@ -526,33 +1004,39 @@ function update() {
             player.vy
         );
 
+
     if (
         velocidade >
-        player.maxSpeed
+        maxSpeed
     ) {
 
         player.vx =
-            (player.vx / velocidade) *
-            player.maxSpeed;
+            (
+                player.vx /
+                velocidade
+            ) *
+            maxSpeed;
 
         player.vy =
-            (player.vy / velocidade) *
-            player.maxSpeed;
+            (
+                player.vy /
+                velocidade
+            ) *
+            maxSpeed;
 
     }
 
 
-    // ==================================================
+    // ==============================================
     // MOVIMENTO
-    // ==================================================
+    // ==============================================
 
-    player.x += player.vx;
-    player.y += player.vy;
+    player.x +=
+        player.vx;
 
+    player.y +=
+        player.vy;
 
-    // ==================================================
-    // LIMITES
-    // ==================================================
 
     player.x =
         Math.max(
@@ -562,6 +1046,7 @@ function update() {
                 player.x
             )
         );
+
 
     player.y =
         Math.max(
@@ -573,9 +1058,9 @@ function update() {
         );
 
 
-    // ==================================================
+    // ==============================================
     // INVENCIBILIDADE
-    // ==================================================
+    // ==============================================
 
     if (
         player.invincible > 0
@@ -586,11 +1071,12 @@ function update() {
     }
 
 
-    // ==================================================
+    // ==============================================
     // SPAWN
-    // ==================================================
+    // ==============================================
 
     spawnTimer++;
+
 
     if (
         spawnTimer > 55
@@ -603,16 +1089,15 @@ function update() {
     }
 
 
-    // ==================================================
-    // INIMIGOS
-    // ==================================================
+    // ==============================================
+    // ENTIDADES
+    // ==============================================
 
     entities.forEach(e => {
 
-        e.phase += 0.02;
+        e.phase += .02;
 
 
-        // TUBARÃO
         if (
             e.type === "shark"
         ) {
@@ -622,6 +1107,7 @@ function update() {
                     player.y - e.y,
                     player.x - e.x
                 );
+
 
             e.x +=
                 Math.cos(angle) *
@@ -633,8 +1119,6 @@ function update() {
 
         }
 
-
-        // OUTROS
         else if (
             e.type !== "mine"
         ) {
@@ -644,38 +1128,40 @@ function update() {
                 e.direction;
 
             e.y +=
-                Math.sin(e.phase) *
-                0.4;
+                Math.sin(
+                    e.phase
+                ) *
+                .4;
 
         }
 
-
-        // Mina
-        if (
-            e.type === "mine"
-        ) {
+        else {
 
             e.y +=
-                Math.sin(e.phase) *
-                0.25;
+                Math.sin(
+                    e.phase
+                ) *
+                .25;
 
         }
 
     });
 
 
-    // ==================================================
+    // ==============================================
     // COLISÕES
-    // ==================================================
+    // ==============================================
 
     for (
-        let i = entities.length - 1;
+        let i =
+            entities.length - 1;
         i >= 0;
         i--
     ) {
 
         const e =
             entities[i];
+
 
         const distance =
             Math.hypot(
@@ -692,7 +1178,7 @@ function update() {
 
 
             // ==========================================
-            // PEIXE / HUMANO
+            // COMER
             // ==========================================
 
             if (
@@ -705,17 +1191,37 @@ function update() {
                     e.size * .9
                 ) {
 
-                    score +=
-                        e.type === "human"
-                            ? 100
-                            : 25;
+                    if (
+                        e.type === "fish"
+                    ) {
+
+                        score += 25;
+
+                        // PEIXE ENCHE IMPULSO
+                        addBoost(20);
+
+                    }
+
+                    else {
+
+                        score += 100;
+
+                        addBoost(10);
+
+                    }
+
 
                     player.size +=
                         e.type === "human"
                             ? 3
                             : 1;
 
-                    entities.splice(i, 1);
+
+                    entities.splice(
+                        i,
+                        1
+                    );
+
 
                     createBubbles(
                         e.x,
@@ -743,11 +1249,13 @@ function update() {
                     player.invincible =
                         100;
 
+
                     player.size =
                         Math.max(
                             20,
                             player.size - 3
                         );
+
 
                     createBubbles(
                         player.x,
@@ -775,9 +1283,9 @@ function update() {
     }
 
 
-    // ==================================================
+    // ==============================================
     // BOLHAS
-    // ==================================================
+    // ==============================================
 
     bubbles.forEach(b => {
 
@@ -786,7 +1294,8 @@ function update() {
         b.x +=
             Math.sin(
                 b.phase
-            ) * .2;
+            ) *
+            .2;
 
         b.phase += .03;
 
@@ -795,7 +1304,8 @@ function update() {
 
     bubbles =
         bubbles.filter(
-            b => b.y > -20
+            b =>
+                b.y > -20
         );
 
 
@@ -805,12 +1315,11 @@ function update() {
 
 
 // ======================================================
-// DESENHAR PEIXE
+// DESENHAR JOGADOR
 // ======================================================
 
 function drawPlayer() {
 
-    // Piscada quando toma dano
     if (
         player.invincible > 0 &&
         Math.floor(
@@ -832,19 +1341,11 @@ function drawPlayer() {
     );
 
 
-    // ==================================================
-    // DIREÇÃO
-    // ==================================================
-
     ctx.scale(
         player.direction,
         1
     );
 
-
-    // ==================================================
-    // VELOCIDADE
-    // ==================================================
 
     const swimming =
         Math.hypot(
@@ -852,10 +1353,6 @@ function drawPlayer() {
             player.vy
         );
 
-
-    // ==================================================
-    // MOVIMENTO DA CAUDA
-    // ==================================================
 
     const tailWave =
         Math.sin(
@@ -867,27 +1364,37 @@ function drawPlayer() {
         );
 
 
-    // ==================================================
-    // BALANÇO DO CORPO
-    // ==================================================
-
     ctx.rotate(
-
         Math.sin(
             player.swimTime * .5
         ) *
-
         Math.min(
             .06,
             swimming / 30
         )
-
     );
 
 
-    // ==================================================
+    // ==============================================
+    // EFEITO DO IMPULSO
+    // ==============================================
+
+    if (
+        boosting
+    ) {
+
+        ctx.shadowBlur =
+            25;
+
+        ctx.shadowColor =
+            "#00cfff";
+
+    }
+
+
+    // ==============================================
     // CAUDA
-    // ==================================================
+    // ==============================================
 
     ctx.save();
 
@@ -937,9 +1444,9 @@ function drawPlayer() {
     ctx.restore();
 
 
-    // ==================================================
+    // ==============================================
     // CORPO
-    // ==================================================
+    // ==============================================
 
     const gradient =
         ctx.createLinearGradient(
@@ -983,9 +1490,9 @@ function drawPlayer() {
     ctx.fill();
 
 
-    // ==================================================
-    // BARBATANA DE CIMA
-    // ==================================================
+    // ==============================================
+    // BARBATINA SUPERIOR
+    // ==============================================
 
     ctx.fillStyle =
         "#e94818";
@@ -1018,9 +1525,9 @@ function drawPlayer() {
     ctx.fill();
 
 
-    // ==================================================
-    // BARBATANA DE BAIXO
-    // ==================================================
+    // ==============================================
+    // BARBATINA INFERIOR
+    // ==============================================
 
     ctx.beginPath();
 
@@ -1049,9 +1556,9 @@ function drawPlayer() {
     ctx.fill();
 
 
-    // ==================================================
+    // ==============================================
     // OLHO
-    // ==================================================
+    // ==============================================
 
     ctx.fillStyle =
         "white";
@@ -1091,9 +1598,9 @@ function drawPlayer() {
     ctx.fill();
 
 
-    // ==================================================
+    // ==============================================
     // BOCA
-    // ==================================================
+    // ==============================================
 
     ctx.strokeStyle =
         "#42130a";
@@ -1122,7 +1629,7 @@ function drawPlayer() {
 
 
 // ======================================================
-// DESENHAR ENTIDADES
+// ENTIDADES
 // ======================================================
 
 function drawEntities() {
@@ -1131,15 +1638,16 @@ function drawEntities() {
 
         ctx.save();
 
+
         ctx.translate(
             e.x,
             e.y
         );
 
 
-        // ==============================================
+        // ==========================================
         // PEIXE
-        // ==============================================
+        // ==========================================
 
         if (
             e.type === "fish"
@@ -1150,10 +1658,13 @@ function drawEntities() {
                 1
             );
 
+
             ctx.fillStyle =
                 "#55c7ff";
 
+
             ctx.beginPath();
+
 
             ctx.ellipse(
                 0,
@@ -1165,30 +1676,37 @@ function drawEntities() {
                 Math.PI * 2
             );
 
+
             ctx.fill();
 
 
             ctx.fillStyle =
                 "#2999d6";
 
+
             ctx.beginPath();
+
 
             ctx.moveTo(
                 -e.size,
                 0
             );
 
+
             ctx.lineTo(
                 -e.size * 1.6,
                 -e.size * .6
             );
+
 
             ctx.lineTo(
                 -e.size * 1.6,
                 e.size * .6
             );
 
+
             ctx.closePath();
+
 
             ctx.fill();
 
@@ -1196,7 +1714,9 @@ function drawEntities() {
             ctx.fillStyle =
                 "white";
 
+
             ctx.beginPath();
+
 
             ctx.arc(
                 e.size * .45,
@@ -1206,13 +1726,16 @@ function drawEntities() {
                 Math.PI * 2
             );
 
+
             ctx.fill();
 
 
             ctx.fillStyle =
                 "#001";
 
+
             ctx.beginPath();
+
 
             ctx.arc(
                 e.size * .5,
@@ -1222,14 +1745,15 @@ function drawEntities() {
                 Math.PI * 2
             );
 
+
             ctx.fill();
 
         }
 
 
-        // ==============================================
+        // ==========================================
         // HUMANO
-        // ==============================================
+        // ==========================================
 
         else if (
             e.type === "human"
@@ -1244,6 +1768,7 @@ function drawEntities() {
             ctx.textBaseline =
                 "middle";
 
+
             ctx.fillText(
                 "🤿",
                 0,
@@ -1253,9 +1778,9 @@ function drawEntities() {
         }
 
 
-        // ==============================================
+        // ==========================================
         // TUBARÃO
-        // ==============================================
+        // ==========================================
 
         else if (
             e.type === "shark"
@@ -1304,8 +1829,6 @@ function drawEntities() {
             ctx.fill();
 
 
-            // barbatana
-
             ctx.beginPath();
 
 
@@ -1333,8 +1856,6 @@ function drawEntities() {
             ctx.fill();
 
 
-            // olho
-
             ctx.fillStyle =
                 "#ff3030";
 
@@ -1356,9 +1877,9 @@ function drawEntities() {
         }
 
 
-        // ==============================================
+        // ==========================================
         // MINA
-        // ==============================================
+        // ==========================================
 
         else if (
             e.type === "mine"
@@ -1401,12 +1922,14 @@ function drawEntities() {
                     Math.PI /
                     4;
 
+
                 ctx.beginPath();
 
 
                 ctx.moveTo(
                     Math.cos(a) *
                     e.size,
+
                     Math.sin(a) *
                     e.size
                 );
@@ -1415,6 +1938,7 @@ function drawEntities() {
                 ctx.lineTo(
                     Math.cos(a) *
                     e.size * 1.5,
+
                     Math.sin(a) *
                     e.size * 1.5
                 );
@@ -1499,30 +2023,34 @@ function createBubbles(
 
 function drawBubbles() {
 
-    bubbles.forEach(b => {
+    bubbles.forEach(
+        b => {
 
-        ctx.strokeStyle =
-            "rgba(170,230,255,.55)";
+            ctx.strokeStyle =
+                "rgba(170,230,255,.55)";
 
-        ctx.lineWidth = 1.5;
-
-
-        ctx.beginPath();
+            ctx.lineWidth = 1.5;
 
 
-        ctx.arc(
-            b.x,
-            b.y,
-            3 +
-            Math.sin(b.phase) * 1,
-            0,
-            Math.PI * 2
-        );
+            ctx.beginPath();
 
 
-        ctx.stroke();
+            ctx.arc(
+                b.x,
+                b.y,
+                3 +
+                Math.sin(
+                    b.phase
+                ),
+                0,
+                Math.PI * 2
+            );
 
-    });
+
+            ctx.stroke();
+
+        }
+    );
 
 }
 
@@ -1572,8 +2100,6 @@ function drawBackground() {
     );
 
 
-    // Luz do fundo
-
     const glow =
         ctx.createRadialGradient(
             W * .5,
@@ -1609,7 +2135,7 @@ function drawBackground() {
     );
 
 
-    // Partículas
+    // partículas
 
     for (
         let i = 0;
@@ -1618,15 +2144,14 @@ function drawBackground() {
     ) {
 
         const x =
-            (i * 197) %
-            W;
+            (i * 197) % W;
+
 
         const y =
             (
                 i * 113 +
                 worldTime * .15
-            ) %
-            H;
+            ) % H;
 
 
         ctx.fillStyle =
@@ -1661,7 +2186,9 @@ function updateHUD() {
     document.getElementById(
         "size"
     ).textContent =
-        Math.floor(player.size);
+        Math.floor(
+            player.size
+        );
 
 
     document.getElementById(
@@ -1675,6 +2202,54 @@ function updateHUD() {
     ).textContent =
         life;
 
+
+    // ==============================================
+    // BARRA
+    // ==============================================
+
+    document.getElementById(
+        "boostFill"
+    ).style.width =
+        boost + "%";
+
+
+    document.getElementById(
+        "boostValue"
+    ).textContent =
+        Math.floor(boost);
+
+
+    const status =
+        document.getElementById(
+            "boostStatus"
+        );
+
+
+    if (
+        boosting
+    ) {
+
+        status.textContent =
+            "IMPULSO ATIVADO!";
+
+    }
+
+    else if (
+        boost >= 100
+    ) {
+
+        status.textContent =
+            "PRESSIONE ESPAÇO!";
+
+    }
+
+    else {
+
+        status.textContent =
+            "coma peixes para carregar";
+
+    }
+
 }
 
 
@@ -1686,10 +2261,18 @@ function endGame() {
 
     gameRunning = false;
 
+    boosting = false;
+
+    document.body
+        .classList
+        .remove("boosting");
+
+
     document.getElementById(
         "finalScore"
     ).textContent =
         score;
+
 
     document.getElementById(
         "gameOver"
@@ -1726,6 +2309,7 @@ function gameLoop() {
 
     drawBubbles();
 
+
     if (
         gameRunning
     ) {
@@ -1738,7 +2322,7 @@ function gameLoop() {
 
 
 // ======================================================
-// INICIAR LOOP
+// INICIAR
 // ======================================================
 
 gameLoop();

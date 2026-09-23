@@ -3,118 +3,114 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ABYSS 🐟</title>
+<title>ABYSS — O Peixe do Abismo</title>
 
 <style>
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-  overflow: hidden;
-  background: #00111f;
-  font-family: Arial, sans-serif;
-  color: white;
+    overflow: hidden;
+    background: #020b14;
+    font-family: Arial, sans-serif;
+    color: white;
 }
 
 canvas {
-  display: block;
-  background: linear-gradient(#006994, #00334d 55%, #00131f);
+    display: block;
+    width: 100vw;
+    height: 100vh;
+    background:
+        radial-gradient(circle at center, #06345c, #01111f 75%);
 }
 
-#menu {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background:
-    radial-gradient(circle at center, rgba(0,180,255,.2), transparent 45%),
-    rgba(0,8,15,.88);
-  z-index: 10;
-}
-
-.box {
-  width: min(600px, 90%);
-  text-align: center;
-  padding: 40px;
-  border: 2px solid #27d9ff;
-  border-radius: 25px;
-  background: rgba(0,20,35,.9);
-  box-shadow: 0 0 40px rgba(0,200,255,.3);
-}
-
-h1 {
-  font-size: clamp(45px, 10vw, 90px);
-  color: #46eaff;
-  text-shadow: 0 0 25px #00bfff;
-  margin-bottom: 10px;
-}
-
-.subtitle {
-  color: #b8eaff;
-  margin-bottom: 25px;
-}
-
-button {
-  border: 0;
-  padding: 16px 35px;
-  border-radius: 12px;
-  background: #16c8ff;
-  color: #00131f;
-  font-size: 18px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: .2s;
-}
-
-button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 25px #16c8ff;
-}
-
-#hud {
-  position: fixed;
-  top: 15px;
-  left: 15px;
-  right: 15px;
-  display: none;
-  justify-content: space-between;
-  pointer-events: none;
-  z-index: 5;
-}
-
-.hudBox {
-  padding: 10px 16px;
-  border-radius: 12px;
-  background: rgba(0,15,25,.65);
-  border: 1px solid rgba(100,230,255,.5);
-  backdrop-filter: blur(5px);
+#menu,
+#gameOver {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background: rgba(0, 8, 18, 0.9);
+    z-index: 10;
+    text-align: center;
 }
 
 #gameOver {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 20;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0,5,10,.8);
+    display: none;
 }
 
-.gameOverBox {
-  text-align: center;
-  background: #001b2a;
-  border: 2px solid #27d9ff;
-  padding: 40px;
-  border-radius: 25px;
+h1 {
+    font-size: clamp(42px, 8vw, 90px);
+    color: #ff7b21;
+    text-shadow: 0 0 25px #ff4d00;
+    margin-bottom: 10px;
 }
 
-#message {
-  margin: 15px 0 25px;
-  color: #b8eaff;
+.subtitle {
+    font-size: 18px;
+    color: #a9dfff;
+    margin-bottom: 30px;
+}
+
+button {
+    border: none;
+    padding: 15px 35px;
+    border-radius: 12px;
+    background: #ff6a00;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(255, 106, 0, 0.5);
+    transition: .2s;
+}
+
+button:hover {
+    transform: scale(1.06);
+    background: #ff7f24;
+}
+
+#hud {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    z-index: 5;
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+}
+
+.hudBox {
+    background: rgba(0, 15, 30, .75);
+    border: 1px solid rgba(100, 200, 255, .3);
+    padding: 10px 15px;
+    border-radius: 12px;
+    backdrop-filter: blur(5px);
+    font-size: 15px;
+}
+
+#controls {
+    position: fixed;
+    bottom: 15px;
+    left: 15px;
+    color: #9edcff;
+    font-size: 13px;
+    background: rgba(0, 15, 30, .6);
+    padding: 8px 12px;
+    border-radius: 8px;
+    z-index: 5;
+}
+
+.warning {
+    margin-top: 20px;
+    color: #ffb06c;
+    font-size: 13px;
 }
 </style>
 </head>
@@ -123,776 +119,1630 @@ button:hover {
 
 <canvas id="game"></canvas>
 
-<div id="menu">
-  <div class="box">
-    <h1>ABYSS</h1>
-    <div class="subtitle">
-      🐟 O PEIXE DO ABISMO
+<div id="hud">
+    <div class="hudBox">
+        🐟 Tamanho: <span id="size">35</span>
     </div>
 
-    <p style="line-height:1.7;margin-bottom:25px;">
-      Você é o predador do fundo do mar.<br>
-      Coma criaturas menores e mergulhadores 🤿.<br>
-      Cresça, sobreviva e domine o oceano.
-    </p>
+    <div class="hudBox">
+        ⭐ Pontos: <span id="score">0</span>
+    </div>
 
-    <button onclick="startGame()">MERGULHAR 🌊</button>
-
-    <p style="margin-top:20px;font-size:13px;color:#75aabd;">
-      WASD ou SETAS para nadar
-    </p>
-  </div>
+    <div class="hudBox">
+        ❤️ Vidas: <span id="life">3</span>
+    </div>
 </div>
 
-<div id="hud">
-  <div class="hudBox">
-    🐟 Tamanho: <span id="size">1</span>
-  </div>
+<div id="controls">
+    🎮 WASD ou setas para nadar
+</div>
 
-  <div class="hudBox">
-    ⭐ Pontos: <span id="score">0</span>
-  </div>
+<div id="menu">
 
-  <div class="hudBox">
-    ❤️ <span id="life">3</span>
-  </div>
+    <h1>ABYSS</h1>
+
+    <div class="subtitle">
+        O PEIXE DO ABISMO
+    </div>
+
+    <button onclick="startGame()">
+        🌊 COMEÇAR
+    </button>
+
+    <div class="warning">
+        Coma criaturas menores e sobreviva às profundezas.
+    </div>
+
 </div>
 
 <div id="gameOver">
-  <div class="gameOverBox">
-    <h1 style="font-size:50px;">FIM DE JOGO</h1>
 
-    <div id="message"></div>
+    <h1>💀 FIM</h1>
 
-    <button onclick="startGame()">TENTAR NOVAMENTE 🔄</button>
-  </div>
+    <div class="subtitle">
+        Você foi derrotado pelo abismo.
+    </div>
+
+    <div style="font-size:22px;margin-bottom:25px;">
+        Pontuação: <b id="finalScore">0</b>
+    </div>
+
+    <button onclick="startGame()">
+        🔄 JOGAR NOVAMENTE
+    </button>
+
 </div>
 
 <script>
+
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
 let W, H;
 
 function resize() {
-  W = canvas.width = innerWidth;
-  H = canvas.height = innerHeight;
+
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+
 }
 
+window.addEventListener("resize", resize);
 resize();
-addEventListener("resize", resize);
+
+
+// ======================================================
+// ESTADO DO JOGO
+// ======================================================
+
+let gameRunning = false;
+
+let score = 0;
+let life = 3;
+
+let worldTime = 0;
+let spawnTimer = 0;
+
+let entities = [];
+let bubbles = [];
+
+
+// ======================================================
+// TECLAS
+// ======================================================
 
 const keys = {};
 
-addEventListener("keydown", e => {
-  keys[e.key.toLowerCase()] = true;
+window.addEventListener("keydown", e => {
+
+    keys[e.key.toLowerCase()] = true;
+
+    if (
+        ["arrowup", "arrowdown", "arrowleft", "arrowright", " "]
+        .includes(e.key.toLowerCase())
+    ) {
+        e.preventDefault();
+    }
+
 });
 
-addEventListener("keyup", e => {
-  keys[e.key.toLowerCase()] = false;
+window.addEventListener("keyup", e => {
+
+    keys[e.key.toLowerCase()] = false;
+
 });
 
-let player;
-let entities = [];
-let bubbles = [];
-let score = 0;
-let life = 3;
-let gameRunning = false;
-let spawnTimer = 0;
-let worldTime = 0;
+
+// ======================================================
+// JOGADOR
+// ======================================================
+
+let player = {
+
+    x: W / 2,
+    y: H / 2,
+
+    size: 35,
+
+    // Velocidade atual
+    vx: 0,
+    vy: 0,
+
+    // Velocidade máxima
+    maxSpeed: 3.2,
+
+    // Quanto acelera
+    acceleration: 0.12,
+
+    // Quanto desacelera
+    friction: 0.94,
+
+    direction: 1,
+
+    // Animação da natação
+    swimTime: 0,
+
+    invincible: 0
+
+};
+
+
+// ======================================================
+// COMEÇAR
+// ======================================================
 
 function startGame() {
 
-  document.getElementById("menu").style.display = "none";
-  document.getElementById("gameOver").style.display = "none";
-  document.getElementById("hud").style.display = "flex";
+    score = 0;
+    life = 3;
 
-  score = 0;
-  life = 3;
+    entities = [];
+    bubbles = [];
 
-  player = {
-    x: W / 2,
-    y: H / 2,
-    size: 35,
-    speed: 5,
-    direction: 1,
-    invincible: 0
-  };
+    player.x = W / 2;
+    player.y = H / 2;
 
-  entities = [];
+    player.size = 35;
 
-  for (let i = 0; i < 18; i++) {
-    spawnEntity();
-  }
+    player.vx = 0;
+    player.vy = 0;
 
-  bubbles = [];
+    player.direction = 1;
 
-  for (let i = 0; i < 80; i++) {
-    bubbles.push({
-      x: Math.random() * W,
-      y: Math.random() * H,
-      r: Math.random() * 3 + 1,
-      speed: Math.random() * 1.5 + .5
-    });
-  }
+    player.swimTime = 0;
 
-  gameRunning = true;
-  updateHUD();
-  requestAnimationFrame(loop);
+    player.invincible = 0;
+
+    spawnTimer = 0;
+    worldTime = 0;
+
+    gameRunning = true;
+
+    document.getElementById("menu").style.display = "none";
+    document.getElementById("gameOver").style.display = "none";
+
+    updateHUD();
+
+    for (let i = 0; i < 12; i++) {
+        spawnEntity();
+    }
+
 }
+
+
+// ======================================================
+// CRIAR CRIATURAS
+// ======================================================
 
 function spawnEntity() {
 
-  const random = Math.random();
+    const types = [
+        "fish",
+        "fish",
+        "fish",
+        "human",
+        "shark",
+        "mine"
+    ];
 
-  let type;
+    const type =
+        types[Math.floor(Math.random() * types.length)];
 
-  if (random < .55) {
-    type = "fish";
-  } else if (random < .82) {
-    type = "human";
-  } else if (random < .94) {
-    type = "shark";
-  } else {
-    type = "mine";
-  }
+    let size;
+    let speed;
 
-  let size;
+    if (type === "fish") {
 
-  if (type === "fish") {
-    size = Math.random() * 15 + 12;
-  }
+        size =
+            10 +
+            Math.random() * 20;
 
-  if (type === "human") {
-    size = 22;
-  }
+        speed =
+            0.5 +
+            Math.random() * 1;
 
-  if (type === "shark") {
-    size = 55;
-  }
+    }
 
-  if (type === "mine") {
-    size = 25;
-  }
+    else if (type === "human") {
 
-  entities.push({
-    x: Math.random() * W,
-    y: Math.random() * H,
-    size,
-    type,
-    speed: Math.random() * 1.5 + .4,
-    phase: Math.random() * Math.PI * 2,
-    direction: Math.random() > .5 ? 1 : -1
-  });
+        size = 17;
+
+        speed =
+            0.4 +
+            Math.random() * .6;
+
+    }
+
+    else if (type === "shark") {
+
+        size = 45;
+
+        speed =
+            0.7 +
+            Math.random() * .5;
+
+    }
+
+    else {
+
+        size = 20;
+
+        speed = 0;
+
+    }
+
+    let x;
+    let y;
+
+    // Nasce fora da tela
+    const side =
+        Math.floor(Math.random() * 4);
+
+    if (side === 0) {
+
+        x = -100;
+        y = Math.random() * H;
+
+    }
+
+    else if (side === 1) {
+
+        x = W + 100;
+        y = Math.random() * H;
+
+    }
+
+    else if (side === 2) {
+
+        x = Math.random() * W;
+        y = -100;
+
+    }
+
+    else {
+
+        x = Math.random() * W;
+        y = H + 100;
+
+    }
+
+    entities.push({
+
+        type,
+
+        x,
+        y,
+
+        size,
+
+        speed,
+
+        direction:
+            Math.random() > .5
+                ? 1
+                : -1,
+
+        phase:
+            Math.random() * Math.PI * 2
+
+    });
+
 }
+
+
+// ======================================================
+// UPDATE
+// ======================================================
 
 function update() {
 
-  worldTime++;
+    worldTime++;
 
-  let dx = 0;
-  let dy = 0;
+    // ==================================================
+    // CONTROLES
+    // ==================================================
 
-  if (keys["arrowleft"] || keys["a"]) dx--;
-  if (keys["arrowright"] || keys["d"]) dx++;
-  if (keys["arrowup"] || keys["w"]) dy--;
-  if (keys["arrowdown"] || keys["s"]) dy++;
+    let dx = 0;
+    let dy = 0;
 
-  if (dx !== 0 || dy !== 0) {
-
-    const length = Math.hypot(dx, dy);
-
-    dx /= length;
-    dy /= length;
-
-    player.x += dx * player.speed;
-    player.y += dy * player.speed;
-
-    if (dx !== 0) {
-      player.direction = dx > 0 ? 1 : -1;
-    }
-  }
-
-  player.x = Math.max(player.size, Math.min(W - player.size, player.x));
-  player.y = Math.max(player.size, Math.min(H - player.size, player.y));
-
-  if (player.invincible > 0) {
-    player.invincible--;
-  }
-
-  spawnTimer++;
-
-  if (spawnTimer > 55) {
-    spawnTimer = 0;
-    spawnEntity();
-  }
-
-  entities.forEach(e => {
-
-    e.phase += .02;
-
-    if (e.type === "shark") {
-
-      const angle = Math.atan2(
-        player.y - e.y,
-        player.x - e.x
-      );
-
-      e.x += Math.cos(angle) * e.speed;
-      e.y += Math.sin(angle) * e.speed;
-
-    } else {
-
-      e.x += e.speed * e.direction;
-
-      e.y += Math.sin(e.phase) * .4;
+    if (
+        keys["arrowleft"] ||
+        keys["a"]
+    ) {
+        dx -= 1;
     }
 
-    if (e.x < -100) e.x = W + 100;
-    if (e.x > W + 100) e.x = -100;
+    if (
+        keys["arrowright"] ||
+        keys["d"]
+    ) {
+        dx += 1;
+    }
 
-    if (e.y < -100) e.y = H + 100;
-    if (e.y > H + 100) e.y = -100;
-  });
+    if (
+        keys["arrowup"] ||
+        keys["w"]
+    ) {
+        dy -= 1;
+    }
 
-  for (let i = entities.length - 1; i >= 0; i--) {
+    if (
+        keys["arrowdown"] ||
+        keys["s"]
+    ) {
+        dy += 1;
+    }
 
-    const e = entities[i];
 
-    const distance = Math.hypot(
-      player.x - e.x,
-      player.y - e.y
-    );
+    // ==================================================
+    // ACELERAÇÃO
+    // ==================================================
 
-    if (distance < player.size + e.size * .65) {
+    if (dx !== 0 || dy !== 0) {
 
-      if (e.type === "fish" || e.type === "human") {
+        const tamanho =
+            Math.hypot(dx, dy);
 
-        if (player.size >= e.size * .9) {
+        dx /= tamanho;
+        dy /= tamanho;
 
-          score += e.type === "human" ? 100 : 25;
+        player.vx +=
+            dx * player.acceleration;
 
-          player.size += e.type === "human" ? 3 : 1;
+        player.vy +=
+            dy * player.acceleration;
 
-          entities.splice(i, 1);
+        // Vira para onde está nadando
+        if (dx !== 0) {
 
-          createBubbles(e.x, e.y, 10);
+            player.direction =
+                dx > 0 ? 1 : -1;
 
         }
 
-      } else {
+        // Aumenta animação
+        player.swimTime += 0.25;
 
-        if (player.invincible <= 0) {
+    }
 
-          life--;
+    else {
 
-          player.invincible = 100;
+        // Desaceleração natural
+        player.vx *= player.friction;
+        player.vy *= player.friction;
 
-          player.size = Math.max(20, player.size - 3);
+        player.swimTime += 0.08;
 
-          createBubbles(player.x, player.y, 15);
+    }
 
-          if (life <= 0) {
-            endGame();
-            return;
-          }
+
+    // ==================================================
+    // LIMITAR VELOCIDADE
+    // ==================================================
+
+    const velocidade =
+        Math.hypot(
+            player.vx,
+            player.vy
+        );
+
+    if (
+        velocidade >
+        player.maxSpeed
+    ) {
+
+        player.vx =
+            (player.vx / velocidade) *
+            player.maxSpeed;
+
+        player.vy =
+            (player.vy / velocidade) *
+            player.maxSpeed;
+
+    }
+
+
+    // ==================================================
+    // MOVIMENTO
+    // ==================================================
+
+    player.x += player.vx;
+    player.y += player.vy;
+
+
+    // ==================================================
+    // LIMITES
+    // ==================================================
+
+    player.x =
+        Math.max(
+            player.size,
+            Math.min(
+                W - player.size,
+                player.x
+            )
+        );
+
+    player.y =
+        Math.max(
+            player.size,
+            Math.min(
+                H - player.size,
+                player.y
+            )
+        );
+
+
+    // ==================================================
+    // INVENCIBILIDADE
+    // ==================================================
+
+    if (
+        player.invincible > 0
+    ) {
+
+        player.invincible--;
+
+    }
+
+
+    // ==================================================
+    // SPAWN
+    // ==================================================
+
+    spawnTimer++;
+
+    if (
+        spawnTimer > 55
+    ) {
+
+        spawnTimer = 0;
+
+        spawnEntity();
+
+    }
+
+
+    // ==================================================
+    // INIMIGOS
+    // ==================================================
+
+    entities.forEach(e => {
+
+        e.phase += 0.02;
+
+
+        // TUBARÃO
+        if (
+            e.type === "shark"
+        ) {
+
+            const angle =
+                Math.atan2(
+                    player.y - e.y,
+                    player.x - e.x
+                );
+
+            e.x +=
+                Math.cos(angle) *
+                e.speed;
+
+            e.y +=
+                Math.sin(angle) *
+                e.speed;
+
         }
-      }
-    }
-  }
 
-  bubbles.forEach(b => {
 
-    b.y -= b.speed;
+        // OUTROS
+        else if (
+            e.type !== "mine"
+        ) {
 
-    if (b.y < -10) {
-      b.y = H + 10;
-      b.x = Math.random() * W;
-    }
-  });
+            e.x +=
+                e.speed *
+                e.direction;
 
-  updateHUD();
-}
+            e.y +=
+                Math.sin(e.phase) *
+                0.4;
 
-function createBubbles(x, y, amount) {
+        }
 
-  for (let i = 0; i < amount; i++) {
 
-    bubbles.push({
-      x,
-      y,
-      r: Math.random() * 4 + 1,
-      speed: Math.random() * 2 + .5
+        // Mina
+        if (
+            e.type === "mine"
+        ) {
+
+            e.y +=
+                Math.sin(e.phase) *
+                0.25;
+
+        }
+
     });
-  }
+
+
+    // ==================================================
+    // COLISÕES
+    // ==================================================
+
+    for (
+        let i = entities.length - 1;
+        i >= 0;
+        i--
+    ) {
+
+        const e =
+            entities[i];
+
+        const distance =
+            Math.hypot(
+                player.x - e.x,
+                player.y - e.y
+            );
+
+
+        if (
+            distance <
+            player.size +
+            e.size * .65
+        ) {
+
+
+            // ==========================================
+            // PEIXE / HUMANO
+            // ==========================================
+
+            if (
+                e.type === "fish" ||
+                e.type === "human"
+            ) {
+
+                if (
+                    player.size >=
+                    e.size * .9
+                ) {
+
+                    score +=
+                        e.type === "human"
+                            ? 100
+                            : 25;
+
+                    player.size +=
+                        e.type === "human"
+                            ? 3
+                            : 1;
+
+                    entities.splice(i, 1);
+
+                    createBubbles(
+                        e.x,
+                        e.y,
+                        10
+                    );
+
+                }
+
+            }
+
+
+            // ==========================================
+            // PERIGO
+            // ==========================================
+
+            else {
+
+                if (
+                    player.invincible <= 0
+                ) {
+
+                    life--;
+
+                    player.invincible =
+                        100;
+
+                    player.size =
+                        Math.max(
+                            20,
+                            player.size - 3
+                        );
+
+                    createBubbles(
+                        player.x,
+                        player.y,
+                        15
+                    );
+
+
+                    if (
+                        life <= 0
+                    ) {
+
+                        endGame();
+
+                        return;
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    }
+
+
+    // ==================================================
+    // BOLHAS
+    // ==================================================
+
+    bubbles.forEach(b => {
+
+        b.y -= b.speed;
+
+        b.x +=
+            Math.sin(
+                b.phase
+            ) * .2;
+
+        b.phase += .03;
+
+    });
+
+
+    bubbles =
+        bubbles.filter(
+            b => b.y > -20
+        );
+
+
+    updateHUD();
+
 }
 
-function updateHUD() {
 
-  document.getElementById("score").textContent = score;
-  document.getElementById("life").textContent = life;
-  document.getElementById("size").textContent =
-    Math.floor(player.size / 35 * 10) / 10;
-}
-
-function drawBackground() {
-
-  const gradient = ctx.createLinearGradient(0, 0, 0, H);
-
-  gradient.addColorStop(0, "#006b94");
-  gradient.addColorStop(.5, "#003e5c");
-  gradient.addColorStop(1, "#00131f");
-
-  ctx.fillStyle = gradient;
-  ctx.fillRect(0, 0, W, H);
-
-  // luz da superfície
-
-  const glow = ctx.createRadialGradient(
-    W / 2,
-    0,
-    0,
-    W / 2,
-    0,
-    H * .7
-  );
-
-  glow.addColorStop(0, "rgba(100,230,255,.25)");
-  glow.addColorStop(1, "rgba(0,0,0,0)");
-
-  ctx.fillStyle = glow;
-  ctx.fillRect(0, 0, W, H);
-
-  // fundo
-
-  ctx.fillStyle = "#001018";
-
-  ctx.beginPath();
-  ctx.moveTo(0, H);
-
-  for (let x = 0; x <= W; x += 40) {
-
-    const y =
-      H - 45 -
-      Math.sin(x * .015) * 15;
-
-    ctx.lineTo(x, y);
-  }
-
-  ctx.lineTo(W, H);
-  ctx.closePath();
-
-  ctx.fill();
-
-  // algas
-
-  for (let i = 0; i < 15; i++) {
-
-    const x = i * (W / 15);
-
-    ctx.strokeStyle = "rgba(0,180,130,.35)";
-    ctx.lineWidth = 5;
-
-    ctx.beginPath();
-    ctx.moveTo(x, H);
-
-    ctx.quadraticCurveTo(
-      x - 20,
-      H - 80,
-      x + Math.sin(i) * 30,
-      H - 140
-    );
-
-    ctx.stroke();
-  }
-}
-
-function drawBubbles() {
-
-  bubbles.forEach(b => {
-
-    ctx.beginPath();
-    ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
-
-    ctx.strokeStyle = "rgba(180,240,255,.35)";
-    ctx.stroke();
-  });
-}
+// ======================================================
+// DESENHAR PEIXE
+// ======================================================
 
 function drawPlayer() {
 
-  if (
-    player.invincible > 0 &&
-    Math.floor(player.invincible / 6) % 2 === 0
-  ) return;
+    // Piscada quando toma dano
+    if (
+        player.invincible > 0 &&
+        Math.floor(
+            player.invincible / 6
+        ) % 2 === 0
+    ) {
 
-  ctx.save();
+        return;
 
-  ctx.translate(player.x, player.y);
+    }
 
-  ctx.scale(
-    player.direction,
-    1
-  );
 
-  // cauda
+    ctx.save();
 
-  ctx.fillStyle = "#ff7b21";
 
-  ctx.beginPath();
-
-  ctx.moveTo(-player.size * .5, 0);
-  ctx.lineTo(-player.size * 1.15, -player.size * .55);
-  ctx.lineTo(-player.size * 1.05, player.size * .55);
-  ctx.closePath();
-
-  ctx.fill();
-
-  // corpo
-
-  const gradient =
-    ctx.createLinearGradient(
-      0,
-      -player.size,
-      0,
-      player.size
+    ctx.translate(
+        player.x,
+        player.y
     );
 
-  gradient.addColorStop(0, "#ffd34d");
-  gradient.addColorStop(1, "#ef4f19");
 
-  ctx.fillStyle = gradient;
+    // ==================================================
+    // DIREÇÃO
+    // ==================================================
 
-  ctx.beginPath();
+    ctx.scale(
+        player.direction,
+        1
+    );
 
-  ctx.ellipse(
-    0,
-    0,
-    player.size,
-    player.size * .6,
-    0,
-    0,
-    Math.PI * 2
-  );
 
-  ctx.fill();
+    // ==================================================
+    // VELOCIDADE
+    // ==================================================
 
-  // barbatana
+    const swimming =
+        Math.hypot(
+            player.vx,
+            player.vy
+        );
 
-  ctx.fillStyle = "#e94818";
 
-  ctx.beginPath();
+    // ==================================================
+    // MOVIMENTO DA CAUDA
+    // ==================================================
 
-  ctx.moveTo(-5, -player.size * .45);
-  ctx.lineTo(5, -player.size * .95);
-  ctx.lineTo(18, -player.size * .45);
+    const tailWave =
+        Math.sin(
+            player.swimTime
+        ) *
+        Math.min(
+            .35,
+            swimming / 10
+        );
 
-  ctx.fill();
 
-  // olho
+    // ==================================================
+    // BALANÇO DO CORPO
+    // ==================================================
 
-  ctx.fillStyle = "white";
+    ctx.rotate(
 
-  ctx.beginPath();
-  ctx.arc(
-    player.size * .45,
-    -player.size * .18,
-    player.size * .16,
-    0,
-    Math.PI * 2
-  );
-  ctx.fill();
+        Math.sin(
+            player.swimTime * .5
+        ) *
 
-  ctx.fillStyle = "#00131f";
+        Math.min(
+            .06,
+            swimming / 30
+        )
 
-  ctx.beginPath();
-  ctx.arc(
-    player.size * .5,
-    -player.size * .18,
-    player.size * .08,
-    0,
-    Math.PI * 2
-  );
-  ctx.fill();
+    );
 
-  // boca
 
-  ctx.strokeStyle = "#42130a";
-  ctx.lineWidth = 3;
+    // ==================================================
+    // CAUDA
+    // ==================================================
 
-  ctx.beginPath();
+    ctx.save();
 
-  ctx.arc(
-    player.size * .55,
-    player.size * .08,
-    player.size * .2,
-    0,
-    Math.PI
-  );
 
-  ctx.stroke();
+    ctx.translate(
+        -player.size * .55,
+        0
+    );
 
-  ctx.restore();
-}
 
-function drawFish(e) {
+    ctx.rotate(
+        tailWave
+    );
 
-  ctx.save();
 
-  ctx.translate(e.x, e.y);
-  ctx.scale(e.direction, 1);
+    ctx.fillStyle =
+        "#ff7b21";
 
-  ctx.fillStyle = "#6de3ff";
-
-  ctx.beginPath();
-
-  ctx.ellipse(
-    0,
-    0,
-    e.size,
-    e.size * .55,
-    0,
-    0,
-    Math.PI * 2
-  );
-
-  ctx.fill();
-
-  ctx.beginPath();
-
-  ctx.moveTo(-e.size * .7, 0);
-  ctx.lineTo(-e.size * 1.3, -e.size * .5);
-  ctx.lineTo(-e.size * 1.3, e.size * .5);
-  ctx.closePath();
-
-  ctx.fill();
-
-  ctx.fillStyle = "white";
-
-  ctx.beginPath();
-  ctx.arc(e.size * .55, -e.size * .15, e.size * .14, 0, Math.PI * 2);
-  ctx.fill();
-
-  ctx.restore();
-}
-
-function drawHuman(e) {
-
-  ctx.save();
-
-  ctx.translate(e.x, e.y);
-
-  // cabeça
-
-  ctx.fillStyle = "#f2c49b";
-
-  ctx.beginPath();
-  ctx.arc(0, -10, 8, 0, Math.PI * 2);
-  ctx.fill();
-
-  // roupa
-
-  ctx.fillStyle = "#dfefff";
-
-  ctx.fillRect(-8, 0, 16, 22);
-
-  // braços
-
-  ctx.strokeStyle = "#f2c49b";
-  ctx.lineWidth = 5;
-
-  ctx.beginPath();
-
-  ctx.moveTo(-7, 5);
-  ctx.lineTo(-18, 15);
-
-  ctx.moveTo(7, 5);
-  ctx.lineTo(18, 15);
-
-  ctx.stroke();
-
-  // pernas
-
-  ctx.strokeStyle = "#17344a";
-  ctx.lineWidth = 6;
-
-  ctx.beginPath();
-
-  ctx.moveTo(-4, 20);
-  ctx.lineTo(-8, 34);
-
-  ctx.moveTo(4, 20);
-  ctx.lineTo(8, 34);
-
-  ctx.stroke();
-
-  // cilindro de oxigênio
-
-  ctx.fillStyle = "#f5f5f5";
-  ctx.fillRect(10, -3, 5, 20);
-
-  ctx.restore();
-}
-
-function drawShark(e) {
-
-  ctx.save();
-
-  ctx.translate(e.x, e.y);
-
-  const angle = Math.atan2(
-    player.y - e.y,
-    player.x - e.x
-  );
-
-  ctx.rotate(angle);
-
-  ctx.fillStyle = "#526d78";
-
-  ctx.beginPath();
-
-  ctx.ellipse(
-    0,
-    0,
-    e.size,
-    e.size * .4,
-    0,
-    0,
-    Math.PI * 2
-  );
-
-  ctx.fill();
-
-  // cauda
-
-  ctx.beginPath();
-
-  ctx.moveTo(-e.size * .7, 0);
-  ctx.lineTo(-e.size * 1.35, -e.size * .5);
-  ctx.lineTo(-e.size * 1.2, e.size * .5);
-  ctx.closePath();
-
-  ctx.fill();
-
-  // barbatana
-
-  ctx.beginPath();
-
-  ctx.moveTo(0, -e.size * .3);
-  ctx.lineTo(10, -e.size * .9);
-  ctx.lineTo(25, -e.size * .25);
-  ctx.closePath();
-
-  ctx.fill();
-
-  ctx.fillStyle = "white";
-
-  ctx.beginPath();
-  ctx.arc(e.size * .55, -e.size * .12, 4, 0, Math.PI * 2);
-  ctx.fill();
-
-  ctx.restore();
-}
-
-function drawMine(e) {
-
-  ctx.save();
-
-  ctx.translate(e.x, e.y);
-
-  ctx.fillStyle = "#333";
-
-  ctx.beginPath();
-
-  ctx.arc(0, 0, e.size, 0, Math.PI * 2);
-
-  ctx.fill();
-
-  ctx.strokeStyle = "#111";
-  ctx.lineWidth = 5;
-
-  for (let i = 0; i < 8; i++) {
-
-    const a = i * Math.PI / 4;
 
     ctx.beginPath();
 
+
     ctx.moveTo(
-      Math.cos(a) * e.size,
-      Math.sin(a) * e.size
+        0,
+        0
     );
+
 
     ctx.lineTo(
-      Math.cos(a) * (e.size + 12),
-      Math.sin(a) * (e.size + 12)
+        -player.size * .65,
+        -player.size * .55
     );
 
+
+    ctx.lineTo(
+        -player.size * .55,
+        player.size * .55
+    );
+
+
+    ctx.closePath();
+
+
+    ctx.fill();
+
+
+    ctx.restore();
+
+
+    // ==================================================
+    // CORPO
+    // ==================================================
+
+    const gradient =
+        ctx.createLinearGradient(
+            0,
+            -player.size,
+            0,
+            player.size
+        );
+
+
+    gradient.addColorStop(
+        0,
+        "#ffd34d"
+    );
+
+
+    gradient.addColorStop(
+        1,
+        "#ef4f19"
+    );
+
+
+    ctx.fillStyle =
+        gradient;
+
+
+    ctx.beginPath();
+
+
+    ctx.ellipse(
+        0,
+        0,
+        player.size,
+        player.size * .6,
+        0,
+        0,
+        Math.PI * 2
+    );
+
+
+    ctx.fill();
+
+
+    // ==================================================
+    // BARBATANA DE CIMA
+    // ==================================================
+
+    ctx.fillStyle =
+        "#e94818";
+
+
+    ctx.beginPath();
+
+
+    ctx.moveTo(
+        -5,
+        -player.size * .42
+    );
+
+
+    ctx.lineTo(
+        5,
+        -player.size * .9
+    );
+
+
+    ctx.lineTo(
+        18,
+        -player.size * .42
+    );
+
+
+    ctx.closePath();
+
+
+    ctx.fill();
+
+
+    // ==================================================
+    // BARBATANA DE BAIXO
+    // ==================================================
+
+    ctx.beginPath();
+
+
+    ctx.moveTo(
+        -5,
+        player.size * .42
+    );
+
+
+    ctx.lineTo(
+        8,
+        player.size * .78
+    );
+
+
+    ctx.lineTo(
+        20,
+        player.size * .42
+    );
+
+
+    ctx.closePath();
+
+
+    ctx.fill();
+
+
+    // ==================================================
+    // OLHO
+    // ==================================================
+
+    ctx.fillStyle =
+        "white";
+
+
+    ctx.beginPath();
+
+
+    ctx.arc(
+        player.size * .45,
+        -player.size * .18,
+        player.size * .16,
+        0,
+        Math.PI * 2
+    );
+
+
+    ctx.fill();
+
+
+    ctx.fillStyle =
+        "#00131f";
+
+
+    ctx.beginPath();
+
+
+    ctx.arc(
+        player.size * .5,
+        -player.size * .18,
+        player.size * .08,
+        0,
+        Math.PI * 2
+    );
+
+
+    ctx.fill();
+
+
+    // ==================================================
+    // BOCA
+    // ==================================================
+
+    ctx.strokeStyle =
+        "#42130a";
+
+    ctx.lineWidth = 3;
+
+
+    ctx.beginPath();
+
+
+    ctx.arc(
+        player.size * .55,
+        player.size * .08,
+        player.size * .2,
+        0,
+        Math.PI
+    );
+
+
     ctx.stroke();
-  }
 
-  ctx.fillStyle = "#ff4444";
 
-  ctx.beginPath();
+    ctx.restore();
 
-  ctx.arc(0, 0, 7, 0, Math.PI * 2);
-
-  ctx.fill();
-
-  ctx.restore();
 }
+
+
+// ======================================================
+// DESENHAR ENTIDADES
+// ======================================================
 
 function drawEntities() {
 
-  entities.forEach(e => {
+    entities.forEach(e => {
 
-    if (e.type === "fish") drawFish(e);
-    if (e.type === "human") drawHuman(e);
-    if (e.type === "shark") drawShark(e);
-    if (e.type === "mine") drawMine(e);
+        ctx.save();
 
-  });
+        ctx.translate(
+            e.x,
+            e.y
+        );
+
+
+        // ==============================================
+        // PEIXE
+        // ==============================================
+
+        if (
+            e.type === "fish"
+        ) {
+
+            ctx.scale(
+                e.direction,
+                1
+            );
+
+            ctx.fillStyle =
+                "#55c7ff";
+
+            ctx.beginPath();
+
+            ctx.ellipse(
+                0,
+                0,
+                e.size,
+                e.size * .55,
+                0,
+                0,
+                Math.PI * 2
+            );
+
+            ctx.fill();
+
+
+            ctx.fillStyle =
+                "#2999d6";
+
+            ctx.beginPath();
+
+            ctx.moveTo(
+                -e.size,
+                0
+            );
+
+            ctx.lineTo(
+                -e.size * 1.6,
+                -e.size * .6
+            );
+
+            ctx.lineTo(
+                -e.size * 1.6,
+                e.size * .6
+            );
+
+            ctx.closePath();
+
+            ctx.fill();
+
+
+            ctx.fillStyle =
+                "white";
+
+            ctx.beginPath();
+
+            ctx.arc(
+                e.size * .45,
+                -e.size * .15,
+                e.size * .18,
+                0,
+                Math.PI * 2
+            );
+
+            ctx.fill();
+
+
+            ctx.fillStyle =
+                "#001";
+
+            ctx.beginPath();
+
+            ctx.arc(
+                e.size * .5,
+                -e.size * .15,
+                e.size * .08,
+                0,
+                Math.PI * 2
+            );
+
+            ctx.fill();
+
+        }
+
+
+        // ==============================================
+        // HUMANO
+        // ==============================================
+
+        else if (
+            e.type === "human"
+        ) {
+
+            ctx.font =
+                "30px Arial";
+
+            ctx.textAlign =
+                "center";
+
+            ctx.textBaseline =
+                "middle";
+
+            ctx.fillText(
+                "🤿",
+                0,
+                0
+            );
+
+        }
+
+
+        // ==============================================
+        // TUBARÃO
+        // ==============================================
+
+        else if (
+            e.type === "shark"
+        ) {
+
+            ctx.scale(
+                e.direction,
+                1
+            );
+
+
+            ctx.fillStyle =
+                "#687b8a";
+
+
+            ctx.beginPath();
+
+
+            ctx.moveTo(
+                -e.size,
+                0
+            );
+
+
+            ctx.lineTo(
+                -e.size * .3,
+                -e.size * .55
+            );
+
+
+            ctx.lineTo(
+                e.size,
+                0
+            );
+
+
+            ctx.lineTo(
+                -e.size * .3,
+                e.size * .55
+            );
+
+
+            ctx.closePath();
+
+
+            ctx.fill();
+
+
+            // barbatana
+
+            ctx.beginPath();
+
+
+            ctx.moveTo(
+                -5,
+                -e.size * .4
+            );
+
+
+            ctx.lineTo(
+                5,
+                -e.size
+            );
+
+
+            ctx.lineTo(
+                18,
+                -e.size * .35
+            );
+
+
+            ctx.closePath();
+
+
+            ctx.fill();
+
+
+            // olho
+
+            ctx.fillStyle =
+                "#ff3030";
+
+
+            ctx.beginPath();
+
+
+            ctx.arc(
+                e.size * .55,
+                -e.size * .18,
+                4,
+                0,
+                Math.PI * 2
+            );
+
+
+            ctx.fill();
+
+        }
+
+
+        // ==============================================
+        // MINA
+        // ==============================================
+
+        else if (
+            e.type === "mine"
+        ) {
+
+            ctx.fillStyle =
+                "#252525";
+
+
+            ctx.beginPath();
+
+
+            ctx.arc(
+                0,
+                0,
+                e.size,
+                0,
+                Math.PI * 2
+            );
+
+
+            ctx.fill();
+
+
+            ctx.strokeStyle =
+                "#111";
+
+
+            ctx.lineWidth = 4;
+
+
+            for (
+                let i = 0;
+                i < 8;
+                i++
+            ) {
+
+                const a =
+                    i *
+                    Math.PI /
+                    4;
+
+                ctx.beginPath();
+
+
+                ctx.moveTo(
+                    Math.cos(a) *
+                    e.size,
+                    Math.sin(a) *
+                    e.size
+                );
+
+
+                ctx.lineTo(
+                    Math.cos(a) *
+                    e.size * 1.5,
+                    Math.sin(a) *
+                    e.size * 1.5
+                );
+
+
+                ctx.stroke();
+
+            }
+
+
+            ctx.fillStyle =
+                "#ff3838";
+
+
+            ctx.beginPath();
+
+
+            ctx.arc(
+                0,
+                0,
+                5,
+                0,
+                Math.PI * 2
+            );
+
+
+            ctx.fill();
+
+        }
+
+
+        ctx.restore();
+
+    });
+
 }
 
-function draw() {
 
-  drawBackground();
-  drawBubbles();
-  drawEntities();
-  drawPlayer();
+// ======================================================
+// BOLHAS
+// ======================================================
 
-  // profundidade
+function createBubbles(
+    x,
+    y,
+    amount
+) {
 
-  ctx.fillStyle = "rgba(0,0,0,.15)";
+    for (
+        let i = 0;
+        i < amount;
+        i++
+    ) {
 
-  const darkness =
-    Math.min(player.y / H, 1) * .3;
+        bubbles.push({
 
-  ctx.fillRect(0, 0, W, H * darkness);
+            x:
+                x +
+                (Math.random() - .5) *
+                40,
+
+            y:
+                y +
+                (Math.random() - .5) *
+                40,
+
+            speed:
+                .5 +
+                Math.random() *
+                1.5,
+
+            phase:
+                Math.random() *
+                Math.PI * 2
+
+        });
+
+    }
+
 }
 
-function loop() {
 
-  if (!gameRunning) return;
+function drawBubbles() {
 
-  update();
-  draw();
+    bubbles.forEach(b => {
 
-  requestAnimationFrame(loop);
+        ctx.strokeStyle =
+            "rgba(170,230,255,.55)";
+
+        ctx.lineWidth = 1.5;
+
+
+        ctx.beginPath();
+
+
+        ctx.arc(
+            b.x,
+            b.y,
+            3 +
+            Math.sin(b.phase) * 1,
+            0,
+            Math.PI * 2
+        );
+
+
+        ctx.stroke();
+
+    });
+
 }
+
+
+// ======================================================
+// FUNDO
+// ======================================================
+
+function drawBackground() {
+
+    const gradient =
+        ctx.createLinearGradient(
+            0,
+            0,
+            0,
+            H
+        );
+
+
+    gradient.addColorStop(
+        0,
+        "#073b66"
+    );
+
+
+    gradient.addColorStop(
+        .5,
+        "#02213b"
+    );
+
+
+    gradient.addColorStop(
+        1,
+        "#010b15"
+    );
+
+
+    ctx.fillStyle =
+        gradient;
+
+
+    ctx.fillRect(
+        0,
+        0,
+        W,
+        H
+    );
+
+
+    // Luz do fundo
+
+    const glow =
+        ctx.createRadialGradient(
+            W * .5,
+            H * .35,
+            20,
+            W * .5,
+            H * .35,
+            H * .8
+        );
+
+
+    glow.addColorStop(
+        0,
+        "rgba(30,140,210,.18)"
+    );
+
+
+    glow.addColorStop(
+        1,
+        "rgba(0,0,0,0)"
+    );
+
+
+    ctx.fillStyle =
+        glow;
+
+
+    ctx.fillRect(
+        0,
+        0,
+        W,
+        H
+    );
+
+
+    // Partículas
+
+    for (
+        let i = 0;
+        i < 35;
+        i++
+    ) {
+
+        const x =
+            (i * 197) %
+            W;
+
+        const y =
+            (
+                i * 113 +
+                worldTime * .15
+            ) %
+            H;
+
+
+        ctx.fillStyle =
+            "rgba(150,220,255,.15)";
+
+
+        ctx.beginPath();
+
+
+        ctx.arc(
+            x,
+            y,
+            1.5,
+            0,
+            Math.PI * 2
+        );
+
+
+        ctx.fill();
+
+    }
+
+}
+
+
+// ======================================================
+// HUD
+// ======================================================
+
+function updateHUD() {
+
+    document.getElementById(
+        "size"
+    ).textContent =
+        Math.floor(player.size);
+
+
+    document.getElementById(
+        "score"
+    ).textContent =
+        score;
+
+
+    document.getElementById(
+        "life"
+    ).textContent =
+        life;
+
+}
+
+
+// ======================================================
+// GAME OVER
+// ======================================================
 
 function endGame() {
 
-  gameRunning = false;
+    gameRunning = false;
 
-  document.getElementById("hud").style.display = "none";
+    document.getElementById(
+        "finalScore"
+    ).textContent =
+        score;
 
-  document.getElementById("message").innerHTML =
-    `🐟 Você chegou ao fim da expedição.<br><br>
-     ⭐ Pontuação: <strong>${score}</strong><br>
-     📏 Tamanho final: <strong>${Math.floor(player.size)}</strong>`;
+    document.getElementById(
+        "gameOver"
+    ).style.display =
+        "flex";
 
-  document.getElementById("gameOver").style.display = "flex";
 }
+
+
+// ======================================================
+// LOOP
+// ======================================================
+
+function gameLoop() {
+
+    requestAnimationFrame(
+        gameLoop
+    );
+
+
+    drawBackground();
+
+
+    if (
+        gameRunning
+    ) {
+
+        update();
+
+    }
+
+
+    drawEntities();
+
+    drawBubbles();
+
+    if (
+        gameRunning
+    ) {
+
+        drawPlayer();
+
+    }
+
+}
+
+
+// ======================================================
+// INICIAR LOOP
+// ======================================================
+
+gameLoop();
+
 </script>
 
 </body>

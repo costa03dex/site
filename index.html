@@ -3,7 +3,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Dream Room ✨</title>
 
 <style>
@@ -11,274 +11,414 @@
 body{
  margin:0;
  font-family:Arial,sans-serif;
- background:#15151d;
+ background:#121218;
  color:white;
  overflow:hidden
 }
 button{font:inherit;border:0;cursor:pointer}
 
+/* =========================
+   SELEÇÃO DE QUARTO
+========================= */
+
+#selection{
+ position:fixed;
+ inset:0;
+ z-index:1000;
+ background:
+ radial-gradient(circle at top,#363044,#121218 65%);
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ padding:25px;
+ overflow:auto
+}
+
+#selection h1{
+ font-size:42px;
+ margin:0 0 8px;
+ text-align:center
+}
+
+#selection h1 span{color:#c69cff}
+
+#selection p{
+ color:#aaa;
+ margin:0 0 28px;
+ text-align:center
+}
+
+.roomChoices{
+ width:min(1100px,100%);
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:18px
+}
+
+.roomCard{
+ background:#24242f;
+ border:2px solid #3a3a49;
+ border-radius:20px;
+ padding:15px;
+ transition:.2s;
+ cursor:pointer
+}
+
+.roomCard:hover{
+ transform:translateY(-8px);
+ border-color:#c69cff;
+ box-shadow:0 15px 35px #0008
+}
+
+.roomPreview{
+ height:190px;
+ border-radius:14px;
+ position:relative;
+ overflow:hidden;
+ margin-bottom:13px
+}
+
+.roomCard h2{
+ margin:5px 0;
+ font-size:19px
+}
+
+.roomCard p{
+ margin:5px 0 13px;
+ font-size:12px;
+ text-align:left
+}
+
+.enter{
+ width:100%;
+ padding:10px;
+ border-radius:10px;
+ background:#a87ce0;
+ color:white;
+ font-weight:bold
+}
+
+/* PREVIEWS */
+
+.previewModern{
+ background:linear-gradient(#d9d1dd 0 67%,#a8734c 67%)
+}
+.previewCute{
+ background:linear-gradient(#f6cbdc 0 67%,#d49b77 67%)
+}
+.previewGamer{
+ background:linear-gradient(#171a28 0 67%,#403229 67%)
+}
+.previewNature{
+ background:linear-gradient(#c9ddc4 0 67%,#9c704e 67%)
+}
+
+.miniBed{
+ position:absolute;
+ width:110px;
+ height:55px;
+ left:25px;
+ bottom:25px;
+ background:#eee;
+ border-radius:9px;
+ border:4px solid #72594f
+}
+.miniDesk{
+ position:absolute;
+ width:70px;
+ height:30px;
+ right:25px;
+ bottom:30px;
+ background:#875d40;
+ border-radius:4px
+}
+.miniPlant{
+ position:absolute;
+ right:28px;
+ top:25px;
+ font-size:45px
+}
+.miniPc{
+ position:absolute;
+ right:25px;
+ bottom:65px;
+ font-size:38px
+}
+.miniHeart{
+ position:absolute;
+ left:30px;
+ top:30px;
+ font-size:40px
+}
+
+/* =========================
+   JOGO
+========================= */
+
+#game{
+ display:none;
+ height:100vh;
+ flex-direction:column
+}
+
 header{
- height:72px;
+ height:70px;
+ flex-shrink:0;
  background:#20202b;
+ border-bottom:1px solid #3a3a48;
  display:flex;
  align-items:center;
  justify-content:space-between;
- padding:0 22px;
- border-bottom:1px solid #3b3b4d;
- z-index:20
+ padding:0 18px
 }
-.logo{font-size:25px;font-weight:800}
-.logo span{color:#c39aff}
-.topBtns{display:flex;gap:8px}
-.topBtns button{
- padding:10px 15px;
- border-radius:10px;
- color:white;
- background:#343446
-}
-.topBtns button:hover{background:#48485e}
 
-.game{
- height:calc(100vh - 72px);
- display:flex
+.logo{
+ font-size:23px;
+ font-weight:800
+}
+
+.logo span{color:#c49aff}
+
+.headerButtons{
+ display:flex;
+ gap:7px
+}
+
+.headerButtons button{
+ background:#353545;
+ color:white;
+ padding:9px 12px;
+ border-radius:9px
+}
+
+.headerButtons button:hover{
+ background:#48485b
+}
+
+.main{
+ display:flex;
+ height:calc(100vh - 70px);
+ min-height:0
 }
 
 /* MENU */
 
 .menu{
  width:270px;
- background:#1b1b25;
- border-right:1px solid #3a3a48;
+ flex-shrink:0;
+ background:#1a1a24;
+ border-right:1px solid #393946;
  overflow:auto;
- padding:16px
+ padding:14px
 }
-.menu h2{margin:4px 0 14px}
+
+.menu h2{
+ margin:3px 0 13px
+}
+
 .category{
- margin:20px 0 9px;
- color:#a8a8b7;
- font-size:12px;
+ color:#aaa;
  text-transform:uppercase;
- letter-spacing:1px
+ font-size:11px;
+ letter-spacing:1px;
+ margin:18px 0 8px
 }
+
 .items{
  display:grid;
  grid-template-columns:1fr 1fr;
  gap:8px
 }
+
 .item{
- background:#292936;
- border:1px solid #3a3a49;
- border-radius:12px;
- padding:10px 5px;
+ background:#292934;
+ border:1px solid #393947;
+ border-radius:11px;
+ padding:8px;
  text-align:center;
  cursor:grab;
  transition:.15s
 }
+
 .item:hover{
- transform:translateY(-3px);
- background:#363647
+ background:#383847;
+ transform:translateY(-3px)
 }
+
 .preview{
- height:58px;
+ height:50px;
  display:flex;
  align-items:center;
  justify-content:center;
- font-size:38px
+ font-size:32px
 }
+
 .item span{
- display:block;
- font-size:12px;
+ font-size:11px;
  color:#ddd
 }
 
-/* ROOM */
+.empty{
+ color:#777;
+ font-size:12px;
+ line-height:1.5;
+ padding:8px
+}
+
+/* QUARTO */
 
 .roomArea{
  flex:1;
  position:relative;
- background:#111118;
+ background:#101016;
  overflow:hidden
 }
+
 .room{
  position:absolute;
- left:25px;
- right:25px;
- top:25px;
- bottom:25px;
+ inset:24px;
  border-radius:18px;
  overflow:hidden;
- box-shadow:0 15px 50px #0008;
- background:#cdb9a8
+ box-shadow:0 15px 50px #0009;
+ background:#cda77e
 }
-
-/* PAREDE */
 
 .wall{
  position:absolute;
- top:0;
- left:0;
- right:0;
- height:67%;
- background:#e7d5df;
- transition:.3s
+ inset:0 0 34% 0;
+ background:#dfd2df
 }
-
-/* textura parede */
-
-.wall:after{
- content:"";
- position:absolute;
- inset:0;
- opacity:.16;
- background:
- repeating-linear-gradient(
-  90deg,
-  transparent 0,
-  transparent 78px,
-  #fff 79px,
-  transparent 81px
- )
-}
-
-/* piso */
 
 .floor{
  position:absolute;
- bottom:0;
  left:0;
  right:0;
- height:33%;
+ bottom:0;
+ height:34%;
  background:
  repeating-linear-gradient(
   90deg,
-  #b77b4e 0px,
-  #b77b4e 95px,
-  #9d643e 96px,
-  #9d643e 100px
- );
-}
-.floor:after{
- content:"";
- position:absolute;
- inset:0;
- background:
- repeating-linear-gradient(
-  0deg,
-  transparent 0,
-  transparent 29px,
-  #71472e44 30px
+  #ad7348 0,
+  #ad7348 92px,
+  #8f5d3c 94px,
+  #8f5d3c 98px
  )
+}
+
+/* =========================
+   PORTA CORRIGIDA
+========================= */
+
+.door{
+ position:absolute;
+ left:45px;
+ bottom:34%;
+ width:115px;
+ height:255px;
+ background:linear-gradient(90deg,#69452f,#936746,#70492f);
+ border:9px solid #4e3223;
+ border-bottom:0;
+ border-radius:9px 9px 0 0;
+ z-index:4;
+ box-shadow:5px 0 12px #0004
+}
+
+.doorPanel1,
+.doorPanel2{
+ position:absolute;
+ left:15px;
+ right:15px;
+ border:4px solid #65422e;
+ border-radius:4px
+}
+
+.doorPanel1{
+ top:18px;
+ height:85px
+}
+
+.doorPanel2{
+ top:120px;
+ height:105px
+}
+
+.doorHandle{
+ position:absolute;
+ right:12px;
+ top:125px;
+ width:11px;
+ height:11px;
+ border-radius:50%;
+ background:#e5c477;
+ box-shadow:0 0 0 3px #b68c45
 }
 
 /* janela */
 
 .window{
  position:absolute;
+ right:85px;
+ top:50px;
  width:185px;
- height:145px;
- right:90px;
- top:55px;
- background:#8ed3f7;
- border:12px solid #f4f0e9;
- box-shadow:0 8px 20px #0003;
- z-index:2
+ height:135px;
+ background:#9bd9f4;
+ border:10px solid #f7f3ea;
+ z-index:2;
+ box-shadow:0 8px 18px #0004
 }
+
 .window:before{
  content:"";
  position:absolute;
- left:50%;
  top:0;
  bottom:0;
+ left:50%;
  width:7px;
- background:#fff
+ background:white
 }
+
 .window:after{
  content:"";
  position:absolute;
- top:50%;
  left:0;
  right:0;
+ top:50%;
  height:7px;
- background:#fff
-}
-.sun{
- position:absolute;
- width:35px;
- height:35px;
- border-radius:50%;
- background:#ffe58a;
- right:22px;
- top:18px
+ background:white
 }
 
-/* cortinas */
-
-.curtain{
+.curtainLeft,
+.curtainRight{
  position:absolute;
- top:45px;
- right:72px;
- width:220px;
- height:165px;
- pointer-events:none;
- z-index:3
-}
-.curtain:before,.curtain:after{
- content:"";
- position:absolute;
- top:0;
- width:45px;
+ top:40px;
+ width:47px;
  height:155px;
- background:#d7a5bd;
-}
-.curtain:before{left:0;border-radius:0 0 20px 20px}
-.curtain:after{right:0;border-radius:0 0 20px 20px}
-
-/* porta */
-
-.door{
- position:absolute;
- left:55px;
- top:95px;
- width:105px;
- height:235px;
- background:#875d43;
- border:8px solid #62412f;
- border-radius:6px 6px 0 0;
- z-index:2
-}
-.door:before{
- content:"";
- position:absolute;
- left:12px;
- top:18px;
- width:65px;
- height:85px;
- border:5px solid #674431
-}
-.door:after{
- content:"";
- position:absolute;
- right:12px;
- top:130px;
- width:10px;
- height:10px;
- border-radius:50%;
- background:#e6c36a
+ background:#bd91ad;
+ z-index:3;
+ border-radius:0 0 18px 18px
 }
 
-/* OBJETOS */
+.curtainLeft{right:235px}
+.curtainRight{right:48px}
+
+/* =========================
+   OBJETOS
+========================= */
 
 .object{
  position:absolute;
  transform:translate(-50%,-50%);
- z-index:8;
  cursor:grab;
- touch-action:none
+ touch-action:none;
+ z-index:10
 }
+
 .object.selected{
  outline:2px dashed white;
  outline-offset:6px
 }
+
 .delete{
  display:none;
  position:absolute;
@@ -287,124 +427,179 @@ header{
  width:27px;
  height:27px;
  border-radius:50%;
- background:#ef536c;
- color:#fff;
+ background:#f05c70;
+ color:white;
  z-index:100
 }
+
 .object.selected .delete{display:block}
 
 /* CAMA */
 
 .bed{
- width:250px;
- height:150px;
- background:#e8e0da;
- border-radius:18px;
- border:7px solid #74574b;
- box-shadow:0 13px 18px #0005
+ width:245px;
+ height:145px;
+ background:#eee8e2;
+ border:7px solid #72574b;
+ border-radius:15px;
+ box-shadow:0 12px 17px #0005
 }
-.bed .headboard{
+
+.bed:before{
+ content:"";
  position:absolute;
  left:-7px;
- top:-27px;
- width:250px;
- height:42px;
- background:#795a4d;
- border-radius:15px 15px 4px 4px
+ top:-28px;
+ width:245px;
+ height:43px;
+ background:#72574b;
+ border-radius:14px 14px 4px 4px
 }
-.bed .pillow{
+
+.pillow{
  position:absolute;
- top:15px;
- left:22px;
- width:72px;
+ top:14px;
+ left:20px;
+ width:73px;
  height:38px;
- border-radius:13px;
- background:#fff
+ background:white;
+ border-radius:12px
 }
-.bed .blanket{
+
+.blanket{
  position:absolute;
  right:10px;
- top:15px;
- width:115px;
- height:112px;
- border-radius:12px;
- background:#b895d7
+ top:13px;
+ width:112px;
+ height:110px;
+ background:#b99ada;
+ border-radius:12px
+}
+
+/* CAMA GAMER */
+
+.gamerBed{
+ background:#252735;
+ border-color:#11131d
+}
+
+.gamerBed:before{
+ background:#10131d
+}
+
+.gamerBed .blanket{
+ background:#543f8e
 }
 
 /* SOFÁ */
 
 .sofa{
- width:225px;
- height:95px;
- background:#70839a;
+ width:220px;
+ height:92px;
+ background:#697c91;
  border-radius:18px;
- box-shadow:0 12px 16px #0005
+ box-shadow:0 11px 16px #0005
 }
+
 .sofa:before{
  content:"";
  position:absolute;
  left:0;
  right:0;
- top:-28px;
- height:48px;
- background:#8296ad;
- border-radius:20px 20px 8px 8px
+ top:-27px;
+ height:45px;
+ background:#8094a9;
+ border-radius:18px 18px 8px 8px
 }
+
 .sofa:after{
  content:"";
  position:absolute;
- left:18px;
- right:18px;
- bottom:-14px;
- height:18px;
- background:#465466;
+ left:12px;
+ right:12px;
+ bottom:-13px;
+ height:16px;
+ background:#465363;
  border-radius:5px
 }
 
-/* MESA */
+/* ESCRIVANINHA */
 
 .table{
  width:155px;
- height:70px;
- background:#a96f45;
- border-radius:8px;
- box-shadow:0 9px 13px #0005
+ height:68px;
+ background:#9a6742;
+ border-radius:7px;
+ box-shadow:0 9px 14px #0005
 }
+
 .table:before{
  content:"";
  position:absolute;
- left:15px;
- right:15px;
- bottom:-45px;
- height:50px;
- background:
- linear-gradient(
-  90deg,
-  #765037 0 14px,
-  transparent 14px calc(100% - 14px),
-  #765037 calc(100% - 14px)
- )
+ left:13px;
+ right:13px;
+ bottom:-48px;
+ height:52px;
+ border-left:11px solid #70482f;
+ border-right:11px solid #70482f
 }
+
 .monitor{
  position:absolute;
  left:50%;
- top:-65px;
+ top:-62px;
  transform:translateX(-50%);
- width:90px;
+ width:92px;
  height:58px;
- background:#20232c;
- border:6px solid #4b4e59;
+ background:#161922;
+ border:6px solid #414550;
  border-radius:7px
 }
+
 .monitor:after{
  content:"";
  position:absolute;
  width:35px;
  height:5px;
- background:#4b4e59;
- bottom:-15px;
+ background:#414550;
+ bottom:-14px;
  left:50%;
  transform:translateX(-50%)
+}
+
+/* SETUP GAMER */
+
+.gamerTable{
+ width:175px;
+ height:70px;
+ background:#242631;
+ border:2px solid #5b4b8b;
+ border-radius:7px;
+ box-shadow:0 0 18px #5d4ba355
+}
+
+.gamerMonitor{
+ position:absolute;
+ left:50%;
+ top:-70px;
+ transform:translateX(-50%);
+ width:110px;
+ height:65px;
+ background:#11131a;
+ border:6px solid #6350a0;
+ border-radius:7px;
+ box-shadow:0 0 15px #725be955
+}
+
+.keyboard{
+ position:absolute;
+ width:70px;
+ height:15px;
+ background:#bbb;
+ left:50%;
+ top:17px;
+ transform:translateX(-50%);
+ border-radius:3px
 }
 
 /* CADEIRA */
@@ -412,19 +607,20 @@ header{
 .chair{
  width:62px;
  height:65px;
- background:#9a72b5;
- border-radius:13px;
- box-shadow:0 8px 12px #0005
+ background:#8664a0;
+ border-radius:13px
 }
+
 .chair:before{
  content:"";
  position:absolute;
  width:62px;
- height:58px;
- background:#a981c0;
- border-radius:15px 15px 8px 8px;
- top:-40px
+ height:60px;
+ background:#9b79b7;
+ border-radius:14px;
+ top:-43px
 }
+
 .chair:after{
  content:"";
  position:absolute;
@@ -432,8 +628,8 @@ header{
  right:10px;
  bottom:-35px;
  height:35px;
- border-left:6px solid #55405e;
- border-right:6px solid #55405e
+ border-left:6px solid #4c4052;
+ border-right:6px solid #4c4052
 }
 
 /* CÔMODA */
@@ -441,53 +637,69 @@ header{
 .dresser{
  width:155px;
  height:105px;
- background:#9a694a;
- border-radius:8px;
- box-shadow:0 10px 14px #0005
+ background:#976547;
+ border-radius:7px;
+ box-shadow:0 10px 15px #0005
 }
+
 .dresser:before{
  content:"";
  position:absolute;
  left:13px;
  right:13px;
- top:15px;
- height:21px;
- background:#b98562;
- border-radius:4px;
- box-shadow:0 30px #b98562,0 60px #b98562
-}
-.dresser:after{
- content:"•  •  •";
- position:absolute;
  top:14px;
+ height:22px;
+ background:#b57d5b;
+ border-radius:4px;
+ box-shadow:0 30px #b57d5b,0 60px #b57d5b
+}
+
+/* PENTEADEIRA */
+
+.vanity{
+ width:175px;
+ height:70px;
+ background:#c69291;
+ border-radius:8px;
+ box-shadow:0 10px 15px #0005
+}
+
+.vanity:before{
+ content:"";
+ position:absolute;
+ width:110px;
+ height:70px;
  left:50%;
+ top:-78px;
  transform:translateX(-50%);
- color:#e8d3ad;
- letter-spacing:24px
+ border:7px solid #c5a5a5;
+ border-radius:55px 55px 8px 8px;
+ background:#d7eef3
 }
 
 /* ESTANTE */
 
 .shelf{
- width:125px;
+ width:120px;
  height:170px;
- background:#704a35;
- border:7px solid #563827;
- box-shadow:0 12px 15px #0005
+ background:#704934;
+ border:7px solid #563725
 }
+
 .shelf:before{
- content:"📚  📚  📚";
+ content:"📚 📚";
  position:absolute;
  top:20px;
- left:7px;
- font-size:24px;
+ left:8px;
+ font-size:25px
 }
+
 .shelf:after{
- content:"📚  🪴";
+ content:"📚 🪴";
  position:absolute;
  bottom:22px;
- left:12px;
- font-size:27px
+ left:8px;
+ font-size:25px
 }
 
 /* ESPELHO */
@@ -495,220 +707,186 @@ header{
 .mirror{
  width:90px;
  height:150px;
- border:10px solid #9a785d;
- border-radius:45px;
- background:linear-gradient(135deg,#d8f5ff,#8db9c9);
- box-shadow:0 8px 15px #0004
+ border:10px solid #9a765c;
+ border-radius:48px;
+ background:linear-gradient(135deg,#d9f5ff,#89b5c5)
 }
 
 /* TAPETE */
 
 .rug{
  width:280px;
- height:150px;
+ height:145px;
  border-radius:50%;
- background:#d9a4bd;
- border:10px solid #c487a3;
- box-shadow:0 9px 12px #0005
+ background:#d69ab5;
+ border:10px solid #bd7e9d;
+ box-shadow:0 9px 13px #0005
 }
 
-/* OBJETOS DECORATIVOS */
+/* OBJETOS */
 
-.plant{font-size:78px}
-.lamp{font-size:72px}
-.picture{font-size:65px}
+.plant{font-size:75px}
+.lamp{font-size:70px}
+.picture{font-size:63px}
 .teddy{font-size:67px}
 .books{font-size:58px}
-.console{font-size:63px}
+.console{font-size:62px}
+.flower{font-size:63px}
+.guitar{font-size:75px}
+
 .tv{
  width:175px;
- height:105px;
- background:#161820;
- border:9px solid #343740;
- border-radius:8px;
- box-shadow:0 10px 14px #0005
+ height:100px;
+ background:#12151b;
+ border:8px solid #343943;
+ border-radius:8px
 }
+
 .tv:after{
  content:"";
  position:absolute;
  left:50%;
  bottom:-28px;
- width:65px;
- height:20px;
- background:#292b32;
  transform:translateX(-50%);
- clip-path:polygon(20% 0,80% 0,100% 100%,0 100%)
+ width:60px;
+ height:20px;
+ background:#282b31
 }
 
-/* PAINEL INFERIOR */
+.led{
+ width:150px;
+ height:15px;
+ border-radius:20px;
+ background:#9d7aff;
+ box-shadow:0 0 22px #9d7aff
+}
+
+/* CONTROLE */
 
 .help{
  position:absolute;
- bottom:15px;
+ bottom:14px;
  left:50%;
  transform:translateX(-50%);
- padding:10px 18px;
- border-radius:25px;
- background:#22222de8;
+ background:#20202bea;
+ padding:9px 16px;
+ border-radius:20px;
+ font-size:12px;
  color:#ddd;
- font-size:13px;
  z-index:200
 }
 
-/* PALETA */
-
-.palette{
- display:grid;
- grid-template-columns:repeat(5,1fr);
- gap:7px
-}
-.color{
- height:27px;
- border-radius:7px;
- border:2px solid #777;
- cursor:pointer
-}
-
-/* MODAL */
-
-.modal{
- display:none;
- position:fixed;
- inset:0;
- background:#0009;
- z-index:999;
- align-items:center;
- justify-content:center
-}
-.modalBox{
- width:min(430px,90%);
- background:#242431;
- padding:25px;
- border-radius:18px;
- text-align:center
-}
-.modalBox button{
- background:#a87ee0;
- color:#fff;
- padding:11px 20px;
- border-radius:10px
-}
-
-@media(max-width:800px){
+@media(max-width:850px){
+ .roomChoices{
+  grid-template-columns:repeat(2,1fr)
+ }
  .menu{width:190px}
+}
+
+@media(max-width:560px){
+ #selection h1{font-size:30px}
+ .roomChoices{grid-template-columns:1fr}
+ .roomPreview{height:140px}
+ .menu{width:155px}
  .items{grid-template-columns:1fr}
- .window{right:30px}
- .curtain{right:12px}
- .room{left:10px;right:10px;top:10px;bottom:10px}
+ .window{right:25px}
 }
 </style>
 </head>
 
 <body>
 
-<header>
- <div class="logo">✨ Dream <span>Room</span></div>
+<!-- =========================
+     SELEÇÃO
+========================= -->
 
- <div class="topBtns">
-  <button onclick="saveRoom()">💾 Salvar</button>
-  <button onclick="loadRoom()">📂 Carregar</button>
-  <button onclick="clearRoom()">🗑️ Limpar</button>
+<section id="selection">
+
+<h1>✨ Dream <span>Room</span></h1>
+<p>Escolha o quarto que você quer personalizar!</p>
+
+<div class="roomChoices">
+
+<div class="roomCard" onclick="startGame('modern')">
+ <div class="roomPreview previewModern">
+  <div class="miniBed"></div>
+  <div class="miniDesk"></div>
+  <div class="miniPlant">🪴</div>
  </div>
+ <h2>🏠 Quarto Moderno</h2>
+ <p>Um quarto elegante e confortável.</p>
+ <button class="enter">Personalizar</button>
+</div>
+
+<div class="roomCard" onclick="startGame('cute')">
+ <div class="roomPreview previewCute">
+  <div class="miniBed"></div>
+  <div class="miniHeart">💗</div>
+  <div class="miniPlant">🌸</div>
+ </div>
+ <h2>🌸 Quarto Fofo</h2>
+ <p>Rosa, aconchegante e cheio de fofura.</p>
+ <button class="enter">Personalizar</button>
+</div>
+
+<div class="roomCard" onclick="startGame('gamer')">
+ <div class="roomPreview previewGamer">
+  <div class="miniPc">🖥️</div>
+  <div class="miniBed"></div>
+ </div>
+ <h2>🎮 Quarto Gamer</h2>
+ <p>Setup, iluminação e decoração gamer.</p>
+ <button class="enter">Personalizar</button>
+</div>
+
+<div class="roomCard" onclick="startGame('nature')">
+ <div class="roomPreview previewNature">
+  <div class="miniBed"></div>
+  <div class="miniPlant">🌿</div>
+  <div class="miniPlant" style="right:80px">🪴</div>
+ </div>
+ <h2>🌿 Quarto Natureza</h2>
+ <p>Madeira, plantas e um clima tranquilo.</p>
+ <button class="enter">Personalizar</button>
+</div>
+
+</div>
+</section>
+
+<!-- =========================
+     JOGO
+========================= -->
+
+<section id="game">
+
+<header>
+
+<div class="logo">
+ ✨ Dream <span id="roomName">Room</span>
+</div>
+
+<div class="headerButtons">
+ <button onclick="backToRooms()">🏠 Quartos</button>
+ <button onclick="saveRoom()">💾 Salvar</button>
+ <button onclick="loadRoom()">📂 Carregar</button>
+ <button onclick="clearRoom()">🗑️ Limpar</button>
+</div>
+
 </header>
 
-<div class="game">
+<div class="main">
 
 <aside class="menu">
 
-<h2>🏠 Decorar</h2>
+<h2>🎨 Decorar</h2>
 
 <div class="category">Móveis</div>
 
-<div class="items">
-
-<div class="item" draggable="true" data-type="bed">
- <div class="preview">🛏️</div><span>Cama</span>
-</div>
-
-<div class="item" draggable="true" data-type="sofa">
- <div class="preview">🛋️</div><span>Sofá</span>
-</div>
-
-<div class="item" draggable="true" data-type="table">
- <div class="preview">🖥️</div><span>Escrivaninha</span>
-</div>
-
-<div class="item" draggable="true" data-type="chair">
- <div class="preview">🪑</div><span>Cadeira</span>
-</div>
-
-<div class="item" draggable="true" data-type="dresser">
- <div class="preview">🗄️</div><span>Cômoda</span>
-</div>
-
-<div class="item" draggable="true" data-type="shelf">
- <div class="preview">📚</div><span>Estante</span>
-</div>
-
-<div class="item" draggable="true" data-type="mirror">
- <div class="preview">🪞</div><span>Espelho</span>
-</div>
-
-<div class="item" draggable="true" data-type="rug">
- <div class="preview">🟣</div><span>Tapete</span>
-</div>
-
-<div class="item" draggable="true" data-type="tv">
- <div class="preview">📺</div><span>TV</span>
-</div>
-
-</div>
+<div class="items" id="furniture"></div>
 
 <div class="category">Decoração</div>
 
-<div class="items">
-
-<div class="item" draggable="true" data-type="plant">
- <div class="preview">🪴</div><span>Planta</span>
-</div>
-
-<div class="item" draggable="true" data-type="lamp">
- <div class="preview">💡</div><span>Luminária</span>
-</div>
-
-<div class="item" draggable="true" data-type="picture">
- <div class="preview">🖼️</div><span>Quadro</span>
-</div>
-
-<div class="item" draggable="true" data-type="teddy">
- <div class="preview">🧸</div><span>Pelúcia</span>
-</div>
-
-<div class="item" draggable="true" data-type="books">
- <div class="preview">📚</div><span>Livros</span>
-</div>
-
-<div class="item" draggable="true" data-type="console">
- <div class="preview">🎮</div><span>Console</span>
-</div>
-
-</div>
-
-<div class="category">🎨 Parede</div>
-
-<div class="palette">
- <div class="color" style="background:#e7d5df" data-color="#e7d5df"></div>
- <div class="color" style="background:#d5e4f2" data-color="#d5e4f2"></div>
- <div class="color" style="background:#e7e0c7" data-color="#e7e0c7"></div>
- <div class="color" style="background:#d3e4d0" data-color="#d3e4d0"></div>
- <div class="color" style="background:#d6c9e9" data-color="#d6c9e9"></div>
-</div>
-
-<div class="category">💡 Dica</div>
-<p style="font-size:12px;color:#aaa">
-Arraste os móveis para dentro do quarto.
-Clique em um objeto para selecioná-lo.
-</p>
+<div class="items" id="decor"></div>
 
 </aside>
 
@@ -716,46 +894,201 @@ Clique em um objeto para selecioná-lo.
 
 <div class="room" id="room">
 
- <div class="wall" id="wall"></div>
+<div class="wall" id="wall"></div>
 
- <div class="door"></div>
+<div class="door">
+ <div class="doorPanel1"></div>
+ <div class="doorPanel2"></div>
+ <div class="doorHandle"></div>
+</div>
 
- <div class="window">
-   <div class="sun"></div>
- </div>
+<div class="window"></div>
 
- <div class="curtain"></div>
+<div class="curtainLeft"></div>
+<div class="curtainRight"></div>
 
- <div class="floor"></div>
+<div class="floor"></div>
 
 </div>
 
 <div class="help">
-🖱️ Arraste • Clique para selecionar • × para remover
+🖱️ Arraste os móveis • Clique para selecionar • × para remover
 </div>
 
 </main>
 
 </div>
+</section>
 
 <script>
 
-const room=document.getElementById("room");
-const wall=document.getElementById("wall");
+/* =========================
+   CONFIGURAÇÕES DOS QUARTOS
+========================= */
 
+const rooms={
+
+ modern:{
+  name:"Quarto Moderno",
+  wall:"#dfd2df",
+
+  furniture:[
+   ["bed","🛏️","Cama"],
+   ["sofa","🛋️","Sofá"],
+   ["table","🖥️","Escrivaninha"],
+   ["chair","🪑","Cadeira"],
+   ["dresser","🗄️","Cômoda"],
+   ["shelf","📚","Estante"],
+   ["mirror","🪞","Espelho"],
+   ["rug","🟣","Tapete"],
+   ["tv","📺","TV"]
+  ],
+
+  decor:[
+   ["plant","🪴","Planta"],
+   ["lamp","💡","Luminária"],
+   ["picture","🖼️","Quadro"],
+   ["books","📚","Livros"],
+   ["teddy","🧸","Pelúcia"]
+  ]
+ },
+
+ cute:{
+  name:"Quarto Fofo",
+  wall:"#f6cbdc",
+
+  furniture:[
+   ["bed","🛏️","Cama Rosa"],
+   ["vanity","💄","Penteadeira"],
+   ["dresser","🗄️","Cômoda"],
+   ["chair","🪑","Cadeira"],
+   ["rug","💗","Tapete Fofo"],
+   ["mirror","🪞","Espelho"]
+  ],
+
+  decor:[
+   ["plant","🌸","Flores"],
+   ["lamp","💡","Luminária"],
+   ["picture","🖼️","Quadro"],
+   ["teddy","🧸","Ursinho"],
+   ["flower","🌷","Vaso de Flores"],
+   ["books","📚","Livros"]
+  ]
+ },
+
+ gamer:{
+  name:"Quarto Gamer",
+  wall:"#1c1e2b",
+
+  furniture:[
+   ["gamerBed","🛏️","Cama Gamer"],
+   ["gamerTable","🖥️","Setup Gamer"],
+   ["chair","🎮","Cadeira Gamer"],
+   ["dresser","🗄️","Gaveteiro"],
+   ["shelf","📚","Estante"],
+   ["tv","📺","TV"]
+  ],
+
+  decor:[
+   ["console","🎮","Console"],
+   ["led","💜","LED"],
+   ["picture","🖼️","Poster"],
+   ["books","📚","Coleção"],
+   ["plant","🪴","Planta"]
+  ]
+ },
+
+ nature:{
+  name:"Quarto Natureza",
+  wall:"#c9ddc4",
+
+  furniture:[
+   ["bed","🛏️","Cama"],
+   ["table","🪵","Mesa de Madeira"],
+   ["chair","🪑","Cadeira"],
+   ["shelf","📚","Estante"],
+   ["dresser","🗄️","Cômoda"],
+   ["rug","🟢","Tapete"]
+  ],
+
+  decor:[
+   ["plant","🌿","Planta Grande"],
+   ["flower","🌷","Flores"],
+   ["guitar","🎸","Violão"],
+   ["books","📚","Livros"],
+   ["lamp","💡","Luminária"],
+   ["picture","🖼️","Quadro"]
+  ]
+ }
+
+};
+
+let currentRoom="modern";
 let draggedType=null;
 
-/* DRAG DO MENU */
+/* =========================
+   INICIAR
+========================= */
 
-document.querySelectorAll(".item").forEach(item=>{
+function startGame(type){
+
+ currentRoom=type;
+
+ const config=rooms[type];
+
+ document.getElementById("selection").style.display="none";
+ document.getElementById("game").style.display="flex";
+
+ document.getElementById("roomName").textContent=config.name;
+
+ document.getElementById("wall").style.background=config.wall;
+
+ createMenu(config);
+
+ loadRoom();
+}
+
+/* =========================
+   MENU
+========================= */
+
+function createMenu(config){
+
+ const furniture=document.getElementById("furniture");
+ const decor=document.getElementById("decor");
+
+ furniture.innerHTML="";
+ decor.innerHTML="";
+
+ config.furniture.forEach(x=>addItem(furniture,x));
+ config.decor.forEach(x=>addItem(decor,x));
+}
+
+function addItem(container,data){
+
+ const item=document.createElement("div");
+
+ item.className="item";
+ item.draggable=true;
+
+ item.dataset.type=data[0];
+
+ item.innerHTML=
+ `<div class="preview">${data[1]}</div>
+  <span>${data[2]}</span>`;
 
  item.addEventListener("dragstart",()=>{
-  draggedType=item.dataset.type;
+  draggedType=data[0];
  });
 
-});
+ container.appendChild(item);
+}
 
-/* DROP */
+/* =========================
+   DROP
+========================= */
+
+const room=document.getElementById("room");
 
 room.addEventListener("dragover",e=>e.preventDefault());
 
@@ -776,7 +1109,9 @@ room.addEventListener("drop",e=>{
  draggedType=null;
 });
 
-/* CRIAR OBJETO */
+/* =========================
+   CRIAR OBJETO
+========================= */
 
 function createObject(type,x,y){
 
@@ -786,27 +1121,43 @@ function createObject(type,x,y){
 
  if(type==="bed"){
   o.innerHTML=
-  `<div class="headboard"></div>
-   <div class="pillow"></div>
-   <div class="blanket"></div>`;
+   `<div class="pillow"></div>
+    <div class="blanket"></div>`;
+ }
+
+ if(type==="gamerBed"){
+  o.classList.add("bed");
+  o.innerHTML=
+   `<div class="pillow"></div>
+    <div class="blanket"></div>`;
  }
 
  if(type==="table"){
   o.innerHTML=`<div class="monitor"></div>`;
  }
 
- const emojis={
+ if(type==="gamerTable"){
+  o.innerHTML=
+   `<div class="gamerMonitor"></div>
+    <div class="keyboard"></div>`;
+ }
+
+ const emoji={
   plant:"🪴",
   lamp:"💡",
   picture:"🖼️",
   teddy:"🧸",
   books:"📚",
-  console:"🎮"
+  console:"🎮",
+  flower:"🌷",
+  guitar:"🎸",
+  led:"💜"
  };
 
- if(emojis[type])o.innerHTML=emojis[type];
+ if(emoji[type])o.innerHTML=emoji[type];
 
  const del=document.createElement("button");
+
  del.className="delete";
  del.textContent="×";
 
@@ -822,12 +1173,14 @@ function createObject(type,x,y){
 
  room.appendChild(o);
 
- dragObject(o);
+ makeDraggable(o);
 }
 
-/* ARRASTAR OBJETO */
+/* =========================
+   ARRASTAR
+========================= */
 
-function dragObject(el){
+function makeDraggable(el){
 
  let moving=false;
 
@@ -838,6 +1191,9 @@ function dragObject(el){
   moving=true;
 
   el.setPointerCapture(e.pointerId);
+
+  document.querySelectorAll(".object")
+   .forEach(x=>x.classList.remove("selected"));
 
   el.classList.add("selected");
  });
@@ -861,40 +1217,11 @@ function dragObject(el){
  el.addEventListener("pointerup",()=>{
   moving=false;
  });
- 
- el.addEventListener("click",e=>{
-  e.stopPropagation();
-
-  document.querySelectorAll(".object")
-   .forEach(x=>x.classList.remove("selected"));
-
-  el.classList.add("selected");
- });
 }
 
-/* DESELECIONAR */
-
-room.addEventListener("click",()=>{
- document.querySelectorAll(".object")
- .forEach(x=>x.classList.remove("selected"));
-});
-
-/* CORES */
-
-document.querySelectorAll(".color").forEach(c=>{
-
- c.onclick=()=>{
-
-  wall.style.background=c.dataset.color;
-
-  localStorage.setItem(
-   "dreamWall",
-   c.dataset.color
-  );
- };
-});
-
-/* SALVAR */
+/* =========================
+   SALVAR POR QUARTO
+========================= */
 
 function saveRoom(){
 
@@ -903,7 +1230,10 @@ function saveRoom(){
  document.querySelectorAll(".object").forEach(o=>{
 
   objects.push({
-   type:o.className.replace("object ","").replace(" selected",""),
+   type:o.className
+    .replace("object ","")
+    .replace(" selected",""),
+
    x:o.style.left,
    y:o.style.top
   });
@@ -911,25 +1241,27 @@ function saveRoom(){
  });
 
  localStorage.setItem(
-  "dreamRoom",
+  "dreamRoom_"+currentRoom,
   JSON.stringify(objects)
  );
 
- alert("✨ Quarto salvo!");
+ alert("✨ Decoração salva!");
 }
 
-/* CARREGAR */
+/* =========================
+   CARREGAR
+========================= */
 
 function loadRoom(){
 
- const data=localStorage.getItem("dreamRoom");
+ document.querySelectorAll(".object")
+  .forEach(o=>o.remove());
 
- if(!data){
-  alert("Nenhuma decoração salva ainda!");
-  return;
- }
+ const data=localStorage.getItem(
+  "dreamRoom_"+currentRoom
+ );
 
- document.querySelectorAll(".object").forEach(o=>o.remove());
+ if(!data)return;
 
  JSON.parse(data).forEach(o=>{
 
@@ -940,33 +1272,37 @@ function loadRoom(){
   );
 
  });
-
- const wallColor=localStorage.getItem("dreamWall");
-
- if(wallColor)
-  wall.style.background=wallColor;
-
- alert("🏠 Decoração carregada!");
 }
 
-/* LIMPAR */
+/* =========================
+   LIMPAR
+========================= */
 
 function clearRoom(){
 
- if(!confirm("Tem certeza que quer limpar o quarto?"))return;
+ if(!confirm("Limpar toda a decoração deste quarto?"))
+  return;
 
- document.querySelectorAll(".object").forEach(o=>o.remove());
+ document.querySelectorAll(".object")
+  .forEach(o=>o.remove());
 
- localStorage.removeItem("dreamRoom");
-
+ localStorage.removeItem(
+  "dreamRoom_"+currentRoom
+ );
 }
 
-/* RESTAURAR COR */
+/* =========================
+   VOLTAR
+========================= */
 
-const savedWall=localStorage.getItem("dreamWall");
+function backToRooms(){
 
-if(savedWall)
- wall.style.background=savedWall;
+ document.getElementById("game").style.display="none";
+ document.getElementById("selection").style.display="flex";
+
+ document.querySelectorAll(".object")
+  .forEach(o=>o.remove());
+}
 
 </script>
 

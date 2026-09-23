@@ -1,2333 +1,726 @@
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ABYSS — O Peixe do Abismo</title>
+<title>Quarto dos Sonhos ✨</title>
 
 <style>
 * {
     box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+    user-select: none;
 }
 
 body {
-    overflow: hidden;
-    background: #020b14;
+    margin: 0;
     font-family: Arial, sans-serif;
+    background: #151522;
     color: white;
-}
-
-canvas {
-    display: block;
-    width: 100vw;
-    height: 100vh;
-}
-
-/* =========================
-   HUD ORIGINAL
-========================= */
-
-#hud {
-    position: fixed;
-    top: 15px;
-    left: 15px;
-    right: 15px;
-    z-index: 5;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-
-    pointer-events: none;
-}
-
-.hudBox {
-    background: rgba(0, 15, 30, .75);
-    border: 1px solid rgba(100, 200, 255, .3);
-    padding: 10px 15px;
-    border-radius: 12px;
-
-    backdrop-filter: blur(5px);
-
-    font-size: 15px;
-}
-
-/* =========================
-   BARRA DE IMPULSO
-========================= */
-
-#boostContainer {
-    position: fixed;
-    top: 70px;
-    left: 50%;
-    transform: translateX(-50%);
-
-    width: min(360px, 70vw);
-
-    z-index: 5;
-
-    pointer-events: none;
-}
-
-#boostLabel {
-    text-align: center;
-    font-size: 12px;
-    font-weight: bold;
-
-    margin-bottom: 5px;
-
-    color: #a9eaff;
-    text-shadow: 0 0 8px #00bfff;
-}
-
-#boostBar {
-    height: 12px;
-
-    background: rgba(0, 15, 30, .8);
-
-    border: 1px solid rgba(100, 220, 255, .5);
-
-    border-radius: 20px;
-
     overflow: hidden;
-
-    box-shadow:
-        0 0 10px rgba(0, 170, 255, .2);
 }
 
-#boostFill {
-    height: 100%;
-    width: 0%;
-
-    border-radius: 20px;
-
-    background:
-        linear-gradient(
-            90deg,
-            #00aaff,
-            #55eaff,
-            #ffffff
-        );
-
-    box-shadow:
-        0 0 15px #00c8ff;
-
-    transition: width .12s linear;
-}
-
-#boostText {
-    text-align: center;
-
-    margin-top: 4px;
-
-    font-size: 11px;
-
-    color: #78dfff;
-}
-
-/* =========================
-   CONTROLES
-========================= */
-
-#controls {
-    position: fixed;
-
-    bottom: 15px;
-    left: 15px;
-
-    color: #9edcff;
-
-    font-size: 13px;
-
-    background: rgba(0, 15, 30, .6);
-
-    padding: 8px 12px;
-
-    border-radius: 8px;
-
-    z-index: 5;
-}
-
-/* =========================
-   MENU
-========================= */
-
-#menu,
-#gameOver {
-    position: fixed;
-
-    inset: 0;
-
+header {
+    height: 70px;
+    background: #202033;
     display: flex;
-
     align-items: center;
-    justify-content: center;
-
-    flex-direction: column;
-
-    background: rgba(0, 8, 18, .9);
-
-    z-index: 10;
-
-    text-align: center;
+    justify-content: space-between;
+    padding: 0 25px;
+    border-bottom: 2px solid #343450;
 }
 
-#gameOver {
-    display: none;
+.logo {
+    font-size: 24px;
+    font-weight: bold;
 }
 
-h1 {
-    font-size: clamp(42px, 8vw, 90px);
-
-    color: #ff7b21;
-
-    text-shadow:
-        0 0 25px #ff4d00;
-
-    margin-bottom: 10px;
-}
-
-.subtitle {
-    font-size: 18px;
-
-    color: #a9dfff;
-
-    margin-bottom: 30px;
+.logo span {
+    color: #b58cff;
 }
 
 button {
     border: none;
-
-    padding: 15px 35px;
-
-    border-radius: 12px;
-
-    background: #ff6a00;
-
-    color: white;
-
-    font-size: 18px;
-
-    font-weight: bold;
-
     cursor: pointer;
+    font-weight: bold;
+}
 
-    box-shadow:
-        0 0 20px rgba(255, 106, 0, .5);
+#reset {
+    background: #ff5d7d;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 12px;
+}
 
+.game {
+    height: calc(100vh - 70px);
+    display: flex;
+}
+
+/* PAINEL */
+
+.sidebar {
+    width: 250px;
+    background: #1b1b2b;
+    padding: 18px;
+    overflow-y: auto;
+    border-right: 2px solid #343450;
+}
+
+.sidebar h2 {
+    margin-top: 0;
+}
+
+.category {
+    color: #aaa;
+    font-size: 13px;
+    margin: 20px 0 8px;
+    text-transform: uppercase;
+}
+
+.item {
+    background: #292941;
+    padding: 13px;
+    border-radius: 12px;
+    margin-bottom: 9px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: grab;
     transition: .2s;
 }
 
-button:hover {
-    transform: scale(1.06);
-
-    background: #ff7f24;
+.item:hover {
+    transform: translateX(5px);
+    background: #353554;
 }
 
-.warning {
-    margin-top: 20px;
-
-    color: #ffb06c;
-
-    font-size: 13px;
+.item .emoji {
+    font-size: 30px;
 }
 
-/* =========================
-   EFEITO DE IMPULSO
-========================= */
+.item small {
+    color: #aaa;
+}
 
-#boostEffect {
-    position: fixed;
+/* QUARTO */
 
-    inset: 0;
+.room-area {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    background: #11111b;
+}
 
-    pointer-events: none;
+.room {
+    position: absolute;
+    inset: 25px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 0 40px #0008;
+    background: #e8d9ff;
+}
 
-    z-index: 4;
+/* parede */
 
-    opacity: 0;
-
+.wall {
+    position: absolute;
+    inset: 0 0 32% 0;
     background:
-        radial-gradient(
-            circle,
-            transparent 35%,
-            rgba(0, 180, 255, .12)
+        linear-gradient(#d9c4f0cc, #d9c4f0cc),
+        repeating-linear-gradient(
+            90deg,
+            transparent 0,
+            transparent 80px,
+            #ffffff22 81px,
+            #ffffff22 82px
         );
 }
 
-.boosting #boostEffect {
-    opacity: 1;
+/* janela */
+
+.window {
+    position: absolute;
+    top: 45px;
+    right: 80px;
+    width: 180px;
+    height: 125px;
+    background: linear-gradient(135deg,#8ed8ff,#d7f5ff);
+    border: 12px solid white;
+    box-shadow: 0 5px 20px #0003;
 }
 
-.boosting #boostLabel {
-    color: white;
+.window::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 8px;
+    background: white;
+    transform: translateX(-50%);
+}
 
-    text-shadow:
-        0 0 10px #00d9ff,
-        0 0 25px #00d9ff;
+.window::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 8px;
+    background: white;
+    transform: translateY(-50%);
+}
+
+/* piso */
+
+.floor {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 32%;
+    background:
+        repeating-linear-gradient(
+            0deg,
+            #b98255 0px,
+            #b98255 28px,
+            #a96f45 30px
+        );
+}
+
+/* objetos */
+
+.object {
+    position: absolute;
+    cursor: grab;
+    z-index: 10;
+    transform: translate(-50%, -50%);
+    transition: filter .15s;
+}
+
+.object:hover {
+    filter: brightness(1.12);
+}
+
+.object.selected {
+    outline: 3px dashed white;
+    outline-offset: 5px;
+}
+
+.object:active {
+    cursor: grabbing;
+}
+
+.object .delete {
+    display: none;
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    background: #ff4e6d;
+    color: white;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    font-size: 15px;
+}
+
+.object.selected .delete {
+    display: block;
+}
+
+/* móveis */
+
+.bed {
+    width: 240px;
+    height: 145px;
+    background: #f4edf9;
+    border: 7px solid #6d527f;
+    border-radius: 18px;
+    box-shadow: 0 10px 15px #0004;
+}
+
+.bed::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 48px;
+    top: 0;
+    background: #b58cff;
+    border-radius: 10px 10px 0 0;
+}
+
+.bed::after {
+    content: "🛏️";
+    position: absolute;
+    font-size: 55px;
+    left: 50%;
+    top: 55%;
+    transform: translate(-50%,-50%);
+}
+
+.desk {
+    width: 180px;
+    height: 85px;
+    background: #8c5f43;
+    border-radius: 8px;
+    box-shadow: 0 10px 15px #0004;
+}
+
+.desk::before {
+    content: "💻";
+    position: absolute;
+    font-size: 48px;
+    left: 50%;
+    top: -45px;
+    transform: translateX(-50%);
+}
+
+.chair {
+    width: 70px;
+    height: 70px;
+    background: #7d65aa;
+    border-radius: 15px;
+    box-shadow: 0 8px 10px #0004;
+}
+
+.chair::before {
+    content: "🪑";
+    position: absolute;
+    font-size: 55px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+}
+
+.rug {
+    width: 230px;
+    height: 130px;
+    border-radius: 50%;
+    background: #ff9ec4;
+    box-shadow: 0 8px 15px #0004;
+}
+
+.plant {
+    font-size: 75px;
+}
+
+.lamp {
+    font-size: 70px;
+}
+
+.picture {
+    font-size: 65px;
+}
+
+.teddy {
+    font-size: 70px;
+}
+
+.books {
+    font-size: 65px;
+}
+
+.clock {
+    font-size: 60px;
+}
+
+/* HUD */
+
+.info {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #202033ee;
+    padding: 10px 18px;
+    border-radius: 30px;
+    z-index: 100;
+    color: #ddd;
+}
+
+#score {
+    color: #d5b5ff;
+    font-weight: bold;
+}
+
+/* PALETA */
+
+.palette {
+    display: flex;
+    gap: 7px;
+    flex-wrap: wrap;
+}
+
+.color {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 3px solid white;
+    cursor: pointer;
+}
+
+.color:hover {
+    transform: scale(1.1);
+}
+
+/* MOBILE */
+
+@media(max-width:700px) {
+    .sidebar {
+        width: 150px;
+        padding: 10px;
+    }
+
+    .logo {
+        font-size: 17px;
+    }
+
+    .sidebar h2 {
+        font-size: 18px;
+    }
+
+    .item {
+        padding: 8px;
+    }
+
+    .item .emoji {
+        font-size: 23px;
+    }
+
+    .room {
+        inset: 10px;
+    }
 }
 </style>
 </head>
 
 <body>
 
-<canvas id="game"></canvas>
+<header>
+    <div class="logo">✨ Quarto <span>dos Sonhos</span></div>
+    <button id="reset">🔄 Limpar quarto</button>
+</header>
 
-<!-- EFEITO -->
-<div id="boostEffect"></div>
+<div class="game">
 
-<!-- =========================
-     HUD ORIGINAL
-========================= -->
+    <aside class="sidebar">
 
-<div id="hud">
+        <h2>🎨 Decorar</h2>
 
-    <div class="hudBox">
-        🐟 Tamanho:
-        <span id="size">35</span>
-    </div>
+        <div class="category">Móveis</div>
 
-    <div class="hudBox">
-        ⭐ Pontos:
-        <span id="score">0</span>
-    </div>
+        <div class="item" draggable="true" data-type="bed">
+            <div class="emoji">🛏️</div>
+            <div>Cama<br><small>Arraste para o quarto</small></div>
+        </div>
 
-    <div class="hudBox">
-        ❤️ Vidas:
-        <span id="life">3</span>
-    </div>
+        <div class="item" draggable="true" data-type="desk">
+            <div class="emoji">🖥️</div>
+            <div>Escrivaninha</div>
+        </div>
 
-</div>
+        <div class="item" draggable="true" data-type="chair">
+            <div class="emoji">🪑</div>
+            <div>Cadeira</div>
+        </div>
 
+        <div class="item" draggable="true" data-type="rug">
+            <div class="emoji">🟣</div>
+            <div>Tapete</div>
+        </div>
 
-<!-- =========================
-     IMPULSO
-========================= -->
+        <div class="category">Decoração</div>
 
-<div id="boostContainer">
+        <div class="item" draggable="true" data-type="plant">
+            <div class="emoji">🪴</div>
+            <div>Planta</div>
+        </div>
 
-    <div id="boostLabel">
-        ⚡ IMPULSO
-    </div>
+        <div class="item" draggable="true" data-type="lamp">
+            <div class="emoji">💡</div>
+            <div>Luminária</div>
+        </div>
 
-    <div id="boostBar">
-        <div id="boostFill"></div>
-    </div>
+        <div class="item" draggable="true" data-type="picture">
+            <div class="emoji">🖼️</div>
+            <div>Quadro</div>
+        </div>
 
-    <div id="boostText">
-        <span id="boostValue">0</span>% —
-        <span id="boostStatus">coma peixes para carregar</span>
-    </div>
+        <div class="item" draggable="true" data-type="teddy">
+            <div class="emoji">🧸</div>
+            <div>Ursinho</div>
+        </div>
 
-</div>
+        <div class="item" draggable="true" data-type="books">
+            <div class="emoji">📚</div>
+            <div>Livros</div>
+        </div>
 
+        <div class="item" draggable="true" data-type="clock">
+            <div class="emoji">🕐</div>
+            <div>Relógio</div>
+        </div>
 
-<!-- CONTROLES -->
+        <div class="category">🎨 Parede</div>
 
-<div id="controls">
-    🎮 WASD / Setas para nadar
-    &nbsp; • &nbsp;
-    ⚡ Espaço para impulso
-</div>
+        <div class="palette">
+            <div class="color" style="background:#d9c4f0" data-color="#d9c4f0"></div>
+            <div class="color" style="background:#ffc8dd" data-color="#ffc8dd"></div>
+            <div class="color" style="background:#cde8ff" data-color="#cde8ff"></div>
+            <div class="color" style="background:#c9f7d5" data-color="#c9f7d5"></div>
+            <div class="color" style="background:#fff0b5" data-color="#fff0b5"></div>
+            <div class="color" style="background:#ddd" data-color="#dddddd"></div>
+        </div>
 
+    </aside>
 
-<!-- =========================
-     MENU
-========================= -->
+    <main class="room-area">
 
-<div id="menu">
+        <div class="room" id="room">
 
-    <h1>ABYSS</h1>
+            <div class="wall" id="wall"></div>
 
-    <div class="subtitle">
-        O PEIXE DO ABISMO
-    </div>
+            <div class="window"></div>
 
-    <button onclick="startGame()">
-        🌊 COMEÇAR
-    </button>
+            <div class="floor"></div>
 
-    <div class="warning">
-        Coma criaturas menores e sobreviva às profundezas.
-    </div>
+        </div>
 
-</div>
+        <div class="info">
+            🖱️ Arraste os móveis • Clique para selecionar •
+            Pontos: <span id="score">0</span>
+        </div>
 
-
-<!-- =========================
-     GAME OVER
-========================= -->
-
-<div id="gameOver">
-
-    <h1>💀 FIM</h1>
-
-    <div class="subtitle">
-        Você foi derrotado pelo abismo.
-    </div>
-
-    <div style="font-size:22px;margin-bottom:25px;">
-        Pontuação:
-        <b id="finalScore">0</b>
-    </div>
-
-    <button onclick="startGame()">
-        🔄 JOGAR NOVAMENTE
-    </button>
+    </main>
 
 </div>
-
 
 <script>
 
-// ======================================================
-// CANVAS
-// ======================================================
-
-const canvas =
-    document.getElementById("game");
-
-const ctx =
-    canvas.getContext("2d");
-
-let W, H;
-
-function resize() {
-
-    W =
-        canvas.width =
-        window.innerWidth;
-
-    H =
-        canvas.height =
-        window.innerHeight;
-
-}
-
-window.addEventListener(
-    "resize",
-    resize
-);
-
-resize();
-
-
-// ======================================================
-// ESTADO
-// ======================================================
-
-let gameRunning = false;
+const room = document.getElementById("room");
+const wall = document.getElementById("wall");
+const scoreText = document.getElementById("score");
 
 let score = 0;
+let draggedType = null;
+let selected = null;
 
-let life = 3;
+/* ARRASTAR ITEM DO MENU */
 
-let worldTime = 0;
+document.querySelectorAll(".item").forEach(item => {
 
-let spawnTimer = 0;
+    item.addEventListener("dragstart", e => {
+        draggedType = item.dataset.type;
+    });
 
-let entities = [];
+});
 
-let bubbles = [];
+/* SOLTAR NO QUARTO */
 
+room.addEventListener("dragover", e => {
+    e.preventDefault();
+});
 
-// ======================================================
-// IMPULSO
-// ======================================================
+room.addEventListener("drop", e => {
 
-let boost = 0;
+    e.preventDefault();
 
-const MAX_BOOST = 100;
+    if(!draggedType) return;
 
-let boosting = false;
+    const rect = room.getBoundingClientRect();
 
-let boostTimer = 0;
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
 
-const BOOST_DURATION = 120;
+    createObject(draggedType, x, y);
 
+    draggedType = null;
+});
 
-// ======================================================
-// TECLAS
-// ======================================================
+/* CRIAR OBJETO */
 
-const keys = {};
+function createObject(type, x, y) {
 
-window.addEventListener(
-    "keydown",
-    e => {
+    const object = document.createElement("div");
 
-        keys[
-            e.key.toLowerCase()
-        ] = true;
+    object.className = "object " + type;
 
-        if (
-            [
-                "arrowup",
-                "arrowdown",
-                "arrowleft",
-                "arrowright",
-                " "
-            ].includes(
-                e.key.toLowerCase()
-            )
-        ) {
+    if(type === "plant") object.textContent = "🪴";
+    if(type === "lamp") object.textContent = "💡";
+    if(type === "picture") object.textContent = "🖼️";
+    if(type === "teddy") object.textContent = "🧸";
+    if(type === "books") object.textContent = "📚";
+    if(type === "clock") object.textContent = "🕐";
 
-            e.preventDefault();
+    if(type === "bed" ||
+       type === "desk" ||
+       type === "chair" ||
+       type === "rug") {
 
-        }
-
+        object.innerHTML = "";
     }
-);
 
+    object.style.left = x + "px";
+    object.style.top = y + "px";
 
-window.addEventListener(
-    "keyup",
-    e => {
+    const deleteButton = document.createElement("button");
 
-        keys[
-            e.key.toLowerCase()
-        ] = false;
+    deleteButton.className = "delete";
+    deleteButton.textContent = "×";
 
-    }
-);
+    deleteButton.onclick = function(e) {
 
+        e.stopPropagation();
 
-// ======================================================
-// JOGADOR
-// ======================================================
+        object.remove();
 
-let player = {
+        score = Math.max(0, score - 5);
 
-    x: W / 2,
+        updateScore();
+    };
 
-    y: H / 2,
+    object.appendChild(deleteButton);
 
-    size: 35,
+    room.appendChild(object);
 
-    vx: 0,
+    makeDraggable(object);
 
-    vy: 0,
+    object.addEventListener("click", e => {
 
-    maxSpeed: 3.2,
+        e.stopPropagation();
 
-    acceleration: .12,
+        selectObject(object);
+    });
 
-    friction: .94,
+    score += 10;
 
-    direction: 1,
+    updateScore();
+}
 
-    swimTime: 0,
+/* SELECIONAR */
 
-    invincible: 0
+function selectObject(object) {
 
-};
+    document.querySelectorAll(".object").forEach(o => {
+        o.classList.remove("selected");
+    });
 
+    object.classList.add("selected");
 
-// ======================================================
-// COMEÇAR
-// ======================================================
+    selected = object;
+}
 
-function startGame() {
+/* ARRASTAR OBJETOS */
+
+function makeDraggable(element) {
+
+    let dragging = false;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    element.addEventListener("pointerdown", e => {
+
+        if(e.target.classList.contains("delete")) return;
+
+        dragging = true;
+
+        const rect = element.getBoundingClientRect();
+
+        offsetX = e.clientX - rect.left - rect.width / 2;
+        offsetY = e.clientY - rect.top - rect.height / 2;
+
+        element.setPointerCapture(e.pointerId);
+
+        selectObject(element);
+    });
+
+    element.addEventListener("pointermove", e => {
+
+        if(!dragging) return;
+
+        const roomRect = room.getBoundingClientRect();
+
+        let x = e.clientX - roomRect.left - offsetX;
+        let y = e.clientY - roomRect.top - offsetY;
+
+        x = Math.max(10, Math.min(room.clientWidth - 10, x));
+        y = Math.max(10, Math.min(room.clientHeight - 10, y));
+
+        element.style.left = x + "px";
+        element.style.top = y + "px";
+    });
+
+    element.addEventListener("pointerup", () => {
+
+        dragging = false;
+    });
+}
+
+/* CLICAR NO FUNDO */
+
+room.addEventListener("click", () => {
+
+    document.querySelectorAll(".object").forEach(o => {
+        o.classList.remove("selected");
+    });
+
+    selected = null;
+});
+
+/* MUDAR COR DA PAREDE */
+
+document.querySelectorAll(".color").forEach(color => {
+
+    color.addEventListener("click", () => {
+
+        wall.style.background =
+            `linear-gradient(${color.dataset.color}cc, ${color.dataset.color}cc),
+             repeating-linear-gradient(
+                90deg,
+                transparent 0,
+                transparent 80px,
+                #ffffff22 81px,
+                #ffffff22 82px
+             )`;
+
+        score += 5;
+
+        updateScore();
+    });
+
+});
+
+/* RESET */
+
+document.getElementById("reset").onclick = () => {
+
+    document.querySelectorAll(".object").forEach(o => o.remove());
 
     score = 0;
 
-    life = 3;
+    updateScore();
 
-    boost = 0;
+    wall.style.background =
+        `linear-gradient(#d9c4f0cc, #d9c4f0cc),
+         repeating-linear-gradient(
+            90deg,
+            transparent 0,
+            transparent 80px,
+            #ffffff22 81px,
+            #ffffff22 82px
+         )`;
+};
 
-    boosting = false;
+/* PONTOS */
 
-    boostTimer = 0;
+function updateScore() {
 
-    entities = [];
-
-    bubbles = [];
-
-    player.x =
-        W / 2;
-
-    player.y =
-        H / 2;
-
-    player.size = 35;
-
-    player.vx = 0;
-
-    player.vy = 0;
-
-    player.direction = 1;
-
-    player.swimTime = 0;
-
-    player.invincible = 0;
-
-    spawnTimer = 0;
-
-    worldTime = 0;
-
-    gameRunning = true;
-
-    document
-        .getElementById("menu")
-        .style.display = "none";
-
-    document
-        .getElementById("gameOver")
-        .style.display = "none";
-
-    document.body
-        .classList
-        .remove("boosting");
-
-    updateHUD();
-
-    for (
-        let i = 0;
-        i < 12;
-        i++
-    ) {
-
-        spawnEntity();
-
-    }
-
+    scoreText.textContent = score;
 }
-
-
-// ======================================================
-// ADICIONAR IMPULSO
-// ======================================================
-
-function addBoost(amount) {
-
-    boost =
-        Math.min(
-            MAX_BOOST,
-            boost + amount
-        );
-
-}
-
-
-// ======================================================
-// ATIVAR IMPULSO
-// ======================================================
-
-function activateBoost() {
-
-    if (
-        boost < 100 ||
-        boosting ||
-        !gameRunning
-    ) {
-
-        return;
-
-    }
-
-    boosting = true;
-
-    boostTimer =
-        BOOST_DURATION;
-
-    boost = 100;
-
-    document.body
-        .classList
-        .add("boosting");
-
-}
-
-
-// ======================================================
-// ATUALIZAR IMPULSO
-// ======================================================
-
-function updateBoost() {
-
-    if (
-        !boosting
-    ) {
-
-        return;
-
-    }
-
-    boostTimer--;
-
-    // Consome a barra
-    boost =
-        Math.max(
-            0,
-            boostTimer /
-            BOOST_DURATION *
-            100
-        );
-
-    if (
-        boostTimer <= 0
-    ) {
-
-        boosting = false;
-
-        boost = 0;
-
-        document.body
-            .classList
-            .remove("boosting");
-
-    }
-
-}
-
-
-// ======================================================
-// CRIAR ENTIDADES
-// ======================================================
-
-function spawnEntity() {
-
-    const types = [
-
-        "fish",
-        "fish",
-        "fish",
-        "fish",
-        "human",
-        "shark",
-        "mine"
-
-    ];
-
-    const type =
-        types[
-            Math.floor(
-                Math.random() *
-                types.length
-            )
-        ];
-
-    let size;
-
-    let speed;
-
-
-    if (
-        type === "fish"
-    ) {
-
-        size =
-            10 +
-            Math.random() *
-            20;
-
-        speed =
-            .5 +
-            Math.random();
-
-    }
-
-    else if (
-        type === "human"
-    ) {
-
-        size = 17;
-
-        speed =
-            .4 +
-            Math.random() *
-            .6;
-
-    }
-
-    else if (
-        type === "shark"
-    ) {
-
-        size = 45;
-
-        speed =
-            .7 +
-            Math.random() *
-            .5;
-
-    }
-
-    else {
-
-        size = 20;
-
-        speed = 0;
-
-    }
-
-
-    let x;
-
-    let y;
-
-
-    const side =
-        Math.floor(
-            Math.random() * 4
-        );
-
-
-    if (
-        side === 0
-    ) {
-
-        x = -100;
-
-        y =
-            Math.random() * H;
-
-    }
-
-    else if (
-        side === 1
-    ) {
-
-        x = W + 100;
-
-        y =
-            Math.random() * H;
-
-    }
-
-    else if (
-        side === 2
-    ) {
-
-        x =
-            Math.random() * W;
-
-        y = -100;
-
-    }
-
-    else {
-
-        x =
-            Math.random() * W;
-
-        y = H + 100;
-
-    }
-
-
-    entities.push({
-
-        type,
-
-        x,
-
-        y,
-
-        size,
-
-        speed,
-
-        direction:
-            Math.random() > .5
-                ? 1
-                : -1,
-
-        phase:
-            Math.random() *
-            Math.PI * 2
-
-    });
-
-}
-
-
-// ======================================================
-// UPDATE
-// ======================================================
-
-function update() {
-
-    worldTime++;
-
-
-    // ==============================================
-    // IMPULSO
-    // ==============================================
-
-    if (
-        keys[" "] &&
-        boost >= 100
-    ) {
-
-        activateBoost();
-
-        keys[" "] = false;
-
-    }
-
-    updateBoost();
-
-
-    // ==============================================
-    // CONTROLES
-    // ==============================================
-
-    let dx = 0;
-
-    let dy = 0;
-
-
-    if (
-        keys["arrowleft"] ||
-        keys["a"]
-    ) {
-
-        dx--;
-
-    }
-
-
-    if (
-        keys["arrowright"] ||
-        keys["d"]
-    ) {
-
-        dx++;
-
-    }
-
-
-    if (
-        keys["arrowup"] ||
-        keys["w"]
-    ) {
-
-        dy--;
-
-    }
-
-
-    if (
-        keys["arrowdown"] ||
-        keys["s"]
-    ) {
-
-        dy++;
-
-    }
-
-
-    // ==============================================
-    // ACELERAÇÃO
-    // ==============================================
-
-    if (
-        dx !== 0 ||
-        dy !== 0
-    ) {
-
-        const tamanho =
-            Math.hypot(
-                dx,
-                dy
-            );
-
-        dx /= tamanho;
-
-        dy /= tamanho;
-
-
-        player.vx +=
-            dx *
-            player.acceleration;
-
-        player.vy +=
-            dy *
-            player.acceleration;
-
-
-        if (
-            dx !== 0
-        ) {
-
-            player.direction =
-                dx > 0
-                    ? 1
-                    : -1;
-
-        }
-
-
-        player.swimTime +=
-            .25;
-
-    }
-
-    else {
-
-        player.vx *=
-            player.friction;
-
-        player.vy *=
-            player.friction;
-
-        player.swimTime +=
-            .08;
-
-    }
-
-
-    // ==============================================
-    // VELOCIDADE
-    // ==============================================
-
-    let maxSpeed =
-        player.maxSpeed;
-
-
-    if (
-        boosting
-    ) {
-
-        maxSpeed =
-            8;
-
-    }
-
-
-    const velocidade =
-        Math.hypot(
-            player.vx,
-            player.vy
-        );
-
-
-    if (
-        velocidade >
-        maxSpeed
-    ) {
-
-        player.vx =
-            (
-                player.vx /
-                velocidade
-            ) *
-            maxSpeed;
-
-        player.vy =
-            (
-                player.vy /
-                velocidade
-            ) *
-            maxSpeed;
-
-    }
-
-
-    // ==============================================
-    // MOVIMENTO
-    // ==============================================
-
-    player.x +=
-        player.vx;
-
-    player.y +=
-        player.vy;
-
-
-    player.x =
-        Math.max(
-            player.size,
-            Math.min(
-                W - player.size,
-                player.x
-            )
-        );
-
-
-    player.y =
-        Math.max(
-            player.size,
-            Math.min(
-                H - player.size,
-                player.y
-            )
-        );
-
-
-    // ==============================================
-    // INVENCIBILIDADE
-    // ==============================================
-
-    if (
-        player.invincible > 0
-    ) {
-
-        player.invincible--;
-
-    }
-
-
-    // ==============================================
-    // SPAWN
-    // ==============================================
-
-    spawnTimer++;
-
-
-    if (
-        spawnTimer > 55
-    ) {
-
-        spawnTimer = 0;
-
-        spawnEntity();
-
-    }
-
-
-    // ==============================================
-    // ENTIDADES
-    // ==============================================
-
-    entities.forEach(e => {
-
-        e.phase += .02;
-
-
-        if (
-            e.type === "shark"
-        ) {
-
-            const angle =
-                Math.atan2(
-                    player.y - e.y,
-                    player.x - e.x
-                );
-
-
-            e.x +=
-                Math.cos(angle) *
-                e.speed;
-
-            e.y +=
-                Math.sin(angle) *
-                e.speed;
-
-        }
-
-        else if (
-            e.type !== "mine"
-        ) {
-
-            e.x +=
-                e.speed *
-                e.direction;
-
-            e.y +=
-                Math.sin(
-                    e.phase
-                ) *
-                .4;
-
-        }
-
-        else {
-
-            e.y +=
-                Math.sin(
-                    e.phase
-                ) *
-                .25;
-
-        }
-
-    });
-
-
-    // ==============================================
-    // COLISÕES
-    // ==============================================
-
-    for (
-        let i =
-            entities.length - 1;
-        i >= 0;
-        i--
-    ) {
-
-        const e =
-            entities[i];
-
-
-        const distance =
-            Math.hypot(
-                player.x - e.x,
-                player.y - e.y
-            );
-
-
-        if (
-            distance <
-            player.size +
-            e.size * .65
-        ) {
-
-
-            // ==========================================
-            // COMER
-            // ==========================================
-
-            if (
-                e.type === "fish" ||
-                e.type === "human"
-            ) {
-
-                if (
-                    player.size >=
-                    e.size * .9
-                ) {
-
-                    if (
-                        e.type === "fish"
-                    ) {
-
-                        score += 25;
-
-                        // PEIXE ENCHE IMPULSO
-                        addBoost(20);
-
-                    }
-
-                    else {
-
-                        score += 100;
-
-                        addBoost(10);
-
-                    }
-
-
-                    player.size +=
-                        e.type === "human"
-                            ? 3
-                            : 1;
-
-
-                    entities.splice(
-                        i,
-                        1
-                    );
-
-
-                    createBubbles(
-                        e.x,
-                        e.y,
-                        10
-                    );
-
-                }
-
-            }
-
-
-            // ==========================================
-            // PERIGO
-            // ==========================================
-
-            else {
-
-                if (
-                    player.invincible <= 0
-                ) {
-
-                    life--;
-
-                    player.invincible =
-                        100;
-
-
-                    player.size =
-                        Math.max(
-                            20,
-                            player.size - 3
-                        );
-
-
-                    createBubbles(
-                        player.x,
-                        player.y,
-                        15
-                    );
-
-
-                    if (
-                        life <= 0
-                    ) {
-
-                        endGame();
-
-                        return;
-
-                    }
-
-                }
-
-            }
-
-        }
-
-    }
-
-
-    // ==============================================
-    // BOLHAS
-    // ==============================================
-
-    bubbles.forEach(b => {
-
-        b.y -= b.speed;
-
-        b.x +=
-            Math.sin(
-                b.phase
-            ) *
-            .2;
-
-        b.phase += .03;
-
-    });
-
-
-    bubbles =
-        bubbles.filter(
-            b =>
-                b.y > -20
-        );
-
-
-    updateHUD();
-
-}
-
-
-// ======================================================
-// DESENHAR JOGADOR
-// ======================================================
-
-function drawPlayer() {
-
-    if (
-        player.invincible > 0 &&
-        Math.floor(
-            player.invincible / 6
-        ) % 2 === 0
-    ) {
-
-        return;
-
-    }
-
-
-    ctx.save();
-
-
-    ctx.translate(
-        player.x,
-        player.y
-    );
-
-
-    ctx.scale(
-        player.direction,
-        1
-    );
-
-
-    const swimming =
-        Math.hypot(
-            player.vx,
-            player.vy
-        );
-
-
-    const tailWave =
-        Math.sin(
-            player.swimTime
-        ) *
-        Math.min(
-            .35,
-            swimming / 10
-        );
-
-
-    ctx.rotate(
-        Math.sin(
-            player.swimTime * .5
-        ) *
-        Math.min(
-            .06,
-            swimming / 30
-        )
-    );
-
-
-    // ==============================================
-    // EFEITO DO IMPULSO
-    // ==============================================
-
-    if (
-        boosting
-    ) {
-
-        ctx.shadowBlur =
-            25;
-
-        ctx.shadowColor =
-            "#00cfff";
-
-    }
-
-
-    // ==============================================
-    // CAUDA
-    // ==============================================
-
-    ctx.save();
-
-
-    ctx.translate(
-        -player.size * .55,
-        0
-    );
-
-
-    ctx.rotate(
-        tailWave
-    );
-
-
-    ctx.fillStyle =
-        "#ff7b21";
-
-
-    ctx.beginPath();
-
-
-    ctx.moveTo(
-        0,
-        0
-    );
-
-
-    ctx.lineTo(
-        -player.size * .65,
-        -player.size * .55
-    );
-
-
-    ctx.lineTo(
-        -player.size * .55,
-        player.size * .55
-    );
-
-
-    ctx.closePath();
-
-
-    ctx.fill();
-
-
-    ctx.restore();
-
-
-    // ==============================================
-    // CORPO
-    // ==============================================
-
-    const gradient =
-        ctx.createLinearGradient(
-            0,
-            -player.size,
-            0,
-            player.size
-        );
-
-
-    gradient.addColorStop(
-        0,
-        "#ffd34d"
-    );
-
-
-    gradient.addColorStop(
-        1,
-        "#ef4f19"
-    );
-
-
-    ctx.fillStyle =
-        gradient;
-
-
-    ctx.beginPath();
-
-
-    ctx.ellipse(
-        0,
-        0,
-        player.size,
-        player.size * .6,
-        0,
-        0,
-        Math.PI * 2
-    );
-
-
-    ctx.fill();
-
-
-    // ==============================================
-    // BARBATINA SUPERIOR
-    // ==============================================
-
-    ctx.fillStyle =
-        "#e94818";
-
-
-    ctx.beginPath();
-
-
-    ctx.moveTo(
-        -5,
-        -player.size * .42
-    );
-
-
-    ctx.lineTo(
-        5,
-        -player.size * .9
-    );
-
-
-    ctx.lineTo(
-        18,
-        -player.size * .42
-    );
-
-
-    ctx.closePath();
-
-
-    ctx.fill();
-
-
-    // ==============================================
-    // BARBATINA INFERIOR
-    // ==============================================
-
-    ctx.beginPath();
-
-
-    ctx.moveTo(
-        -5,
-        player.size * .42
-    );
-
-
-    ctx.lineTo(
-        8,
-        player.size * .78
-    );
-
-
-    ctx.lineTo(
-        20,
-        player.size * .42
-    );
-
-
-    ctx.closePath();
-
-
-    ctx.fill();
-
-
-    // ==============================================
-    // OLHO
-    // ==============================================
-
-    ctx.fillStyle =
-        "white";
-
-
-    ctx.beginPath();
-
-
-    ctx.arc(
-        player.size * .45,
-        -player.size * .18,
-        player.size * .16,
-        0,
-        Math.PI * 2
-    );
-
-
-    ctx.fill();
-
-
-    ctx.fillStyle =
-        "#00131f";
-
-
-    ctx.beginPath();
-
-
-    ctx.arc(
-        player.size * .5,
-        -player.size * .18,
-        player.size * .08,
-        0,
-        Math.PI * 2
-    );
-
-
-    ctx.fill();
-
-
-    // ==============================================
-    // BOCA
-    // ==============================================
-
-    ctx.strokeStyle =
-        "#42130a";
-
-    ctx.lineWidth = 3;
-
-
-    ctx.beginPath();
-
-
-    ctx.arc(
-        player.size * .55,
-        player.size * .08,
-        player.size * .2,
-        0,
-        Math.PI
-    );
-
-
-    ctx.stroke();
-
-
-    ctx.restore();
-
-}
-
-
-// ======================================================
-// ENTIDADES
-// ======================================================
-
-function drawEntities() {
-
-    entities.forEach(e => {
-
-        ctx.save();
-
-
-        ctx.translate(
-            e.x,
-            e.y
-        );
-
-
-        // ==========================================
-        // PEIXE
-        // ==========================================
-
-        if (
-            e.type === "fish"
-        ) {
-
-            ctx.scale(
-                e.direction,
-                1
-            );
-
-
-            ctx.fillStyle =
-                "#55c7ff";
-
-
-            ctx.beginPath();
-
-
-            ctx.ellipse(
-                0,
-                0,
-                e.size,
-                e.size * .55,
-                0,
-                0,
-                Math.PI * 2
-            );
-
-
-            ctx.fill();
-
-
-            ctx.fillStyle =
-                "#2999d6";
-
-
-            ctx.beginPath();
-
-
-            ctx.moveTo(
-                -e.size,
-                0
-            );
-
-
-            ctx.lineTo(
-                -e.size * 1.6,
-                -e.size * .6
-            );
-
-
-            ctx.lineTo(
-                -e.size * 1.6,
-                e.size * .6
-            );
-
-
-            ctx.closePath();
-
-
-            ctx.fill();
-
-
-            ctx.fillStyle =
-                "white";
-
-
-            ctx.beginPath();
-
-
-            ctx.arc(
-                e.size * .45,
-                -e.size * .15,
-                e.size * .18,
-                0,
-                Math.PI * 2
-            );
-
-
-            ctx.fill();
-
-
-            ctx.fillStyle =
-                "#001";
-
-
-            ctx.beginPath();
-
-
-            ctx.arc(
-                e.size * .5,
-                -e.size * .15,
-                e.size * .08,
-                0,
-                Math.PI * 2
-            );
-
-
-            ctx.fill();
-
-        }
-
-
-        // ==========================================
-        // HUMANO
-        // ==========================================
-
-        else if (
-            e.type === "human"
-        ) {
-
-            ctx.font =
-                "30px Arial";
-
-            ctx.textAlign =
-                "center";
-
-            ctx.textBaseline =
-                "middle";
-
-
-            ctx.fillText(
-                "🤿",
-                0,
-                0
-            );
-
-        }
-
-
-        // ==========================================
-        // TUBARÃO
-        // ==========================================
-
-        else if (
-            e.type === "shark"
-        ) {
-
-            ctx.scale(
-                e.direction,
-                1
-            );
-
-
-            ctx.fillStyle =
-                "#687b8a";
-
-
-            ctx.beginPath();
-
-
-            ctx.moveTo(
-                -e.size,
-                0
-            );
-
-
-            ctx.lineTo(
-                -e.size * .3,
-                -e.size * .55
-            );
-
-
-            ctx.lineTo(
-                e.size,
-                0
-            );
-
-
-            ctx.lineTo(
-                -e.size * .3,
-                e.size * .55
-            );
-
-
-            ctx.closePath();
-
-
-            ctx.fill();
-
-
-            ctx.beginPath();
-
-
-            ctx.moveTo(
-                -5,
-                -e.size * .4
-            );
-
-
-            ctx.lineTo(
-                5,
-                -e.size
-            );
-
-
-            ctx.lineTo(
-                18,
-                -e.size * .35
-            );
-
-
-            ctx.closePath();
-
-
-            ctx.fill();
-
-
-            ctx.fillStyle =
-                "#ff3030";
-
-
-            ctx.beginPath();
-
-
-            ctx.arc(
-                e.size * .55,
-                -e.size * .18,
-                4,
-                0,
-                Math.PI * 2
-            );
-
-
-            ctx.fill();
-
-        }
-
-
-        // ==========================================
-        // MINA
-        // ==========================================
-
-        else if (
-            e.type === "mine"
-        ) {
-
-            ctx.fillStyle =
-                "#252525";
-
-
-            ctx.beginPath();
-
-
-            ctx.arc(
-                0,
-                0,
-                e.size,
-                0,
-                Math.PI * 2
-            );
-
-
-            ctx.fill();
-
-
-            ctx.strokeStyle =
-                "#111";
-
-
-            ctx.lineWidth = 4;
-
-
-            for (
-                let i = 0;
-                i < 8;
-                i++
-            ) {
-
-                const a =
-                    i *
-                    Math.PI /
-                    4;
-
-
-                ctx.beginPath();
-
-
-                ctx.moveTo(
-                    Math.cos(a) *
-                    e.size,
-
-                    Math.sin(a) *
-                    e.size
-                );
-
-
-                ctx.lineTo(
-                    Math.cos(a) *
-                    e.size * 1.5,
-
-                    Math.sin(a) *
-                    e.size * 1.5
-                );
-
-
-                ctx.stroke();
-
-            }
-
-
-            ctx.fillStyle =
-                "#ff3838";
-
-
-            ctx.beginPath();
-
-
-            ctx.arc(
-                0,
-                0,
-                5,
-                0,
-                Math.PI * 2
-            );
-
-
-            ctx.fill();
-
-        }
-
-
-        ctx.restore();
-
-    });
-
-}
-
-
-// ======================================================
-// BOLHAS
-// ======================================================
-
-function createBubbles(
-    x,
-    y,
-    amount
-) {
-
-    for (
-        let i = 0;
-        i < amount;
-        i++
-    ) {
-
-        bubbles.push({
-
-            x:
-                x +
-                (Math.random() - .5) *
-                40,
-
-            y:
-                y +
-                (Math.random() - .5) *
-                40,
-
-            speed:
-                .5 +
-                Math.random() *
-                1.5,
-
-            phase:
-                Math.random() *
-                Math.PI * 2
-
-        });
-
-    }
-
-}
-
-
-function drawBubbles() {
-
-    bubbles.forEach(
-        b => {
-
-            ctx.strokeStyle =
-                "rgba(170,230,255,.55)";
-
-            ctx.lineWidth = 1.5;
-
-
-            ctx.beginPath();
-
-
-            ctx.arc(
-                b.x,
-                b.y,
-                3 +
-                Math.sin(
-                    b.phase
-                ),
-                0,
-                Math.PI * 2
-            );
-
-
-            ctx.stroke();
-
-        }
-    );
-
-}
-
-
-// ======================================================
-// FUNDO
-// ======================================================
-
-function drawBackground() {
-
-    const gradient =
-        ctx.createLinearGradient(
-            0,
-            0,
-            0,
-            H
-        );
-
-
-    gradient.addColorStop(
-        0,
-        "#073b66"
-    );
-
-
-    gradient.addColorStop(
-        .5,
-        "#02213b"
-    );
-
-
-    gradient.addColorStop(
-        1,
-        "#010b15"
-    );
-
-
-    ctx.fillStyle =
-        gradient;
-
-
-    ctx.fillRect(
-        0,
-        0,
-        W,
-        H
-    );
-
-
-    const glow =
-        ctx.createRadialGradient(
-            W * .5,
-            H * .35,
-            20,
-            W * .5,
-            H * .35,
-            H * .8
-        );
-
-
-    glow.addColorStop(
-        0,
-        "rgba(30,140,210,.18)"
-    );
-
-
-    glow.addColorStop(
-        1,
-        "rgba(0,0,0,0)"
-    );
-
-
-    ctx.fillStyle =
-        glow;
-
-
-    ctx.fillRect(
-        0,
-        0,
-        W,
-        H
-    );
-
-
-    // partículas
-
-    for (
-        let i = 0;
-        i < 35;
-        i++
-    ) {
-
-        const x =
-            (i * 197) % W;
-
-
-        const y =
-            (
-                i * 113 +
-                worldTime * .15
-            ) % H;
-
-
-        ctx.fillStyle =
-            "rgba(150,220,255,.15)";
-
-
-        ctx.beginPath();
-
-
-        ctx.arc(
-            x,
-            y,
-            1.5,
-            0,
-            Math.PI * 2
-        );
-
-
-        ctx.fill();
-
-    }
-
-}
-
-
-// ======================================================
-// HUD
-// ======================================================
-
-function updateHUD() {
-
-    document.getElementById(
-        "size"
-    ).textContent =
-        Math.floor(
-            player.size
-        );
-
-
-    document.getElementById(
-        "score"
-    ).textContent =
-        score;
-
-
-    document.getElementById(
-        "life"
-    ).textContent =
-        life;
-
-
-    // ==============================================
-    // BARRA
-    // ==============================================
-
-    document.getElementById(
-        "boostFill"
-    ).style.width =
-        boost + "%";
-
-
-    document.getElementById(
-        "boostValue"
-    ).textContent =
-        Math.floor(boost);
-
-
-    const status =
-        document.getElementById(
-            "boostStatus"
-        );
-
-
-    if (
-        boosting
-    ) {
-
-        status.textContent =
-            "IMPULSO ATIVADO!";
-
-    }
-
-    else if (
-        boost >= 100
-    ) {
-
-        status.textContent =
-            "PRESSIONE ESPAÇO!";
-
-    }
-
-    else {
-
-        status.textContent =
-            "coma peixes para carregar";
-
-    }
-
-}
-
-
-// ======================================================
-// GAME OVER
-// ======================================================
-
-function endGame() {
-
-    gameRunning = false;
-
-    boosting = false;
-
-    document.body
-        .classList
-        .remove("boosting");
-
-
-    document.getElementById(
-        "finalScore"
-    ).textContent =
-        score;
-
-
-    document.getElementById(
-        "gameOver"
-    ).style.display =
-        "flex";
-
-}
-
-
-// ======================================================
-// LOOP
-// ======================================================
-
-function gameLoop() {
-
-    requestAnimationFrame(
-        gameLoop
-    );
-
-
-    drawBackground();
-
-
-    if (
-        gameRunning
-    ) {
-
-        update();
-
-    }
-
-
-    drawEntities();
-
-    drawBubbles();
-
-
-    if (
-        gameRunning
-    ) {
-
-        drawPlayer();
-
-    }
-
-}
-
-
-// ======================================================
-// INICIAR
-// ======================================================
-
-gameLoop();
 
 </script>
 
 </body>
 </html>
+```

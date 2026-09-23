@@ -1,885 +1,899 @@
-```html
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ABYSS 🐟</title>
 
-    <title>O Mistério de Josefa</title>
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+body {
+  overflow: hidden;
+  background: #00111f;
+  font-family: Arial, sans-serif;
+  color: white;
+}
 
-        body {
-            margin: 0;
-            min-height: 100vh;
-            background:
-                radial-gradient(circle at center, #252525 0%, #080808 70%);
-            color: white;
-            font-family: Arial, sans-serif;
-            overflow-x: hidden;
-        }
+canvas {
+  display: block;
+  background: linear-gradient(#006994, #00334d 55%, #00131f);
+}
 
-        #jogo {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+#menu {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background:
+    radial-gradient(circle at center, rgba(0,180,255,.2), transparent 45%),
+    rgba(0,8,15,.88);
+  z-index: 10;
+}
 
-        /* TELA INICIAL */
+.box {
+  width: min(600px, 90%);
+  text-align: center;
+  padding: 40px;
+  border: 2px solid #27d9ff;
+  border-radius: 25px;
+  background: rgba(0,20,35,.9);
+  box-shadow: 0 0 40px rgba(0,200,255,.3);
+}
 
-        #inicio {
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 30px;
-        }
+h1 {
+  font-size: clamp(45px, 10vw, 90px);
+  color: #46eaff;
+  text-shadow: 0 0 25px #00bfff;
+  margin-bottom: 10px;
+}
 
-        .inicio-caixa {
-            max-width: 750px;
-        }
+.subtitle {
+  color: #b8eaff;
+  margin-bottom: 25px;
+}
 
-        .inicio-caixa h1 {
-            font-size: 52px;
-            color: #e5e5e5;
-            text-shadow: 0 0 20px #ffffff55;
-            margin-bottom: 10px;
-        }
+button {
+  border: 0;
+  padding: 16px 35px;
+  border-radius: 12px;
+  background: #16c8ff;
+  color: #00131f;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: .2s;
+}
 
-        .inicio-caixa p {
-            color: #bbbbbb;
-            font-size: 18px;
-            line-height: 1.6;
-        }
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 25px #16c8ff;
+}
 
-        .botao {
-            background: #b91c1c;
-            color: white;
-            border: none;
-            padding: 16px 35px;
-            border-radius: 10px;
-            font-size: 18px;
-            cursor: pointer;
-            margin-top: 20px;
-            transition: 0.2s;
-        }
+#hud {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  right: 15px;
+  display: none;
+  justify-content: space-between;
+  pointer-events: none;
+  z-index: 5;
+}
 
-        .botao:hover {
-            background: #dc2626;
-            transform: scale(1.05);
-        }
+.hudBox {
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: rgba(0,15,25,.65);
+  border: 1px solid rgba(100,230,255,.5);
+  backdrop-filter: blur(5px);
+}
 
-        /* JOGO */
+#gameOver {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,5,10,.8);
+}
 
-        #jogoPrincipal {
-            display: none;
-            min-height: 100vh;
-            flex-direction: column;
-        }
+.gameOverBox {
+  text-align: center;
+  background: #001b2a;
+  border: 2px solid #27d9ff;
+  padding: 40px;
+  border-radius: 25px;
+}
 
-        .topo {
-            padding: 15px 25px;
-            background: #0b0b0b;
-            border-bottom: 1px solid #333;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .titulo-jogo {
-            font-weight: bold;
-            color: #ddd;
-        }
-
-        #capitulo {
-            color: #888;
-        }
-
-        /* CENÁRIO */
-
-        #cenario {
-            flex: 1;
-            min-height: 400px;
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            gap: 80px;
-            padding: 50px 20px 20px;
-
-            background:
-                linear-gradient(#00000055, #000000dd),
-                radial-gradient(circle at center, #3b3b3b, #101010 70%);
-        }
-
-        .personagem {
-            width: 170px;
-            text-align: center;
-            transition: 0.3s;
-        }
-
-        .personagem.ativo {
-            transform: translateY(-12px) scale(1.05);
-        }
-
-        .emoji-personagem {
-            font-size: 105px;
-            filter: grayscale(0.3);
-        }
-
-        .nome-personagem {
-            background: #111;
-            border: 1px solid #444;
-            border-radius: 8px;
-            padding: 7px;
-            margin-top: 8px;
-            font-weight: bold;
-        }
-
-        /* DIÁLOGO */
-
-        .dialogo-area {
-            background: #090909;
-            border-top: 2px solid #444;
-            padding: 20px;
-        }
-
-        .caixa-dialogo {
-            max-width: 950px;
-            margin: auto;
-        }
-
-        #nomeFalante {
-            color: #ef4444;
-            font-weight: bold;
-            font-size: 18px;
-            margin-bottom: 8px;
-        }
-
-        #texto {
-            background: #171717;
-            border: 1px solid #444;
-            border-radius: 10px;
-            padding: 18px;
-            min-height: 75px;
-            font-size: 18px;
-            line-height: 1.5;
-        }
-
-        /* ESCOLHAS */
-
-        #escolhas {
-            max-width: 950px;
-            margin: 15px auto 0;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .escolha {
-            background: #222;
-            color: white;
-            border: 1px solid #555;
-            border-radius: 8px;
-            padding: 14px;
-            cursor: pointer;
-            text-align: left;
-            font-size: 16px;
-            transition: 0.2s;
-        }
-
-        .escolha:hover {
-            background: #333;
-            border-color: #aaa;
-            transform: translateX(5px);
-        }
-
-        /* FINAL */
-
-        #final {
-            display: none;
-            min-height: 100vh;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 30px;
-        }
-
-        .final-caixa {
-            max-width: 700px;
-        }
-
-        #tituloFinal {
-            font-size: 40px;
-            margin-bottom: 20px;
-        }
-
-        #textoFinal {
-            color: #ccc;
-            font-size: 18px;
-            line-height: 1.7;
-        }
-
-        .final-caixa .emoji-final {
-            font-size: 100px;
-        }
-
-        @media (max-width: 700px) {
-
-            .inicio-caixa h1 {
-                font-size: 35px;
-            }
-
-            #cenario {
-                gap: 15px;
-                padding-top: 40px;
-            }
-
-            .personagem {
-                width: 120px;
-            }
-
-            .emoji-personagem {
-                font-size: 75px;
-            }
-
-            #texto {
-                font-size: 16px;
-            }
-        }
-    </style>
+#message {
+  margin: 15px 0 25px;
+  color: #b8eaff;
+}
+</style>
 </head>
 
 <body>
 
-    <div id="jogo">
+<canvas id="game"></canvas>
 
-        <!-- TELA INICIAL -->
-
-        <section id="inicio">
-
-            <div class="inicio-caixa">
-
-                <div style="font-size: 90px;">🏚️</div>
-
-                <h1>O Mistério de Josefa</h1>
-
-                <p>
-                    Há muitos anos, uma casa abandonada guarda
-                    um segredo que ninguém conseguiu descobrir.
-                </p>
-
-                <p>
-                    Hoje, a neta decidiu visitar seu avô.
-                    Mas alguma coisa está diferente...
-                </p>
-
-                <button class="botao" onclick="iniciarJogo()">
-                    ▶ COMEÇAR
-                </button>
-
-            </div>
-
-        </section>
-
-
-        <!-- JOGO -->
-
-        <section id="jogoPrincipal">
-
-            <div class="topo">
-                <div class="titulo-jogo">
-                    👻 O Mistério de Josefa
-                </div>
-
-                <div id="capitulo">
-                    Capítulo 1
-                </div>
-            </div>
-
-
-            <!-- PERSONAGENS -->
-
-            <div id="cenario">
-
-                <div class="personagem" id="vo">
-
-                    <div class="emoji-personagem">
-                        👴
-                    </div>
-
-                    <div class="nome-personagem">
-                        Vô
-                    </div>
-
-                </div>
-
-
-                <div class="personagem" id="neta">
-
-                    <div class="emoji-personagem">
-                        👧
-                    </div>
-
-                    <div class="nome-personagem">
-                        Neta
-                    </div>
-
-                </div>
-
-
-                <div class="personagem" id="josefa">
-
-                    <div class="emoji-personagem">
-                        👩
-                    </div>
-
-                    <div class="nome-personagem">
-                        Josefa
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- DIÁLOGO -->
-
-            <div class="dialogo-area">
-
-                <div class="caixa-dialogo">
-
-                    <div id="nomeFalante">
-                        Narrador
-                    </div>
-
-                    <div id="texto">
-                        ...
-                    </div>
-
-                    <div id="escolhas"></div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- FINAL -->
-
-        <section id="final">
-
-            <div class="final-caixa">
-
-                <div class="emoji-final" id="emojiFinal">
-                    👻
-                </div>
-
-                <h1 id="tituloFinal">
-                    Final
-                </h1>
-
-                <p id="textoFinal">
-                    ...
-                </p>
-
-                <button class="botao" onclick="location.reload()">
-                    🔄 Jogar novamente
-                </button>
-
-            </div>
-
-        </section>
-
+<div id="menu">
+  <div class="box">
+    <h1>ABYSS</h1>
+    <div class="subtitle">
+      🐟 O PEIXE DO ABISMO
     </div>
 
+    <p style="line-height:1.7;margin-bottom:25px;">
+      Você é o predador do fundo do mar.<br>
+      Coma criaturas menores e mergulhadores 🤿.<br>
+      Cresça, sobreviva e domine o oceano.
+    </p>
+
+    <button onclick="startGame()">MERGULHAR 🌊</button>
+
+    <p style="margin-top:20px;font-size:13px;color:#75aabd;">
+      WASD ou SETAS para nadar
+    </p>
+  </div>
+</div>
+
+<div id="hud">
+  <div class="hudBox">
+    🐟 Tamanho: <span id="size">1</span>
+  </div>
+
+  <div class="hudBox">
+    ⭐ Pontos: <span id="score">0</span>
+  </div>
+
+  <div class="hudBox">
+    ❤️ <span id="life">3</span>
+  </div>
+</div>
+
+<div id="gameOver">
+  <div class="gameOverBox">
+    <h1 style="font-size:50px;">FIM DE JOGO</h1>
+
+    <div id="message"></div>
+
+    <button onclick="startGame()">TENTAR NOVAMENTE 🔄</button>
+  </div>
+</div>
+
+<script>
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+
+let W, H;
+
+function resize() {
+  W = canvas.width = innerWidth;
+  H = canvas.height = innerHeight;
+}
+
+resize();
+addEventListener("resize", resize);
+
+const keys = {};
+
+addEventListener("keydown", e => {
+  keys[e.key.toLowerCase()] = true;
+});
+
+addEventListener("keyup", e => {
+  keys[e.key.toLowerCase()] = false;
+});
+
+let player;
+let entities = [];
+let bubbles = [];
+let score = 0;
+let life = 3;
+let gameRunning = false;
+let spawnTimer = 0;
+let worldTime = 0;
+
+function startGame() {
+
+  document.getElementById("menu").style.display = "none";
+  document.getElementById("gameOver").style.display = "none";
+  document.getElementById("hud").style.display = "flex";
+
+  score = 0;
+  life = 3;
+
+  player = {
+    x: W / 2,
+    y: H / 2,
+    size: 35,
+    speed: 5,
+    direction: 1,
+    invincible: 0
+  };
+
+  entities = [];
+
+  for (let i = 0; i < 18; i++) {
+    spawnEntity();
+  }
+
+  bubbles = [];
+
+  for (let i = 0; i < 80; i++) {
+    bubbles.push({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: Math.random() * 3 + 1,
+      speed: Math.random() * 1.5 + .5
+    });
+  }
 
-    <script>
+  gameRunning = true;
+  updateHUD();
+  requestAnimationFrame(loop);
+}
 
-        let etapa = 0;
+function spawnEntity() {
 
-        const cenas = [
+  const random = Math.random();
 
-            {
-                capitulo: "Capítulo 1 — A chegada",
-
-                personagem: "Narrador",
+  let type;
 
-                texto:
-                    "Depois de uma longa viagem, a neta chega à antiga casa do avô. A porta está entreaberta.",
+  if (random < .55) {
+    type = "fish";
+  } else if (random < .82) {
+    type = "human";
+  } else if (random < .94) {
+    type = "shark";
+  } else {
+    type = "mine";
+  }
 
-                escolhas: [
-                    {
-                        texto: "🚪 Entrar na casa",
-                        proxima: 1
-                    },
-                    {
-                        texto: "📢 Chamar pelo avô",
-                        proxima: 2
-                    }
-                ]
-            },
+  let size;
 
+  if (type === "fish") {
+    size = Math.random() * 15 + 12;
+  }
 
-            {
-                capitulo: "Capítulo 1 — Dentro da casa",
-
-                personagem: "Neta",
+  if (type === "human") {
+    size = 22;
+  }
 
-                texto:
-                    "Vô? Eu cheguei! Por que está tudo tão escuro?",
+  if (type === "shark") {
+    size = 55;
+  }
 
-                escolhas: [
-                    {
-                        texto: "🔦 Procurar o interruptor",
-                        proxima: 3
-                    },
-                    {
-                        texto: "👣 Seguir o barulho no corredor",
-                        proxima: 4
-                    }
-                ]
-            },
+  if (type === "mine") {
+    size = 25;
+  }
 
+  entities.push({
+    x: Math.random() * W,
+    y: Math.random() * H,
+    size,
+    type,
+    speed: Math.random() * 1.5 + .4,
+    phase: Math.random() * Math.PI * 2,
+    direction: Math.random() > .5 ? 1 : -1
+  });
+}
 
-            {
-                capitulo: "Capítulo 1 — A resposta",
-
-                personagem: "Vô",
-
-                texto:
-                    "Você finalmente chegou... Eu estava esperando por você.",
+function update() {
 
-                escolhas: [
-                    {
-                        texto: "❓ Perguntar o que aconteceu",
-                        proxima: 5
-                    },
-                    {
-                        texto: "😰 Perguntar sobre a casa",
-                        proxima: 6
-                    }
-                ]
-            },
+  worldTime++;
 
-
-            {
-                capitulo: "Capítulo 2 — A luz",
-
-                personagem: "Neta",
-
-                texto:
-                    "O interruptor não funciona. De repente, alguma coisa cai no andar de cima.",
-
-                escolhas: [
-                    {
-                        texto: "⬆️ Subir as escadas",
-                        proxima: 7
-                    },
-                    {
-                        texto: "🏃 Voltar para a porta",
-                        proxima: 8
-                    }
-                ]
-            },
-
-
-            {
-                capitulo: "Capítulo 2 — O corredor",
+  let dx = 0;
+  let dy = 0;
 
-                personagem: "Neta",
+  if (keys["arrowleft"] || keys["a"]) dx--;
+  if (keys["arrowright"] || keys["d"]) dx++;
+  if (keys["arrowup"] || keys["w"]) dy--;
+  if (keys["arrowdown"] || keys["s"]) dy++;
 
-                texto:
-                    "O corredor parece mais comprido do que antes. No fim dele há uma porta com o número 13.",
+  if (dx !== 0 || dy !== 0) {
 
-                escolhas: [
-                    {
-                        texto: "🚪 Abrir a porta 13",
-                        proxima: 9
-                    },
-                    {
-                        texto: "🔙 Voltar",
-                        proxima: 3
-                    }
-                ]
-            },
-
-
-            {
-                capitulo: "Capítulo 2 — O segredo",
-
-                personagem: "Vô",
-
-                texto:
-                    "Há muitos anos, Josefa desapareceu depois de entrar naquela casa. Ninguém sabe exatamente o que aconteceu.",
-
-                escolhas: [
-                    {
-                        texto: "😮 Perguntar quem é Josefa",
-                        proxima: 10
-                    },
-                    {
-                        texto: "🔎 Perguntar onde ela está",
-                        proxima: 11
-                    }
-                ]
-            },
-
-
-            {
-                capitulo: "Capítulo 2 — A casa",
-
-                personagem: "Vô",
-
-                texto:
-                    "Essa casa não é como as outras. Algumas coisas aqui parecem lembrar das pessoas que passaram por ela.",
-
-                escolhas: [
-                    {
-                        texto: "🕵️ Investigar",
-                        proxima: 10
-                    },
-                    {
-                        texto: "🚪 Ir embora",
-                        proxima: 8
-                    }
-                ]
-            },
-
-
-            {
-                capitulo: "Capítulo 3 — O andar de cima",
-
-                personagem: "Neta",
-
-                texto:
-                    "No quarto há uma fotografia antiga. Nela aparecem o vô e uma mulher que a neta nunca viu.",
-
-                escolhas: [
-                    {
-                        texto: "🖼️ Pegar a fotografia",
-                        proxima: 10
-                    },
-                    {
-                        texto: "🔦 Procurar outra pista",
-                        proxima: 12
-                    }
-                ]
-            },
-
-
-            {
-                capitulo: "Final — A fuga",
-
-                personagem: "Narrador",
-
-                texto:
-                    "A neta decide sair da casa. Antes de fechar a porta, escuta alguém sussurrar seu nome.",
-
-                escolhas: [
-                    {
-                        texto: "🏃 Ir embora",
-                        proxima: 13
-                    }
-                ]
-            },
-
-
-            {
-                capitulo: "Capítulo 3 — A Sala 13",
-
-                personagem: "Neta",
-
-                texto:
-                    "Atrás da porta existe uma pequena sala. No centro há uma cadeira e uma fotografia de Josefa.",
-
-                escolhas: [
-                    {
-                        texto: "👩 Perguntar quem é Josefa",
-                        proxima: 11
-                    },
-                    {
-                        texto: "🔍 Procurar pistas na sala",
-                        proxima: 12
-                    }
-                ]
-            },
-
-
-            {
-                capitulo: "Capítulo 3 — Josefa",
-
-                personagem: "Josefa",
-
-                texto:
-                    "Meu nome é Josefa. Eu conheço esse lugar melhor do que qualquer pessoa.",
-
-                escolhas: [
-                    {
-                        texto: "❓ Perguntar o que aconteceu",
-                        proxima: 14
-                    },
-                    {
-                        texto: "😨 Perguntar por que ela está ali",
-                        proxima: 15
-                    }
-                ]
-            },
-
-
-            {
-                capitulo: "Capítulo 4 — A verdade",
+    const length = Math.hypot(dx, dy);
 
-                personagem: "Josefa",
-
-                texto:
-                    "Eu não desapareci. Eu fui embora porque descobri um segredo que ninguém deveria encontrar.",
-
-                escolhas: [
-                    {
-                        texto: "🔎 Perguntar qual é o segredo",
-                        proxima: 16
-                    },
-                    {
-                        texto: "🚪 Pedir para sair dali",
-                        proxima: 17
-                    }
-                ]
-            },
+    dx /= length;
+    dy /= length;
 
+    player.x += dx * player.speed;
+    player.y += dy * player.speed;
 
-            {
-                capitulo: "Capítulo 4 — A pista",
+    if (dx !== 0) {
+      player.direction = dx > 0 ? 1 : -1;
+    }
+  }
 
-                personagem: "Narrador",
+  player.x = Math.max(player.size, Math.min(W - player.size, player.x));
+  player.y = Math.max(player.size, Math.min(H - player.size, player.y));
 
-                texto:
-                    "Debaixo da fotografia existe um pequeno papel. Nele está escrito: 13 - 07 - 21.",
+  if (player.invincible > 0) {
+    player.invincible--;
+  }
 
-                escolhas: [
-                    {
-                        texto: "🧠 Memorizar o código",
-                        proxima: 14
-                    },
-                    {
-                        texto: "📜 Ler novamente",
-                        proxima: 14
-                    }
-                ]
-            },
+  spawnTimer++;
 
+  if (spawnTimer > 55) {
+    spawnTimer = 0;
+    spawnEntity();
+  }
 
-            {
-                capitulo: "Final — O segredo",
+  entities.forEach(e => {
 
-                personagem: "Narrador",
+    e.phase += .02;
 
-                texto:
-                    "A neta descobre que Josefa estava protegendo a família de um segredo antigo. O avô finalmente conta toda a verdade.",
+    if (e.type === "shark") {
 
-                escolhas: [
-                    {
-                        texto: "🏠 Voltar para casa",
-                        proxima: 18
-                    }
-                ]
-            },
+      const angle = Math.atan2(
+        player.y - e.y,
+        player.x - e.x
+      );
 
+      e.x += Math.cos(angle) * e.speed;
+      e.y += Math.sin(angle) * e.speed;
 
-            {
-                capitulo: "Final — A pergunta",
+    } else {
 
-                personagem: "Josefa",
+      e.x += e.speed * e.direction;
 
-                texto:
-                    "Alguns mistérios existem para continuar sendo mistérios.",
+      e.y += Math.sin(e.phase) * .4;
+    }
 
-                escolhas: [
-                    {
-                        texto: "❓ Perguntar mais uma vez",
-                        proxima: 16
-                    },
-                    {
-                        texto: "🤫 Ficar em silêncio",
-                        proxima: 18
-                    }
-                ]
-            },
+    if (e.x < -100) e.x = W + 100;
+    if (e.x > W + 100) e.x = -100;
 
+    if (e.y < -100) e.y = H + 100;
+    if (e.y > H + 100) e.y = -100;
+  });
 
-            {
-                capitulo: "Final — A verdade escondida",
+  for (let i = entities.length - 1; i >= 0; i--) {
 
-                personagem: "Josefa",
+    const e = entities[i];
 
-                texto:
-                    "O segredo estava escondido na casa há décadas. Agora você sabe onde procurar.",
+    const distance = Math.hypot(
+      player.x - e.x,
+      player.y - e.y
+    );
 
-                escolhas: [
-                    {
-                        texto: "🔐 Guardar o segredo",
-                        proxima: 18
-                    }
-                ]
-            },
+    if (distance < player.size + e.size * .65) {
 
+      if (e.type === "fish" || e.type === "human") {
 
-            {
-                capitulo: "Final — A saída",
+        if (player.size >= e.size * .9) {
 
-                personagem: "Neta",
+          score += e.type === "human" ? 100 : 25;
 
-                texto:
-                    "Josefa abre a porta. A neta sai da casa e olha para trás. A janela do segundo andar se fecha sozinha.",
+          player.size += e.type === "human" ? 3 : 1;
 
-                escolhas: [
-                    {
-                        texto: "🌙 Continuar caminhando",
-                        proxima: 18
-                    }
-                ]
-            }
+          entities.splice(i, 1);
 
-        ];
-
-
-        function iniciarJogo() {
-
-            document.getElementById("inicio").style.display = "none";
-
-            document.getElementById("jogoPrincipal").style.display = "flex";
-
-            etapa = 0;
-
-            mostrarCena();
+          createBubbles(e.x, e.y, 10);
 
         }
 
+      } else {
 
-        function mostrarCena() {
+        if (player.invincible <= 0) {
 
-            const cena = cenas[etapa];
+          life--;
 
-            document.getElementById("capitulo").innerText =
-                cena.capitulo;
+          player.invincible = 100;
 
-            document.getElementById("nomeFalante").innerText =
-                cena.personagem;
+          player.size = Math.max(20, player.size - 3);
 
-            document.getElementById("texto").innerText =
-                cena.texto;
+          createBubbles(player.x, player.y, 15);
 
-
-            const escolhas =
-                document.getElementById("escolhas");
-
-            escolhas.innerHTML = "";
-
-
-            atualizarPersonagem(cena.personagem);
-
-
-            cena.escolhas.forEach(function (escolha) {
-
-                const botao =
-                    document.createElement("button");
-
-                botao.className = "escolha";
-
-                botao.innerText = escolha.texto;
-
-                botao.onclick = function () {
-
-                    etapa = escolha.proxima;
-
-                    if (etapa === 18) {
-
-                        mostrarFinal();
-
-                    } else {
-
-                        mostrarCena();
-
-                    }
-
-                };
-
-                escolhas.appendChild(botao);
-
-            });
-
+          if (life <= 0) {
+            endGame();
+            return;
+          }
         }
+      }
+    }
+  }
 
+  bubbles.forEach(b => {
 
-        function atualizarPersonagem(nome) {
+    b.y -= b.speed;
 
-            document
-                .querySelectorAll(".personagem")
-                .forEach(function (personagem) {
+    if (b.y < -10) {
+      b.y = H + 10;
+      b.x = Math.random() * W;
+    }
+  });
 
-                    personagem.classList.remove("ativo");
+  updateHUD();
+}
 
-                });
+function createBubbles(x, y, amount) {
 
+  for (let i = 0; i < amount; i++) {
 
-            if (nome === "Vô") {
+    bubbles.push({
+      x,
+      y,
+      r: Math.random() * 4 + 1,
+      speed: Math.random() * 2 + .5
+    });
+  }
+}
 
-                document
-                    .getElementById("vo")
-                    .classList.add("ativo");
+function updateHUD() {
 
-            }
+  document.getElementById("score").textContent = score;
+  document.getElementById("life").textContent = life;
+  document.getElementById("size").textContent =
+    Math.floor(player.size / 35 * 10) / 10;
+}
 
-            if (nome === "Neta") {
+function drawBackground() {
 
-                document
-                    .getElementById("neta")
-                    .classList.add("ativo");
+  const gradient = ctx.createLinearGradient(0, 0, 0, H);
 
-            }
+  gradient.addColorStop(0, "#006b94");
+  gradient.addColorStop(.5, "#003e5c");
+  gradient.addColorStop(1, "#00131f");
 
-            if (nome === "Josefa") {
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, W, H);
 
-                document
-                    .getElementById("josefa")
-                    .classList.add("ativo");
+  // luz da superfície
 
-            }
+  const glow = ctx.createRadialGradient(
+    W / 2,
+    0,
+    0,
+    W / 2,
+    0,
+    H * .7
+  );
 
-        }
+  glow.addColorStop(0, "rgba(100,230,255,.25)");
+  glow.addColorStop(1, "rgba(0,0,0,0)");
 
+  ctx.fillStyle = glow;
+  ctx.fillRect(0, 0, W, H);
 
-        function mostrarFinal() {
+  // fundo
 
-            document
-                .getElementById("jogoPrincipal")
-                .style.display = "none";
+  ctx.fillStyle = "#001018";
 
-            document
-                .getElementById("final")
-                .style.display = "flex";
+  ctx.beginPath();
+  ctx.moveTo(0, H);
 
+  for (let x = 0; x <= W; x += 40) {
 
-            document
-                .getElementById("tituloFinal")
-                .innerText =
-                "👻 O mistério continua...";
+    const y =
+      H - 45 -
+      Math.sin(x * .015) * 15;
 
-            document
-                .getElementById("textoFinal")
-                .innerText =
-                "Você descobriu parte da história de Josefa, mas ainda existem perguntas sem resposta. Talvez a casa ainda esconda outros segredos.";
+    ctx.lineTo(x, y);
+  }
 
-        }
+  ctx.lineTo(W, H);
+  ctx.closePath();
 
-    </script>
+  ctx.fill();
+
+  // algas
+
+  for (let i = 0; i < 15; i++) {
+
+    const x = i * (W / 15);
+
+    ctx.strokeStyle = "rgba(0,180,130,.35)";
+    ctx.lineWidth = 5;
+
+    ctx.beginPath();
+    ctx.moveTo(x, H);
+
+    ctx.quadraticCurveTo(
+      x - 20,
+      H - 80,
+      x + Math.sin(i) * 30,
+      H - 140
+    );
+
+    ctx.stroke();
+  }
+}
+
+function drawBubbles() {
+
+  bubbles.forEach(b => {
+
+    ctx.beginPath();
+    ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+
+    ctx.strokeStyle = "rgba(180,240,255,.35)";
+    ctx.stroke();
+  });
+}
+
+function drawPlayer() {
+
+  if (
+    player.invincible > 0 &&
+    Math.floor(player.invincible / 6) % 2 === 0
+  ) return;
+
+  ctx.save();
+
+  ctx.translate(player.x, player.y);
+
+  ctx.scale(
+    player.direction,
+    1
+  );
+
+  // cauda
+
+  ctx.fillStyle = "#ff7b21";
+
+  ctx.beginPath();
+
+  ctx.moveTo(-player.size * .5, 0);
+  ctx.lineTo(-player.size * 1.15, -player.size * .55);
+  ctx.lineTo(-player.size * 1.05, player.size * .55);
+  ctx.closePath();
+
+  ctx.fill();
+
+  // corpo
+
+  const gradient =
+    ctx.createLinearGradient(
+      0,
+      -player.size,
+      0,
+      player.size
+    );
+
+  gradient.addColorStop(0, "#ffd34d");
+  gradient.addColorStop(1, "#ef4f19");
+
+  ctx.fillStyle = gradient;
+
+  ctx.beginPath();
+
+  ctx.ellipse(
+    0,
+    0,
+    player.size,
+    player.size * .6,
+    0,
+    0,
+    Math.PI * 2
+  );
+
+  ctx.fill();
+
+  // barbatana
+
+  ctx.fillStyle = "#e94818";
+
+  ctx.beginPath();
+
+  ctx.moveTo(-5, -player.size * .45);
+  ctx.lineTo(5, -player.size * .95);
+  ctx.lineTo(18, -player.size * .45);
+
+  ctx.fill();
+
+  // olho
+
+  ctx.fillStyle = "white";
+
+  ctx.beginPath();
+  ctx.arc(
+    player.size * .45,
+    -player.size * .18,
+    player.size * .16,
+    0,
+    Math.PI * 2
+  );
+  ctx.fill();
+
+  ctx.fillStyle = "#00131f";
+
+  ctx.beginPath();
+  ctx.arc(
+    player.size * .5,
+    -player.size * .18,
+    player.size * .08,
+    0,
+    Math.PI * 2
+  );
+  ctx.fill();
+
+  // boca
+
+  ctx.strokeStyle = "#42130a";
+  ctx.lineWidth = 3;
+
+  ctx.beginPath();
+
+  ctx.arc(
+    player.size * .55,
+    player.size * .08,
+    player.size * .2,
+    0,
+    Math.PI
+  );
+
+  ctx.stroke();
+
+  ctx.restore();
+}
+
+function drawFish(e) {
+
+  ctx.save();
+
+  ctx.translate(e.x, e.y);
+  ctx.scale(e.direction, 1);
+
+  ctx.fillStyle = "#6de3ff";
+
+  ctx.beginPath();
+
+  ctx.ellipse(
+    0,
+    0,
+    e.size,
+    e.size * .55,
+    0,
+    0,
+    Math.PI * 2
+  );
+
+  ctx.fill();
+
+  ctx.beginPath();
+
+  ctx.moveTo(-e.size * .7, 0);
+  ctx.lineTo(-e.size * 1.3, -e.size * .5);
+  ctx.lineTo(-e.size * 1.3, e.size * .5);
+  ctx.closePath();
+
+  ctx.fill();
+
+  ctx.fillStyle = "white";
+
+  ctx.beginPath();
+  ctx.arc(e.size * .55, -e.size * .15, e.size * .14, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.restore();
+}
+
+function drawHuman(e) {
+
+  ctx.save();
+
+  ctx.translate(e.x, e.y);
+
+  // cabeça
+
+  ctx.fillStyle = "#f2c49b";
+
+  ctx.beginPath();
+  ctx.arc(0, -10, 8, 0, Math.PI * 2);
+  ctx.fill();
+
+  // roupa
+
+  ctx.fillStyle = "#dfefff";
+
+  ctx.fillRect(-8, 0, 16, 22);
+
+  // braços
+
+  ctx.strokeStyle = "#f2c49b";
+  ctx.lineWidth = 5;
+
+  ctx.beginPath();
+
+  ctx.moveTo(-7, 5);
+  ctx.lineTo(-18, 15);
+
+  ctx.moveTo(7, 5);
+  ctx.lineTo(18, 15);
+
+  ctx.stroke();
+
+  // pernas
+
+  ctx.strokeStyle = "#17344a";
+  ctx.lineWidth = 6;
+
+  ctx.beginPath();
+
+  ctx.moveTo(-4, 20);
+  ctx.lineTo(-8, 34);
+
+  ctx.moveTo(4, 20);
+  ctx.lineTo(8, 34);
+
+  ctx.stroke();
+
+  // cilindro de oxigênio
+
+  ctx.fillStyle = "#f5f5f5";
+  ctx.fillRect(10, -3, 5, 20);
+
+  ctx.restore();
+}
+
+function drawShark(e) {
+
+  ctx.save();
+
+  ctx.translate(e.x, e.y);
+
+  const angle = Math.atan2(
+    player.y - e.y,
+    player.x - e.x
+  );
+
+  ctx.rotate(angle);
+
+  ctx.fillStyle = "#526d78";
+
+  ctx.beginPath();
+
+  ctx.ellipse(
+    0,
+    0,
+    e.size,
+    e.size * .4,
+    0,
+    0,
+    Math.PI * 2
+  );
+
+  ctx.fill();
+
+  // cauda
+
+  ctx.beginPath();
+
+  ctx.moveTo(-e.size * .7, 0);
+  ctx.lineTo(-e.size * 1.35, -e.size * .5);
+  ctx.lineTo(-e.size * 1.2, e.size * .5);
+  ctx.closePath();
+
+  ctx.fill();
+
+  // barbatana
+
+  ctx.beginPath();
+
+  ctx.moveTo(0, -e.size * .3);
+  ctx.lineTo(10, -e.size * .9);
+  ctx.lineTo(25, -e.size * .25);
+  ctx.closePath();
+
+  ctx.fill();
+
+  ctx.fillStyle = "white";
+
+  ctx.beginPath();
+  ctx.arc(e.size * .55, -e.size * .12, 4, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.restore();
+}
+
+function drawMine(e) {
+
+  ctx.save();
+
+  ctx.translate(e.x, e.y);
+
+  ctx.fillStyle = "#333";
+
+  ctx.beginPath();
+
+  ctx.arc(0, 0, e.size, 0, Math.PI * 2);
+
+  ctx.fill();
+
+  ctx.strokeStyle = "#111";
+  ctx.lineWidth = 5;
+
+  for (let i = 0; i < 8; i++) {
+
+    const a = i * Math.PI / 4;
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+      Math.cos(a) * e.size,
+      Math.sin(a) * e.size
+    );
+
+    ctx.lineTo(
+      Math.cos(a) * (e.size + 12),
+      Math.sin(a) * (e.size + 12)
+    );
+
+    ctx.stroke();
+  }
+
+  ctx.fillStyle = "#ff4444";
+
+  ctx.beginPath();
+
+  ctx.arc(0, 0, 7, 0, Math.PI * 2);
+
+  ctx.fill();
+
+  ctx.restore();
+}
+
+function drawEntities() {
+
+  entities.forEach(e => {
+
+    if (e.type === "fish") drawFish(e);
+    if (e.type === "human") drawHuman(e);
+    if (e.type === "shark") drawShark(e);
+    if (e.type === "mine") drawMine(e);
+
+  });
+}
+
+function draw() {
+
+  drawBackground();
+  drawBubbles();
+  drawEntities();
+  drawPlayer();
+
+  // profundidade
+
+  ctx.fillStyle = "rgba(0,0,0,.15)";
+
+  const darkness =
+    Math.min(player.y / H, 1) * .3;
+
+  ctx.fillRect(0, 0, W, H * darkness);
+}
+
+function loop() {
+
+  if (!gameRunning) return;
+
+  update();
+  draw();
+
+  requestAnimationFrame(loop);
+}
+
+function endGame() {
+
+  gameRunning = false;
+
+  document.getElementById("hud").style.display = "none";
+
+  document.getElementById("message").innerHTML =
+    `🐟 Você chegou ao fim da expedição.<br><br>
+     ⭐ Pontuação: <strong>${score}</strong><br>
+     📏 Tamanho final: <strong>${Math.floor(player.size)}</strong>`;
+
+  document.getElementById("gameOver").style.display = "flex";
+}
+</script>
 
 </body>
-
 </html>
-```

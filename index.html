@@ -6,242 +6,250 @@
 <title>Mercado Maluco 3D 🛒</title>
 
 <style>
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
 }
 
-body {
-    overflow: hidden;
-    font-family: Arial, Helvetica, sans-serif;
-    background: #111;
-    color: white;
-    user-select: none;
+body{
+    overflow:hidden;
+    font-family:Arial,sans-serif;
+    background:#111;
+    color:white;
 }
 
-canvas {
-    display: block;
+canvas{
+    display:block;
 }
 
-/* HUD */
-#hud {
-    position: fixed;
-    top: 15px;
-    left: 15px;
-    z-index: 10;
-    background: rgba(10,10,10,.82);
-    border: 2px solid rgba(255,255,255,.15);
-    border-radius: 16px;
-    padding: 15px 18px;
-    min-width: 220px;
-    box-shadow: 0 8px 30px rgba(0,0,0,.4);
-}
-
-#hud h1 {
-    font-size: 20px;
-    margin-bottom: 10px;
-}
-
-.stat {
-    margin: 5px 0;
-    font-size: 15px;
-}
-
-#pedido {
-    position: fixed;
-    top: 15px;
-    right: 15px;
-    z-index: 10;
-    width: 250px;
-    background: rgba(10,10,10,.88);
-    border-radius: 16px;
-    padding: 16px;
-    border: 2px solid rgba(255,255,255,.12);
-}
-
-#pedido h2 {
-    font-size: 18px;
-    margin-bottom: 8px;
-}
-
-#pedidoLista {
-    line-height: 1.7;
-    font-size: 14px;
-}
-
-#mensagem {
-    position: fixed;
-    left: 50%;
-    bottom: 90px;
-    transform: translateX(-50%);
-    z-index: 20;
-    background: rgba(0,0,0,.86);
-    padding: 12px 20px;
-    border-radius: 30px;
-    font-weight: bold;
-    opacity: 0;
-    transition: .25s;
-    pointer-events: none;
-}
-
-#crosshair {
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%,-50%);
-    z-index: 9;
-    width: 8px;
-    height: 8px;
-    border: 2px solid white;
-    border-radius: 50%;
-    pointer-events: none;
-}
-
-/* Tela inicial */
-#menu {
-    position: fixed;
-    inset: 0;
-    z-index: 100;
+#menu{
+    position:fixed;
+    inset:0;
+    z-index:100;
+    display:flex;
+    align-items:center;
+    justify-content:center;
     background:
-        radial-gradient(circle at center, rgba(50,80,100,.25), transparent 50%),
-        linear-gradient(135deg,#111,#050505);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+        radial-gradient(circle at center,#34495e55,transparent 50%),
+        linear-gradient(135deg,#111,#030303);
 }
 
-.menuBox {
-    width: min(500px,90%);
-    text-align: center;
-    padding: 35px;
-    border-radius: 25px;
-    background: rgba(20,20,20,.95);
-    border: 1px solid rgba(255,255,255,.15);
-    box-shadow: 0 20px 80px rgba(0,0,0,.6);
+.menu-box{
+    width:min(520px,90%);
+    padding:40px;
+    text-align:center;
+    background:#151515;
+    border:1px solid #ffffff22;
+    border-radius:25px;
+    box-shadow:0 20px 80px #000b;
 }
 
-.menuBox h1 {
-    font-size: 46px;
-    margin-bottom: 8px;
+.menu-box .logo{
+    font-size:70px;
 }
 
-.menuBox p {
-    color: #bbb;
-    line-height: 1.6;
-    margin-bottom: 25px;
+.menu-box h1{
+    font-size:42px;
+    margin:10px 0;
 }
 
-button {
-    border: 0;
-    border-radius: 14px;
-    padding: 14px 28px;
-    background: #f59e0b;
-    color: #111;
-    font-weight: 900;
-    font-size: 17px;
-    cursor: pointer;
-    transition: .2s;
+.menu-box p{
+    color:#bbb;
+    line-height:1.6;
+    margin:15px 0 25px;
 }
 
-button:hover {
-    transform: scale(1.05);
+#startBtn{
+    border:0;
+    background:#f59e0b;
+    color:#111;
+    padding:16px 35px;
+    border-radius:14px;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.2s;
 }
 
-/* Mobile */
-#mobileControls {
-    display: none;
-    position: fixed;
-    inset: auto 0 15px 0;
-    z-index: 30;
-    pointer-events: none;
+#startBtn:hover{
+    transform:scale(1.05);
+    background:#fbbf24;
 }
 
-#joystick {
-    margin-left: 20px;
-    width: 130px;
-    height: 130px;
-    border-radius: 50%;
-    background: rgba(255,255,255,.12);
-    border: 2px solid rgba(255,255,255,.25);
-    position: relative;
-    pointer-events: auto;
+#hud{
+    position:fixed;
+    top:15px;
+    left:15px;
+    z-index:10;
+    min-width:220px;
+    padding:15px;
+    background:#080808dd;
+    border:1px solid #ffffff22;
+    border-radius:16px;
 }
 
-#stick {
-    position: absolute;
-    width: 55px;
-    height: 55px;
-    background: rgba(255,255,255,.35);
-    border-radius: 50%;
-    left: 37px;
-    top: 37px;
+#hud h2{
+    margin-bottom:10px;
+    font-size:20px;
 }
 
-#interagir {
-    position: absolute;
-    right: 25px;
-    bottom: 25px;
-    width: 85px;
-    height: 85px;
-    border-radius: 50%;
-    padding: 0;
-    font-size: 13px;
-    pointer-events: auto;
+.stat{
+    margin:5px 0;
 }
 
-/* tela de final */
-#fim {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 200;
-    background: rgba(0,0,0,.88);
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+#pedido{
+    position:fixed;
+    top:15px;
+    right:15px;
+    z-index:10;
+    width:260px;
+    padding:17px;
+    background:#080808dd;
+    border:1px solid #ffffff22;
+    border-radius:16px;
 }
 
-.fimBox {
-    background: #151515;
-    border-radius: 25px;
-    padding: 35px;
-    width: min(450px,90%);
+#pedido h2{
+    margin-bottom:10px;
 }
 
-.fimBox h2 {
-    font-size: 36px;
-    margin-bottom: 15px;
+#pedidoLista{
+    line-height:1.8;
 }
 
-@media (max-width: 700px) {
-    #pedido {
-        top: auto;
-        bottom: 15px;
-        right: 15px;
-        width: 190px;
-        font-size: 13px;
+#mensagem{
+    position:fixed;
+    left:50%;
+    bottom:80px;
+    transform:translateX(-50%);
+    z-index:30;
+    background:#000e;
+    padding:13px 22px;
+    border-radius:30px;
+    font-weight:bold;
+    opacity:0;
+    transition:.3s;
+    pointer-events:none;
+}
+
+#crosshair{
+    position:fixed;
+    left:50%;
+    top:50%;
+    width:10px;
+    height:10px;
+    transform:translate(-50%,-50%);
+    border:2px solid white;
+    border-radius:50%;
+    z-index:8;
+    pointer-events:none;
+}
+
+#fim{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:200;
+    align-items:center;
+    justify-content:center;
+    background:#000d;
+}
+
+.fim-box{
+    width:min(450px,90%);
+    padding:35px;
+    text-align:center;
+    background:#151515;
+    border-radius:25px;
+}
+
+.fim-box h2{
+    font-size:35px;
+    margin-bottom:15px;
+}
+
+.restart{
+    margin-top:20px;
+    padding:14px 25px;
+    border:0;
+    border-radius:12px;
+    background:#f59e0b;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+#mobileControls{
+    display:none;
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:15px;
+    z-index:40;
+}
+
+#joystick{
+    margin-left:20px;
+    width:130px;
+    height:130px;
+    border-radius:50%;
+    background:#ffffff18;
+    border:2px solid #ffffff33;
+    position:relative;
+}
+
+#stick{
+    position:absolute;
+    width:55px;
+    height:55px;
+    left:37px;
+    top:37px;
+    border-radius:50%;
+    background:#ffffff55;
+}
+
+#interagir{
+    position:absolute;
+    right:25px;
+    bottom:20px;
+    width:85px;
+    height:85px;
+    border:0;
+    border-radius:50%;
+    background:#f59e0b;
+    font-weight:bold;
+}
+
+@media(max-width:700px){
+
+    #mobileControls{
+        display:block;
     }
 
-    #hud {
-        min-width: 180px;
-        padding: 10px;
+    #pedido{
+        width:190px;
+        top:auto;
+        bottom:15px;
+        right:15px;
+        font-size:12px;
     }
 
-    #hud h1 {
-        font-size: 16px;
+    #hud{
+        min-width:170px;
+        padding:10px;
+        font-size:12px;
     }
 
-    .stat {
-        font-size: 12px;
+    #hud h2{
+        font-size:16px;
     }
 
-    #mobileControls {
-        display: block;
+    #crosshair{
+        display:none;
     }
 
-    #crosshair {
-        display: none;
+    .menu-box h1{
+        font-size:32px;
     }
 }
 </style>
@@ -249,172 +257,284 @@ button:hover {
 
 <body>
 
+<!-- MENU -->
+
 <div id="menu">
-    <div class="menuBox">
-        <h1>🛒</h1>
+
+    <div class="menu-box">
+
+        <div class="logo">🛒</div>
+
         <h1>Mercado Maluco</h1>
 
         <p>
-            Bem-vindo ao supermercado mais caótico da cidade!
-            Atenda os clientes, encontre os produtos e tente
-            não deixar ninguém esperando.
+            O supermercado mais caótico da cidade!
+            Pegue os produtos, atenda os clientes
+            e tente sobreviver ao caos.
         </p>
 
-        <button onclick="iniciarJogo()">COMEÇAR 🛒</button>
+        <button id="startBtn">
+            COMEÇAR 🛒
+        </button>
 
-        <p style="margin-top:18px;font-size:13px">
-            PC: WASD / Setas + Mouse<br>
-            Celular: controles na tela
+        <p style="font-size:13px">
+            PC: WASD + mouse<br>
+            Celular: joystick + botão PEGAR
         </p>
+
     </div>
+
 </div>
+
+
+<!-- HUD -->
 
 <div id="hud">
-    <h1>🛒 Mercado Maluco</h1>
 
-    <div class="stat">💰 Dinheiro: <b id="dinheiro">0</b></div>
-    <div class="stat">👥 Clientes: <b id="clientes">0</b></div>
-    <div class="stat">⭐ Pontos: <b id="pontos">0</b></div>
-    <div class="stat">⏱️ Tempo: <b id="tempo">120</b>s</div>
+    <h2>🛒 Mercado Maluco</h2>
+
+    <div class="stat">
+        💰 Dinheiro:
+        <b id="dinheiro">0</b>
+    </div>
+
+    <div class="stat">
+        👥 Clientes:
+        <b id="clientes">0</b>
+    </div>
+
+    <div class="stat">
+        ⭐ Pontos:
+        <b id="pontos">0</b>
+    </div>
+
+    <div class="stat">
+        ⏱️ Tempo:
+        <b id="tempo">120</b>s
+    </div>
+
 </div>
+
+
+<!-- PEDIDO -->
 
 <div id="pedido">
+
     <h2>📋 Pedido</h2>
+
     <div id="pedidoLista">
-        Nenhum pedido ainda.
+        Nenhum pedido.
     </div>
+
 </div>
+
 
 <div id="crosshair"></div>
 
 <div id="mensagem"></div>
 
+
+<!-- MOBILE -->
+
 <div id="mobileControls">
+
     <div id="joystick">
         <div id="stick"></div>
     </div>
 
-    <button id="interagir">PEGAR</button>
+    <button id="interagir">
+        PEGAR
+    </button>
+
 </div>
 
+
+<!-- FINAL -->
+
 <div id="fim">
-    <div class="fimBox">
-        <h2>🏁 Fim!</h2>
+
+    <div class="fim-box">
+
+        <h2>🏁 Fim de jogo!</h2>
 
         <p id="resultado"></p>
 
-        <br>
+        <button
+            class="restart"
+            onclick="location.reload()"
+        >
+            JOGAR NOVAMENTE
+        </button>
 
-        <button onclick="location.reload()">JOGAR NOVAMENTE</button>
     </div>
+
 </div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 
 <script>
-/* =========================================================
-   MERCADO MALUCO 3D
-   ========================================================= */
 
-let cena;
+/* =====================================================
+   VARIÁVEIS
+===================================================== */
+
+let scene;
 let camera;
 let renderer;
-let relogio;
+let clock;
 
-let jogador;
-let direcao = new THREE.Vector3();
+let player;
 
-let teclas = {};
+let products = [];
+let customers = [];
 
-let dinheiro = 0;
-let pontos = 0;
-let clientesAtendidos = 0;
-let tempo = 120;
+let keys = {};
 
-let jogoAtivo = false;
+let gameStarted = false;
 
-let produtos = [];
-let clientes = [];
-let obstaculos = [];
-
-let pedidoAtual = [];
-let pedidoColetado = [];
-
-let velocidade = 0.09;
+let money = 0;
+let points = 0;
+let customersServed = 0;
+let timeLeft = 120;
 
 let yaw = 0;
-let pitch = 0;
 
-let mouseAtivo = false;
+let speed = 0.11;
+
+let order = [];
+let collected = [];
+
+let joystickX = 0;
+let joystickY = 0;
 
 
-/* =========================================================
-   TEXTURAS SIMPLES
-   ========================================================= */
+/* =====================================================
+   PRODUTOS
+===================================================== */
 
-function material(cor) {
+const productTypes = [
+
+    {
+        name:"🍎 Maçã",
+        color:0xff3333
+    },
+
+    {
+        name:"🍌 Banana",
+        color:0xffd92f
+    },
+
+    {
+        name:"🥛 Leite",
+        color:0xf5f5f5
+    },
+
+    {
+        name:"🍞 Pão",
+        color:0xc87932
+    },
+
+    {
+        name:"🥤 Refrigerante",
+        color:0x355cff
+    },
+
+    {
+        name:"🧀 Queijo",
+        color:0xffd633
+    }
+
+];
+
+
+/* =====================================================
+   MATERIAL
+===================================================== */
+
+function mat(color){
+
     return new THREE.MeshStandardMaterial({
-        color: cor,
-        roughness: .75,
-        metalness: .05
+        color:color,
+        roughness:.75
     });
+
 }
 
 
-/* =========================================================
-   INICIAR
-   ========================================================= */
+/* =====================================================
+   COMEÇAR
+===================================================== */
 
-function iniciarJogo() {
+document
+.getElementById("startBtn")
+.addEventListener("click",startGame);
 
-    document.getElementById("menu").style.display = "none";
 
-    jogoAtivo = true;
+function startGame(){
 
-    criarCena();
-    criarMercado();
-    criarJogador();
-    criarProdutos();
-    criarClientes();
+    console.log("Jogo iniciado!");
 
-    gerarPedido();
+    document
+    .getElementById("menu")
+    .style.display="none";
 
-    relogio = new THREE.Clock();
+    gameStarted=true;
+
+    createScene();
+
+    createMarket();
+
+    createPlayer();
+
+    createProducts();
+
+    createCustomers();
+
+    createOrder();
+
+    clock=new THREE.Clock();
+
+    showMessage("🛒 Pegue os produtos do pedido!");
 
     animate();
 
-    mostrarMensagem("🛒 Pegue os produtos do pedido!");
 }
 
 
-/* =========================================================
+/* =====================================================
    CENA
-   ========================================================= */
+===================================================== */
 
-function criarCena() {
+function createScene(){
 
-    cena = new THREE.Scene();
+    scene=new THREE.Scene();
 
-    cena.background = new THREE.Color(0x8bb3c7);
+    scene.background=
+        new THREE.Color(0x86aebb);
 
-    cena.fog = new THREE.Fog(
-        0x8bb3c7,
-        18,
-        55
-    );
+    scene.fog=
+        new THREE.Fog(
+            0x86aebb,
+            15,
+            55
+        );
 
-    camera = new THREE.PerspectiveCamera(
-        70,
-        innerWidth / innerHeight,
-        0.1,
-        100
-    );
 
-    camera.position.set(0,1.7,5);
+    camera=
+        new THREE.PerspectiveCamera(
+            70,
+            innerWidth/innerHeight,
+            .1,
+            100
+        );
 
-    renderer = new THREE.WebGLRenderer({
-        antialias: true
-    });
+
+    renderer=
+        new THREE.WebGLRenderer({
+            antialias:true
+        });
+
 
     renderer.setSize(
         innerWidth,
@@ -425,546 +545,533 @@ function criarCena() {
         Math.min(devicePixelRatio,2)
     );
 
-    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.enabled=true;
 
-    document.body.appendChild(renderer.domElement);
+    document.body.appendChild(
+        renderer.domElement
+    );
 
 
-    /* Luz */
-
-    const ambiente =
+    const ambient=
         new THREE.HemisphereLight(
             0xffffff,
             0x555555,
-            1.5
+            1.7
         );
 
-    cena.add(ambiente);
+    scene.add(ambient);
 
 
-    const luz =
+    const sun=
         new THREE.DirectionalLight(
             0xffffff,
             2
         );
 
-    luz.position.set(
+    sun.position.set(
         5,
         12,
-        5
+        8
     );
 
-    luz.castShadow = true;
+    sun.castShadow=true;
 
-    cena.add(luz);
+    scene.add(sun);
 
 
     window.addEventListener(
         "resize",
-        redimensionar
+        resize
     );
+
 
     document.addEventListener(
         "keydown",
-        e => {
-            teclas[e.key.toLowerCase()] = true;
+        e=>{
+            keys[e.key.toLowerCase()]=true;
 
-            if(e.key.toLowerCase() === "e") {
-                interagir();
+            if(
+                e.key.toLowerCase()==="e"
+            ){
+                interact();
             }
         }
     );
+
 
     document.addEventListener(
         "keyup",
-        e => {
-            teclas[e.key.toLowerCase()] = false;
+        e=>{
+            keys[e.key.toLowerCase()]=false;
         }
     );
 
 
-    /* Mouse */
-
     renderer.domElement.addEventListener(
         "click",
-        () => {
+        ()=>{
+            renderer.domElement.requestPointerLock();
+        }
+    );
 
-            if(document.pointerLockElement !== renderer.domElement) {
 
-                renderer.domElement.requestPointerLock();
+    document.addEventListener(
+        "mousemove",
+        e=>{
+
+            if(
+                document.pointerLockElement===
+                renderer.domElement
+            ){
+
+                yaw-=e.movementX*.0025;
 
             }
 
         }
     );
 
-    document.addEventListener(
-        "mousemove",
-        controlarMouse
-    );
 
+    setupMobile();
 
-    configurarMobile();
 }
 
 
-/* =========================================================
+/* =====================================================
    MERCADO
-   ========================================================= */
+===================================================== */
 
-function criarMercado() {
+function createMarket(){
 
-    /* Chão */
+    /* chão */
 
-    const chao =
+    const floor=
         new THREE.Mesh(
             new THREE.BoxGeometry(
                 42,
                 .2,
                 32
             ),
-            material(0xdddddd)
+            mat(0xd9d9d9)
         );
 
-    chao.position.y = -.1;
+    floor.position.y=-.1;
 
-    chao.receiveShadow = true;
+    floor.receiveShadow=true;
 
-    cena.add(chao);
-
-
-    /* Paredes */
-
-    criarParede(0,3,-16,42,6,.4);
-    criarParede(0,3,16,42,6,.4);
-    criarParede(-21,3,0,.4,6,32);
-    criarParede(21,3,0,.4,6,32);
+    scene.add(floor);
 
 
-    /* Entrada */
+    /* paredes */
 
-    criarPlaca(
-        0,
-        5.4,
-        -15.6,
-        "MERCADO MALUCO"
+    createWall(
+        0,3,-16,
+        42,6,.4
+    );
+
+    createWall(
+        0,3,16,
+        42,6,.4
+    );
+
+    createWall(
+        -21,3,0,
+        .4,6,32
+    );
+
+    createWall(
+        21,3,0,
+        .4,6,32
     );
 
 
-    /* Prateleiras */
+    /* prateleiras */
 
-    for(let x=-15;x<=15;x+=6) {
+    for(
+        let x=-15;
+        x<=15;
+        x+=6
+    ){
 
-        criarPrateleira(
-            x,
-            0,
-            -6
-        );
+        createShelf(x,-6);
 
-        criarPrateleira(
-            x,
-            0,
-            2
-        );
+        createShelf(x,2);
 
-        criarPrateleira(
-            x,
-            0,
-            10
-        );
+        createShelf(x,10);
+
     }
 
 
-    /* Caixas */
+    /* caixas */
 
-    criarCaixa(15,0,-12);
-    criarCaixa(17,0,-12);
+    createCheckout(16,-11);
 
-    criarPlaca(
+    createSign(
         16,
-        2,
-        -12,
+        3,
+        -11,
         "CAIXAS"
     );
 
 
-    /* Frutas */
+    createSign(
+        0,
+        5,
+        -15.7,
+        "MERCADO MALUCO"
+    );
 
-    for(let i=0;i<10;i++) {
-
-        const fruta =
-            new THREE.Mesh(
-                new THREE.SphereGeometry(.25,12,12),
-                material(
-                    i % 2 === 0
-                    ? 0xff3333
-                    : 0xffcc33
-                )
-            );
-
-        fruta.position.set(
-            -18 + Math.random()*36,
-            .35,
-            -14 + Math.random()*28
-        );
-
-        fruta.castShadow = true;
-
-        cena.add(fruta);
-    }
 }
 
 
-/* =========================================================
+/* =====================================================
    PAREDE
-   ========================================================= */
+===================================================== */
 
-function criarParede(
+function createWall(
     x,y,z,
-    largura,altura,profundidade
-) {
+    w,h,d
+){
 
-    const parede =
+    const wall=
         new THREE.Mesh(
             new THREE.BoxGeometry(
-                largura,
-                altura,
-                profundidade
+                w,h,d
             ),
-            material(0xf1f1f1)
+            mat(0xf1f1f1)
         );
 
-    parede.position.set(x,y,z);
+    wall.position.set(
+        x,y,z
+    );
 
-    parede.castShadow = true;
-    parede.receiveShadow = true;
+    wall.castShadow=true;
 
-    cena.add(parede);
+    scene.add(wall);
+
 }
 
 
-/* =========================================================
+/* =====================================================
    PRATELEIRA
-   ========================================================= */
+===================================================== */
 
-function criarPrateleira(x,y,z) {
+function createShelf(x,z){
 
-    const grupo =
+    const group=
         new THREE.Group();
 
-    const madeira =
-        material(0x7b4b2a);
 
+    for(
+        let i=0;
+        i<3;
+        i++
+    ){
 
-    for(let i=0;i<3;i++) {
-
-        const tabua =
+        const shelf=
             new THREE.Mesh(
                 new THREE.BoxGeometry(
                     4.8,
                     .18,
                     1.2
                 ),
-                madeira
+                mat(0x704522)
             );
 
-        tabua.position.y =
-            .5 + i*1.1;
+        shelf.position.y=
+            .5+i*1.1;
 
-        grupo.add(tabua);
+        group.add(shelf);
+
     }
 
 
-    const lateral1 =
+    const side=
         new THREE.Mesh(
             new THREE.BoxGeometry(
                 .18,
                 3.2,
                 1.2
             ),
-            madeira
+            mat(0x704522)
         );
 
-    lateral1.position.set(
+    side.position.set(
         -2.3,
         1.5,
         0
     );
 
-
-    const lateral2 =
-        lateral1.clone();
-
-    lateral2.position.x = 2.3;
+    group.add(side);
 
 
-    grupo.add(
-        lateral1,
-        lateral2
-    );
+    const side2=side.clone();
+
+    side2.position.x=2.3;
+
+    group.add(side2);
 
 
-    grupo.position.set(
+    group.position.set(
         x,
-        y,
+        0,
         z
     );
 
-    grupo.traverse(obj => {
-        if(obj.isMesh) {
-            obj.castShadow = true;
-        }
-    });
 
-    cena.add(grupo);
+    scene.add(group);
+
 }
 
 
-/* =========================================================
+/* =====================================================
    PLACA
-   ========================================================= */
+===================================================== */
 
-function criarPlaca(
-    x,y,z,texto
-) {
+function createSign(
+    x,y,z,text
+){
 
-    const canvas =
+    const canvas=
         document.createElement("canvas");
 
-    canvas.width = 512;
-    canvas.height = 128;
+    canvas.width=512;
+    canvas.height=128;
 
-    const ctx =
+    const ctx=
         canvas.getContext("2d");
 
-    ctx.fillStyle = "#222";
-    ctx.fillRect(0,0,512,128);
+    ctx.fillStyle="#222";
 
-    ctx.fillStyle = "#fff";
-    ctx.font = "bold 45px Arial";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
+    ctx.fillRect(
+        0,0,
+        512,128
+    );
+
+    ctx.fillStyle="#fff";
+
+    ctx.font=
+        "bold 42px Arial";
+
+    ctx.textAlign="center";
+
+    ctx.textBaseline="middle";
 
     ctx.fillText(
-        texto,
+        text,
         256,
         64
     );
 
 
-    const textura =
-        new THREE.CanvasTexture(canvas);
+    const texture=
+        new THREE.CanvasTexture(
+            canvas
+        );
 
-    const mesh =
+
+    const sign=
         new THREE.Mesh(
             new THREE.PlaneGeometry(
                 5,
                 1.25
             ),
             new THREE.MeshBasicMaterial({
-                map:textura
+                map:texture
             })
         );
 
-    mesh.position.set(
+
+    sign.position.set(
         x,y,z
     );
 
-    mesh.rotation.y = Math.PI;
 
-    cena.add(mesh);
+    sign.rotation.y=Math.PI;
+
+    scene.add(sign);
+
 }
 
 
-/* =========================================================
+/* =====================================================
    CAIXA
-   ========================================================= */
+===================================================== */
 
-function criarCaixa(x,y,z) {
+function createCheckout(x,z){
 
-    const caixa =
+    const box=
         new THREE.Mesh(
             new THREE.BoxGeometry(
-                2.3,
+                2.5,
                 1.2,
                 1.8
             ),
-            material(0x333333)
+            mat(0x333333)
         );
 
-    caixa.position.set(
-        x,
-        .6,
-        z
+    box.position.set(
+        x,.6,z
     );
 
-    caixa.castShadow = true;
+    box.castShadow=true;
 
-    cena.add(caixa);
+    scene.add(box);
+
 }
 
 
-/* =========================================================
-   JOGADOR
-   ========================================================= */
+/* =====================================================
+   PLAYER
+===================================================== */
 
-function criarJogador() {
+function createPlayer(){
 
-    jogador =
+    player=
         new THREE.Group();
 
 
-    /* corpo */
-
-    const corpo =
+    const body=
         new THREE.Mesh(
             new THREE.BoxGeometry(
                 .65,
                 1,
                 .4
             ),
-            material(0x2563eb)
+            mat(0x2563eb)
         );
 
-    corpo.position.y = .8;
+    body.position.y=.8;
 
-    corpo.castShadow = true;
+    body.castShadow=true;
 
 
-    /* cabeça */
-
-    const cabeca =
+    const head=
         new THREE.Mesh(
             new THREE.SphereGeometry(
                 .35,
                 16,
                 16
             ),
-            material(0xffc49b)
+            mat(0xffc49b)
         );
 
-    cabeca.position.y = 1.55;
+    head.position.y=1.55;
 
-    cabeca.castShadow = true;
+    head.castShadow=true;
 
 
-    jogador.add(
-        corpo,
-        cabeca
+    player.add(
+        body,
+        head
     );
 
-    jogador.position.set(
+
+    player.position.set(
         0,
         0,
         12
     );
 
-    cena.add(jogador);
 
-    camera.position.set(
-        0,
-        2,
-        5
-    );
+    scene.add(player);
+
 }
 
 
-/* =========================================================
+/* =====================================================
    PRODUTOS
-   ========================================================= */
+===================================================== */
 
-const tiposProdutos = [
-    {
-        nome:"🍎 Maçã",
-        cor:0xff3333
-    },
-    {
-        nome:"🍌 Banana",
-        cor:0xffdd22
-    },
-    {
-        nome:"🥛 Leite",
-        cor:0xffffff
-    },
-    {
-        nome:"🍞 Pão",
-        cor:0xc77b30
-    },
-    {
-        nome:"🥤 Refrigerante",
-        cor:0x3333aa
-    },
-    {
-        nome:"🧀 Queijo",
-        cor:0xffcc33
-    }
-];
+function createProducts(){
+
+    let index=0;
 
 
-function criarProdutos() {
+    for(
+        let shelfX=-15;
+        shelfX<=15;
+        shelfX+=6
+    ){
 
-    produtos = [];
+        for(
+            let i=0;
+            i<3;
+            i++
+        ){
 
-    let contador = 0;
+            const type=
+                productTypes[
+                    index%
+                    productTypes.length
+                ];
 
-    for(let x=-15;x<=15;x+=6) {
 
-        for(let linha=0;linha<3;linha++) {
-
-            for(let i=0;i<3;i++) {
-
-                const tipo =
-                    tiposProdutos[
-                        contador %
-                        tiposProdutos.length
-                    ];
-
-                const obj =
-                    new THREE.Mesh(
-                        new THREE.BoxGeometry(
-                            .55,
-                            .7,
-                            .55
-                        ),
-                        material(tipo.cor)
-                    );
-
-                obj.position.set(
-                    x - 1.3 + i*1.2,
-                    .9 + linha*1.1,
-                    -6 + linha*.0
+            const product=
+                new THREE.Mesh(
+                    new THREE.BoxGeometry(
+                        .55,
+                        .65,
+                        .55
+                    ),
+                    mat(type.color)
                 );
 
-                obj.castShadow = true;
 
-                obj.userData.tipo =
-                    tipo.nome;
+            product.position.set(
+                shelfX-1.3+i*1.2,
+                .9,
+                -6
+            );
 
-                obj.userData.pego = false;
 
-                cena.add(obj);
+            product.userData.type=
+                type.name;
 
-                produtos.push(obj);
+            product.userData.taken=false;
 
-                contador++;
-            }
+            product.castShadow=true;
+
+
+            scene.add(product);
+
+            products.push(product);
+
+            index++;
+
         }
+
     }
+
 }
 
 
-/* =========================================================
+/* =====================================================
    CLIENTES
-   ========================================================= */
+===================================================== */
 
-function criarClientes() {
+function createCustomers(){
 
-    for(let i=0;i<7;i++) {
+    for(
+        let i=0;
+        i<7;
+        i++
+    ){
 
-        const cliente =
+        const customer=
             new THREE.Group();
 
-        const corpo =
+
+        /* CORREÇÃO DO ERRO ORIGINAL:
+           agora a cor é gerada corretamente */
+
+        const randomColor =
+            Math.floor(
+                Math.random()*0xffffff
+            );
+
+
+        const body=
             new THREE.Mesh(
                 new THREE.CylinderGeometry(
                     .35,
@@ -972,302 +1079,357 @@ function criarClientes() {
                     1,
                     12
                 ),
-                material(
-                    0x
-                    + (
-                        100000 +
-                        Math.floor(
-                            Math.random()*899999
-                        )
-                    )
-                )
+                mat(randomColor)
             );
 
-        corpo.position.y = .6;
+
+        body.position.y=.6;
 
 
-        const cabeca =
+        const head=
             new THREE.Mesh(
                 new THREE.SphereGeometry(
                     .3,
                     12,
                     12
                 ),
-                material(0xffc49b)
+                mat(0xffc49b)
             );
 
-        cabeca.position.y = 1.35;
+
+        head.position.y=1.35;
 
 
-        cliente.add(
-            corpo,
-            cabeca
+        customer.add(
+            body,
+            head
         );
 
 
-        cliente.position.set(
-            -17 + Math.random()*34,
+        customer.position.set(
+            -17+Math.random()*34,
             0,
-            -13 + Math.random()*25
+            -13+Math.random()*25
         );
 
-        cliente.userData.velocidade =
-            .015 + Math.random()*.025;
 
-        cliente.userData.alvo =
+        customer.userData.speed=
+            .015+
+            Math.random()*.02;
+
+
+        customer.userData.target=
             new THREE.Vector3(
-                -15 + Math.random()*30,
+                -15+Math.random()*30,
                 0,
-                -10 + Math.random()*20
+                -10+Math.random()*20
             );
 
 
-        cena.add(cliente);
+        scene.add(customer);
 
-        clientes.push(cliente);
+        customers.push(customer);
+
     }
+
 }
 
 
-/* =========================================================
+/* =====================================================
    PEDIDO
-   ========================================================= */
+===================================================== */
 
-function gerarPedido() {
+function createOrder(){
 
-    pedidoAtual = [];
-    pedidoColetado = [];
+    order=[];
+    collected=[];
 
-    const quantidade =
-        2 + Math.floor(Math.random()*3);
 
-    for(let i=0;i<quantidade;i++) {
+    const amount=
+        2+
+        Math.floor(
+            Math.random()*3
+        );
 
-        const tipo =
-            tiposProdutos[
+
+    for(
+        let i=0;
+        i<amount;
+        i++
+    ){
+
+        const type=
+            productTypes[
                 Math.floor(
-                    Math.random() *
-                    tiposProdutos.length
+                    Math.random()*
+                    productTypes.length
                 )
             ];
 
-        pedidoAtual.push(tipo.nome);
+
+        order.push(
+            type.name
+        );
+
     }
 
-    atualizarPedido();
+
+    updateOrder();
+
 }
 
 
-function atualizarPedido() {
+function updateOrder(){
 
-    const div =
+    const div=
         document.getElementById(
             "pedidoLista"
         );
 
-    if(pedidoAtual.length === 0) {
 
-        div.innerHTML =
-            "🎉 Pedido concluído!";
+    if(order.length===0){
+
+        div.innerHTML=
+            "🎉 Pedido completo!";
 
         return;
+
     }
 
-    div.innerHTML =
-        pedidoAtual
-        .map(item => {
 
-            const quantidade =
-                pedidoAtual.filter(
-                    x => x === item
+    const unique=
+        [...new Set(order)];
+
+
+    div.innerHTML=
+        unique
+        .map(item=>{
+
+            const total=
+                order.filter(
+                    x=>x===item
                 ).length;
 
-            const pegou =
-                pedidoColetado.filter(
-                    x => x === item
+            const got=
+                collected.filter(
+                    x=>x===item
                 ).length;
 
             return `
-                ${pegou >= quantidade ? "✅" : "⬜"}
+                ${got>=total?"✅":"⬜"}
                 ${item}
-                ${pegou}/${quantidade}
+                ${got}/${total}
             `;
 
         })
-        .filter(
-            (v,i,a) =>
-                a.indexOf(v) === i
-        )
         .join("<br>");
+
 }
 
 
-/* =========================================================
+/* =====================================================
    INTERAÇÃO
-   ========================================================= */
+===================================================== */
 
-function interagir() {
+function interact(){
 
-    if(!jogoAtivo) return;
+    if(!gameStarted)
+        return;
 
-    let maisProximo = null;
-    let menorDistancia = 2.2;
 
-    produtos.forEach(produto => {
+    let nearest=null;
 
-        if(produto.userData.pego)
+    let distanceLimit=2.3;
+
+
+    products.forEach(product=>{
+
+        if(product.userData.taken)
             return;
 
-        const distancia =
-            jogador.position.distanceTo(
-                produto.position
+
+        const distance=
+            player.position.distanceTo(
+                product.position
             );
 
-        if(distancia < menorDistancia) {
 
-            menorDistancia = distancia;
-            maisProximo = produto;
+        if(distance<distanceLimit){
+
+            nearest=product;
+
+            distanceLimit=distance;
+
         }
+
     });
 
 
-    if(!maisProximo) {
+    if(!nearest){
 
-        mostrarMensagem(
-            "❌ Nenhum produto por perto."
+        showMessage(
+            "❌ Nenhum produto perto!"
         );
 
         return;
+
     }
 
 
-    const tipo =
-        maisProximo.userData.tipo;
+    const type=
+        nearest.userData.type;
 
 
-    const indice =
-        pedidoAtual.indexOf(tipo);
+    const index=
+        order.indexOf(type);
 
 
-    if(indice === -1) {
+    if(index===-1){
 
-        mostrarMensagem(
+        showMessage(
             "❌ Esse produto não está no pedido!"
         );
 
         return;
+
     }
 
 
-    maisProximo.userData.pego = true;
+    nearest.userData.taken=true;
 
-    maisProximo.visible = false;
+    nearest.visible=false;
 
-    pedidoColetado.push(tipo);
 
-    pedidoAtual.splice(
-        indice,
+    collected.push(type);
+
+    order.splice(
+        index,
         1
     );
 
-    pontos += 50;
 
-    atualizarHUD();
-    atualizarPedido();
+    points+=50;
 
 
-    if(pedidoAtual.length === 0) {
+    updateHUD();
 
-        const premio =
-            100 +
-            Math.floor(tempo * 2);
+    updateOrder();
 
-        dinheiro += premio;
-        clientesAtendidos++;
 
-        pontos += 200;
+    if(order.length===0){
 
-        mostrarMensagem(
-            "🎉 Pedido completo! +$" +
-            premio
+        const reward=
+            100+
+            Math.floor(
+                timeLeft
+            );
+
+
+        money+=reward;
+
+        points+=200;
+
+        customersServed++;
+
+
+        showMessage(
+            "🎉 Pedido entregue! +$"+
+            reward
         );
+
 
         setTimeout(
-            gerarPedido,
-            900
+            createOrder,
+            800
         );
+
     }
+
 }
 
 
-/* =========================================================
+/* =====================================================
    MOVIMENTO
-   ========================================================= */
+===================================================== */
 
-function atualizarJogador() {
+function updatePlayer(){
 
-    if(!jogador) return;
-
-    let frente = 0;
-    let lado = 0;
+    if(!player)
+        return;
 
 
-    if(
-        teclas["w"] ||
-        teclas["arrowup"]
-    ) frente += 1;
+    let forward=0;
 
-    if(
-        teclas["s"] ||
-        teclas["arrowdown"]
-    ) frente -= 1;
-
-    if(
-        teclas["a"] ||
-        teclas["arrowleft"]
-    ) lado -= 1;
-
-    if(
-        teclas["d"] ||
-        teclas["arrowright"]
-    ) lado += 1;
+    let side=0;
 
 
     if(
-        joystickX !== 0 ||
-        joystickY !== 0
-    ) {
+        keys["w"]||
+        keys["arrowup"]
+    )
+        forward=1;
 
-        lado = joystickX;
-        frente = -joystickY;
+
+    if(
+        keys["s"]||
+        keys["arrowdown"]
+    )
+        forward=-1;
+
+
+    if(
+        keys["a"]||
+        keys["arrowleft"]
+    )
+        side=-1;
+
+
+    if(
+        keys["d"]||
+        keys["arrowright"]
+    )
+        side=1;
+
+
+    if(
+        joystickX!==0||
+        joystickY!==0
+    ){
+
+        side=joystickX;
+
+        forward=-joystickY;
+
     }
 
 
     if(
-        frente === 0 &&
-        lado === 0
-    ) return;
+        forward===0&&
+        side===0
+    )
+        return;
 
 
-    const vetor =
+    const move=
         new THREE.Vector3(
-            lado,
+            side,
             0,
-            frente
+            forward
         );
 
 
-    vetor.normalize();
+    move.normalize();
 
 
-    const frenteCamera =
+    const forwardVector=
         new THREE.Vector3(
             Math.sin(yaw),
             0,
             Math.cos(yaw)
         );
 
-    const direita =
+
+    const rightVector=
         new THREE.Vector3(
             Math.cos(yaw),
             0,
@@ -1275,321 +1437,292 @@ function atualizarJogador() {
         );
 
 
-    const movimento =
+    const movement=
         new THREE.Vector3();
 
-    movimento.addScaledVector(
-        frenteCamera,
-        vetor.z * velocidade
-    );
 
-    movimento.addScaledVector(
-        direita,
-        vetor.x * velocidade
+    movement.addScaledVector(
+        forwardVector,
+        move.z*speed
     );
 
 
-    jogador.position.add(
-        movimento
+    movement.addScaledVector(
+        rightVector,
+        move.x*speed
     );
 
 
-    jogador.position.x =
+    player.position.add(
+        movement
+    );
+
+
+    player.position.x=
         THREE.MathUtils.clamp(
-            jogador.position.x,
+            player.position.x,
             -19,
             19
         );
 
-    jogador.position.z =
+
+    player.position.z=
         THREE.MathUtils.clamp(
-            jogador.position.z,
+            player.position.z,
             -14,
             14
         );
+
 }
 
 
-/* =========================================================
+/* =====================================================
    CÂMERA
-   ========================================================= */
+===================================================== */
 
-function atualizarCamera() {
+function updateCamera(){
 
-    if(!jogador) return;
-
-    const distancia = 5;
-
-    const offset =
-        new THREE.Vector3(
-            Math.sin(yaw) * distancia,
-            2.7,
-            Math.cos(yaw) * distancia
-        );
+    if(!player)
+        return;
 
 
-    camera.position.copy(
-        jogador.position
-    ).add(offset);
+    const distance=5;
+
+
+    camera.position.set(
+        player.position.x+
+        Math.sin(yaw)*distance,
+
+        player.position.y+2.8,
+
+        player.position.z+
+        Math.cos(yaw)*distance
+    );
 
 
     camera.lookAt(
-        jogador.position.x,
-        jogador.position.y + 1,
-        jogador.position.z
+        player.position.x,
+        player.position.y+1,
+        player.position.z
     );
+
 }
 
 
-function controlarMouse(e) {
+/* =====================================================
+   CLIENTES
+===================================================== */
 
-    if(
-        document.pointerLockElement !==
-        renderer?.domElement
-    ) return;
+function updateCustomers(){
 
+    customers.forEach(customer=>{
 
-    yaw -= e.movementX * .0025;
-    pitch -= e.movementY * .0025;
-
-    pitch =
-        THREE.MathUtils.clamp(
-            pitch,
-            -.8,
-            .8
-        );
-}
+        const target=
+            customer.userData.target;
 
 
-/* =========================================================
-   CLIENTES MOVENDO
-   ========================================================= */
+        if(
+            customer.position.distanceTo(
+                target
+            )<.5
+        ){
 
-function atualizarClientes() {
-
-    clientes.forEach(cliente => {
-
-        const alvo =
-            cliente.userData.alvo;
-
-        const distancia =
-            cliente.position.distanceTo(
-                alvo
-            );
-
-
-        if(distancia < .5) {
-
-            cliente.userData.alvo =
+            customer.userData.target=
                 new THREE.Vector3(
-                    -17 + Math.random()*34,
+                    -17+Math.random()*34,
                     0,
-                    -13 + Math.random()*25
+                    -13+Math.random()*25
                 );
 
             return;
+
         }
 
 
-        const direcaoCliente =
+        const direction=
             new THREE.Vector3()
             .subVectors(
-                alvo,
-                cliente.position
+                target,
+                customer.position
             )
             .normalize();
 
 
-        cliente.position.add(
-            direcaoCliente.multiplyScalar(
-                cliente.userData.velocidade
+        customer.position.add(
+            direction.multiplyScalar(
+                customer.userData.speed
             )
         );
 
-
-        cliente.lookAt(
-            alvo.x,
-            cliente.position.y,
-            alvo.z
-        );
     });
+
 }
 
 
-/* =========================================================
-   EVENTOS MALUCOS
-   ========================================================= */
-
-let ultimoEvento = 0;
-
-function eventosMalucos(delta) {
-
-    ultimoEvento += delta;
-
-    if(ultimoEvento < 15)
-        return;
-
-    ultimoEvento = 0;
-
-    const eventos = [
-
-        "🐔 Uma galinha invadiu o mercado!",
-
-        "🍉 Uma melancia saiu rolando!",
-
-        "🚨 ALARME! Todo mundo corre!",
-
-        "💡 A luz piscou!",
-
-        "🐀 Um rato apareceu no corredor!",
-
-        "🛒 Um carrinho está bloqueando o caminho!"
-
-    ];
-
-
-    const evento =
-        eventos[
-            Math.floor(
-                Math.random() *
-                eventos.length
-            )
-        ];
-
-
-    mostrarMensagem(evento);
-
-    velocidade =
-        .09 + Math.random()*.035;
-}
-
-
-/* =========================================================
+/* =====================================================
    HUD
-   ========================================================= */
+===================================================== */
 
-function atualizarHUD() {
+function updateHUD(){
 
     document.getElementById(
         "dinheiro"
-    ).textContent = dinheiro;
+    ).textContent=money;
+
 
     document.getElementById(
         "clientes"
-    ).textContent = clientesAtendidos;
+    ).textContent=customersServed;
+
 
     document.getElementById(
         "pontos"
-    ).textContent = pontos;
+    ).textContent=points;
+
 
     document.getElementById(
         "tempo"
-    ).textContent =
-        Math.max(
-            0,
-            Math.ceil(tempo)
+    ).textContent=
+        Math.ceil(
+            Math.max(
+                timeLeft,
+                0
+            )
         );
+
 }
 
 
-function mostrarMensagem(texto) {
+/* =====================================================
+   MENSAGEM
+===================================================== */
 
-    const el =
+function showMessage(text){
+
+    const element=
         document.getElementById(
             "mensagem"
         );
 
-    el.textContent = texto;
 
-    el.style.opacity = "1";
+    element.textContent=text;
 
-    clearTimeout(el.timer);
+    element.style.opacity="1";
 
-    el.timer =
+
+    clearTimeout(
+        element.messageTimer
+    );
+
+
+    element.messageTimer=
         setTimeout(
-            () => {
-                el.style.opacity = "0";
+            ()=>{
+                element.style.opacity="0";
             },
-            2500
+            2300
         );
+
 }
 
 
-/* =========================================================
+/* =====================================================
    TEMPO
-   ========================================================= */
+===================================================== */
 
-function atualizarTempo(delta) {
+function updateTime(delta){
 
-    tempo -= delta;
+    timeLeft-=delta;
 
-    if(tempo <= 0) {
 
-        tempo = 0;
+    if(timeLeft<=0){
 
-        finalizarJogo();
+        timeLeft=0;
+
+        finishGame();
+
     }
 
-    atualizarHUD();
+
+    updateHUD();
+
 }
 
 
-/* =========================================================
+/* =====================================================
    FINAL
-   ========================================================= */
+===================================================== */
 
-function finalizarJogo() {
+function finishGame(){
 
-    if(!jogoAtivo) return;
+    if(!gameStarted)
+        return;
 
-    jogoAtivo = false;
 
-    document.exitPointerLock?.();
+    gameStarted=false;
+
+
+    if(
+        document.pointerLockElement
+    ){
+
+        document.exitPointerLock();
+
+    }
+
 
     document.getElementById(
         "fim"
-    ).style.display = "flex";
+    ).style.display="flex";
 
 
     document.getElementById(
         "resultado"
-    ).innerHTML = `
-        Você atendeu <b>${clientesAtendidos}</b> clientes!<br><br>
-        💰 Dinheiro: <b>$${dinheiro}</b><br>
-        ⭐ Pontos: <b>${pontos}</b>
+    ).innerHTML=`
+
+        👥 Clientes atendidos:
+        <b>${customersServed}</b>
+
+        <br><br>
+
+        💰 Dinheiro:
+        <b>$${money}</b>
+
+        <br><br>
+
+        ⭐ Pontos:
+        <b>${points}</b>
+
     `;
+
 }
 
 
-/* =========================================================
+/* =====================================================
    MOBILE
-   ========================================================= */
+===================================================== */
 
-let joystickX = 0;
-let joystickY = 0;
+function setupMobile(){
 
-function configurarMobile() {
-
-    const joystick =
+    const joystick=
         document.getElementById(
             "joystick"
         );
 
-    const stick =
+
+    const stick=
         document.getElementById(
             "stick"
         );
 
 
-    let ativo = false;
+    let active=false;
 
 
     joystick.addEventListener(
         "touchstart",
-        e => {
-
-            ativo = true;
-
+        e=>{
+            active=true;
             e.preventDefault();
         },
         {passive:false}
@@ -1598,55 +1731,61 @@ function configurarMobile() {
 
     joystick.addEventListener(
         "touchmove",
-        e => {
+        e=>{
 
-            if(!ativo) return;
+            if(!active)
+                return;
 
-            const toque =
+
+            const touch=
                 e.touches[0];
 
-            const rect =
+
+            const rect=
                 joystick.getBoundingClientRect();
 
-            let x =
-                toque.clientX -
-                rect.left -
+
+            let x=
+                touch.clientX-
+                rect.left-
                 rect.width/2;
 
-            let y =
-                toque.clientY -
-                rect.top -
+
+            let y=
+                touch.clientY-
+                rect.top-
                 rect.height/2;
 
 
-            const max =
-                38;
+            const max=38;
 
-            const distancia =
+
+            const distance=
                 Math.sqrt(
                     x*x+y*y
                 );
 
 
-            if(distancia > max) {
+            if(distance>max){
 
-                x =
-                    x / distancia * max;
+                x=
+                    x/distance*max;
 
-                y =
-                    y / distancia * max;
+                y=
+                    y/distance*max;
+
             }
 
 
-            stick.style.transform =
+            stick.style.transform=
                 `translate(${x}px,${y}px)`;
 
 
-            joystickX =
-                x / max;
+            joystickX=
+                x/max;
 
-            joystickY =
-                y / max;
+            joystickY=
+                y/max;
 
 
             e.preventDefault();
@@ -1658,101 +1797,108 @@ function configurarMobile() {
 
     joystick.addEventListener(
         "touchend",
-        () => {
+        ()=>{
 
-            ativo = false;
+            active=false;
 
-            joystickX = 0;
-            joystickY = 0;
+            joystickX=0;
 
-            stick.style.transform =
+            joystickY=0;
+
+            stick.style.transform=
                 "translate(0,0)";
+
         }
     );
 
 
     document
-        .getElementById("interagir")
-        .addEventListener(
-            "touchstart",
-            e => {
+    .getElementById("interagir")
+    .addEventListener(
+        "touchstart",
+        e=>{
+            e.preventDefault();
+            interact();
+        },
+        {passive:false}
+    );
 
-                e.preventDefault();
-
-                interagir();
-            },
-            {passive:false}
-        );
 }
 
 
-/* =========================================================
+/* =====================================================
    LOOP
-   ========================================================= */
+===================================================== */
 
-function animate() {
+function animate(){
 
     requestAnimationFrame(
         animate
     );
 
 
-    if(!jogoAtivo) {
+    if(!gameStarted){
 
-        renderer.render(
-            cena,
-            camera
-        );
+        if(renderer)
+            renderer.render(
+                scene,
+                camera
+            );
 
         return;
+
     }
 
 
-    const delta =
+    const delta=
         Math.min(
-            relogio.getDelta(),
+            clock.getDelta(),
             .05
         );
 
 
-    atualizarJogador();
+    updatePlayer();
 
-    atualizarCamera();
+    updateCamera();
 
-    atualizarClientes();
+    updateCustomers();
 
-    atualizarTempo(delta);
-
-    eventosMalucos(delta);
+    updateTime(delta);
 
 
     renderer.render(
-        cena,
+        scene,
         camera
     );
+
 }
 
 
-/* =========================================================
-   REDIMENSIONAR
-   ========================================================= */
+/* =====================================================
+   RESIZE
+===================================================== */
 
-function redimensionar() {
+function resize(){
 
-    if(!camera || !renderer)
+    if(!camera||!renderer)
         return;
 
-    camera.aspect =
-        innerWidth /
+
+    camera.aspect=
+        innerWidth/
         innerHeight;
 
+
     camera.updateProjectionMatrix();
+
 
     renderer.setSize(
         innerWidth,
         innerHeight
     );
+
 }
+
 </script>
 
 </body>

@@ -2,7 +2,8 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
 <title>Mercado Maluco 3D 🛒</title>
 
 <style>
@@ -13,46 +14,68 @@
     user-select:none;
 }
 
-body{
+html,body{
+    width:100%;
+    height:100%;
     overflow:hidden;
-    background:#111;
+    background:#111827;
     font-family:Arial,Helvetica,sans-serif;
-    color:white;
+    color:#fff;
 }
 
 canvas{
     display:block;
 }
 
-/* ================= MENU ================= */
+/* =====================================================
+   MENU
+===================================================== */
 
 #menu{
     position:fixed;
     inset:0;
-    z-index:100;
+    z-index:1000;
+
     display:flex;
     align-items:center;
     justify-content:center;
+
     background:
-        radial-gradient(circle at 50% 30%,rgba(255,193,7,.18),transparent 35%),
-        linear-gradient(135deg,#111827,#020617);
+        radial-gradient(
+            circle at 50% 25%,
+            rgba(251,191,36,.18),
+            transparent 35%
+        ),
+        linear-gradient(
+            135deg,
+            #111827,
+            #020617
+        );
 }
 
 .menuBox{
     width:min(700px,92%);
-    padding:45px 35px;
+    padding:42px 35px;
+
     text-align:center;
-    border:2px solid rgba(255,255,255,.15);
+
     border-radius:28px;
-    background:rgba(15,23,42,.92);
-    box-shadow:0 25px 80px #000;
+
+    background:rgba(15,23,42,.96);
+
+    border:2px solid rgba(255,255,255,.12);
+
+    box-shadow:
+        0 30px 100px rgba(0,0,0,.7);
 }
 
 .logo{
-    font-size:clamp(42px,8vw,76px);
+    font-size:clamp(42px,8vw,75px);
     font-weight:1000;
-    margin-bottom:8px;
-    text-shadow:0 8px 25px #000;
+    margin-bottom:10px;
+
+    text-shadow:
+        0 8px 30px rgba(0,0,0,.7);
 }
 
 .logo span{
@@ -68,36 +91,51 @@ canvas{
 .menuInfo{
     display:grid;
     grid-template-columns:repeat(3,1fr);
-    gap:10px;
-    margin-bottom:28px;
+    gap:12px;
+    margin-bottom:30px;
 }
 
 .info{
+    padding:16px 8px;
     background:#1e293b;
     border-radius:15px;
-    padding:15px 8px;
 }
 
 .info b{
     display:block;
-    font-size:25px;
+    font-size:27px;
+    margin-bottom:4px;
 }
 
 .info span{
-    font-size:12px;
     color:#94a3b8;
+    font-size:11px;
+    font-weight:bold;
 }
 
 #startBtn{
     border:0;
     border-radius:16px;
+
     padding:18px 55px;
-    background:linear-gradient(135deg,#f59e0b,#facc15);
+
+    background:
+        linear-gradient(
+            135deg,
+            #f59e0b,
+            #facc15
+        );
+
     color:#111827;
-    font-weight:1000;
+
     font-size:22px;
+    font-weight:1000;
+
     cursor:pointer;
-    box-shadow:0 10px 30px rgba(245,158,11,.3);
+
+    box-shadow:
+        0 12px 35px rgba(245,158,11,.3);
+
     transition:.2s;
 }
 
@@ -105,85 +143,127 @@ canvas{
     transform:translateY(-3px) scale(1.03);
 }
 
-.controls{
-    margin-top:20px;
+.controlsInfo{
+    margin-top:22px;
+
     color:#94a3b8;
+
     font-size:13px;
+
     line-height:1.8;
 }
 
-/* ================= HUD ================= */
+/* =====================================================
+   HUD
+===================================================== */
 
 #hud{
     display:none;
+
     position:fixed;
     inset:0;
-    z-index:20;
+
+    z-index:50;
+
     pointer-events:none;
 }
 
-.topbar{
+/* ---------------- TOP LEFT ---------------- */
+
+#statsPanel{
     position:absolute;
+
     top:15px;
     left:15px;
-    right:15px;
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
-    gap:15px;
-}
 
-.stats{
     display:flex;
     gap:8px;
+
+    max-width:55%;
+
     flex-wrap:wrap;
 }
 
 .stat{
     min-width:105px;
+
     padding:10px 14px;
+
     border-radius:13px;
-    background:rgba(15,23,42,.9);
+
+    background:rgba(15,23,42,.94);
+
     border:1px solid rgba(255,255,255,.12);
-    backdrop-filter:blur(8px);
-    box-shadow:0 8px 25px rgba(0,0,0,.3);
+
+    backdrop-filter:blur(10px);
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.3);
 }
 
 .stat small{
     display:block;
+
     color:#94a3b8;
+
     font-size:10px;
-    text-transform:uppercase;
+
     font-weight:bold;
+
+    text-transform:uppercase;
 }
 
 .stat strong{
+    display:block;
+
+    margin-top:2px;
+
     font-size:19px;
 }
 
+/* =====================================================
+   PEDIDO
+===================================================== */
+
 #orderPanel{
-    width:min(350px,42vw);
-    background:rgba(15,23,42,.95);
+    position:absolute;
+
+    top:15px;
+    right:15px;
+
+    width:340px;
+    max-width:calc(100vw - 30px);
+
+    background:rgba(15,23,42,.97);
+
     border:2px solid rgba(251,191,36,.45);
+
     border-radius:18px;
+
     overflow:hidden;
-    box-shadow:0 12px 35px rgba(0,0,0,.4);
+
+    box-shadow:
+        0 12px 35px rgba(0,0,0,.45);
 }
 
 .orderHeader{
-    padding:13px 15px;
-    background:linear-gradient(135deg,#92400e,#f59e0b);
-    color:#fff;
-    font-weight:1000;
     display:flex;
     justify-content:space-between;
+    align-items:center;
+
+    padding:13px 15px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #92400e,
+            #f59e0b
+        );
+
+    font-weight:1000;
 }
 
 #orderNumber{
-    font-size:13px;
-}
-
-#orderTime{
     font-size:13px;
 }
 
@@ -192,32 +272,46 @@ canvas{
 }
 
 #orderTitle{
-    font-size:14px;
-    color:#fbbf24;
     margin-bottom:9px;
+
+    color:#fbbf24;
+
+    font-size:13px;
     font-weight:bold;
 }
 
 .orderItem{
     display:flex;
     align-items:center;
+
     gap:9px;
-    padding:9px;
+
+    padding:8px;
+
     margin-bottom:6px;
+
     background:#1e293b;
+
     border-radius:10px;
+
     border:1px solid rgba(255,255,255,.06);
+
+    transition:.2s;
 }
 
 .orderEmoji{
-    font-size:24px;
     width:30px;
+
     text-align:center;
+
+    font-size:23px;
 }
 
 .orderName{
     flex:1;
+
     font-size:13px;
+
     font-weight:bold;
 }
 
@@ -228,92 +322,126 @@ canvas{
 
 .orderItem.done{
     background:rgba(22,163,74,.25);
+
     border-color:rgba(34,197,94,.5);
 }
 
 .orderItem.done .orderName{
-    text-decoration:line-through;
     color:#86efac;
+    text-decoration:line-through;
 }
 
 .progressWrap{
-    margin-top:9px;
+    margin-top:10px;
 }
 
 .progressText{
     display:flex;
     justify-content:space-between;
-    font-size:11px;
-    color:#94a3b8;
+
     margin-bottom:5px;
+
+    color:#94a3b8;
+
+    font-size:11px;
 }
 
 .progressBar{
     height:8px;
-    border-radius:99px;
+
     overflow:hidden;
+
+    border-radius:99px;
+
     background:#334155;
 }
 
 #progressFill{
     width:0%;
     height:100%;
-    background:linear-gradient(90deg,#22c55e,#84cc16);
+
+    background:
+        linear-gradient(
+            90deg,
+            #22c55e,
+            #84cc16
+        );
+
     transition:.3s;
 }
 
-/* ================= PROMPT ================= */
-
-#prompt{
-    position:absolute;
-    left:50%;
-    bottom:85px;
-    transform:translateX(-50%);
-    padding:13px 22px;
-    border-radius:14px;
-    background:rgba(15,23,42,.94);
-    border:1px solid rgba(255,255,255,.15);
-    font-weight:bold;
-    font-size:15px;
-    opacity:0;
-    transition:.15s;
-}
-
-#prompt.show{
-    opacity:1;
-}
+/* =====================================================
+   MENSAGEM CENTRAL
+===================================================== */
 
 #message{
     position:absolute;
+
     left:50%;
-    top:45%;
-    transform:translate(-50%,-50%);
-    font-size:24px;
+    top:47%;
+
+    transform:
+        translate(-50%,-50%)
+        scale(.95);
+
+    padding:13px 22px;
+
+    border-radius:14px;
+
+    background:rgba(15,23,42,.95);
+
+    border:1px solid rgba(255,255,255,.15);
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.4);
+
+    font-size:18px;
+
     font-weight:1000;
-    text-shadow:0 5px 20px #000;
-    opacity:0;
-    transition:.2s;
+
     white-space:nowrap;
+
+    opacity:0;
+
+    transition:.2s;
 }
 
 #message.show{
     opacity:1;
-    transform:translate(-50%,-55%);
+
+    transform:
+        translate(-50%,-50%)
+        scale(1);
 }
 
-/* ================= EVENT ================= */
+/* =====================================================
+   EVENTOS
+===================================================== */
 
 #eventBox{
     position:absolute;
+
+    top:110px;
     left:50%;
-    top:100px;
+
     transform:translateX(-50%);
-    background:#7f1d1d;
-    border:2px solid #ef4444;
+
     padding:11px 20px;
+
     border-radius:13px;
+
+    background:#7f1d1d;
+
+    border:2px solid #ef4444;
+
+    font-size:13px;
+
     font-weight:1000;
+
+    white-space:nowrap;
+
     opacity:0;
+
     transition:.3s;
 }
 
@@ -321,66 +449,252 @@ canvas{
     opacity:1;
 }
 
-/* ================= MOBILE ================= */
+/* =====================================================
+   PROMPT DE INTERAÇÃO
+===================================================== */
+
+#prompt{
+    position:absolute;
+
+    left:50%;
+    bottom:35px;
+
+    transform:translateX(-50%);
+
+    padding:12px 20px;
+
+    border-radius:14px;
+
+    background:rgba(15,23,42,.96);
+
+    border:1px solid rgba(255,255,255,.18);
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.35);
+
+    font-size:14px;
+
+    font-weight:bold;
+
+    white-space:nowrap;
+
+    opacity:0;
+
+    transition:.2s;
+}
+
+#prompt.show{
+    opacity:1;
+}
+
+/* =====================================================
+   CONTROLES MOBILE
+===================================================== */
 
 #mobileControls{
     display:none;
+
     position:absolute;
+
     inset:0;
+
     pointer-events:none;
+}
+
+/* JOYSTICK */
+
+#joystickArea{
+    position:absolute;
+
+    left:22px;
+    bottom:22px;
+
+    width:140px;
+    height:140px;
+
+    pointer-events:auto;
 }
 
 #joystick{
     position:absolute;
-    left:25px;
-    bottom:30px;
-    width:120px;
-    height:120px;
+
+    left:0;
+    bottom:0;
+
+    width:130px;
+    height:130px;
+
     border-radius:50%;
-    background:rgba(255,255,255,.1);
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,255,255,.12),
+            rgba(255,255,255,.04)
+        );
+
     border:2px solid rgba(255,255,255,.18);
-    pointer-events:auto;
+
+    box-shadow:
+        inset 0 0 20px rgba(0,0,0,.25);
 }
 
 #stick{
     position:absolute;
-    width:55px;
-    height:55px;
-    left:30px;
-    top:30px;
+
+    width:58px;
+    height:58px;
+
+    left:34px;
+    top:34px;
+
     border-radius:50%;
-    background:rgba(251,191,36,.8);
+
+    background:
+        linear-gradient(
+            145deg,
+            #facc15,
+            #f59e0b
+        );
+
+    box-shadow:
+        0 5px 15px rgba(0,0,0,.35);
+
+    transition:transform .05s;
 }
 
-#actionBtn{
+/* BOTÃO */
+
+#actionArea{
     position:absolute;
-    right:25px;
-    bottom:45px;
-    width:85px;
-    height:85px;
-    border:0;
-    border-radius:50%;
-    background:#f59e0b;
-    color:#111827;
-    font-size:15px;
-    font-weight:1000;
+
+    right:22px;
+    bottom:28px;
+
     pointer-events:auto;
 }
 
-@media(max-width:700px){
-    .topbar{
-        top:7px;
-        left:7px;
-        right:7px;
-    }
+#actionBtn{
+    width:92px;
+    height:92px;
 
-    .stats{
+    border:3px solid rgba(255,255,255,.25);
+
+    border-radius:50%;
+
+    background:
+        linear-gradient(
+            145deg,
+            #fbbf24,
+            #f59e0b
+        );
+
+    color:#111827;
+
+    font-size:15px;
+
+    font-weight:1000;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.4);
+}
+
+#actionBtn:active{
+    transform:scale(.92);
+}
+
+/* =====================================================
+   GAME OVER
+===================================================== */
+
+#gameOver{
+    display:none;
+
+    position:fixed;
+    inset:0;
+
+    z-index:2000;
+
+    align-items:center;
+    justify-content:center;
+
+    background:rgba(2,6,23,.9);
+}
+
+.gameOverBox{
+    width:min(500px,90%);
+
+    padding:35px;
+
+    text-align:center;
+
+    border-radius:25px;
+
+    background:#0f172a;
+
+    border:2px solid rgba(255,255,255,.12);
+
+    box-shadow:
+        0 25px 80px #000;
+}
+
+.gameOverBox h1{
+    font-size:45px;
+
+    margin-bottom:12px;
+}
+
+.result{
+    color:#cbd5e1;
+
+    line-height:2;
+
+    margin:20px 0;
+}
+
+#restartBtn{
+    border:0;
+
+    border-radius:14px;
+
+    padding:15px 35px;
+
+    background:#f59e0b;
+
+    color:#111827;
+
+    font-size:18px;
+
+    font-weight:1000;
+
+    cursor:pointer;
+}
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width:700px){
+
+    #statsPanel{
+        top:8px;
+        left:8px;
+
         max-width:45%;
+
+        gap:5px;
     }
 
     .stat{
-        min-width:auto;
+        min-width:0;
+
         padding:7px 9px;
+
+        border-radius:10px;
+    }
+
+    .stat small{
+        font-size:8px;
     }
 
     .stat strong{
@@ -388,207 +702,374 @@ canvas{
     }
 
     #orderPanel{
-        width:53%;
-        max-height:48vh;
-        overflow:auto;
+        top:8px;
+        right:8px;
+
+        width:48%;
+
+        max-width:none;
+
+        max-height:47vh;
+
+        overflow-y:auto;
+
+        border-radius:14px;
+    }
+
+    .orderHeader{
+        padding:9px 10px;
+
+        font-size:12px;
+    }
+
+    .orderBody{
+        padding:8px;
+    }
+
+    #orderTitle{
+        font-size:10px;
     }
 
     .orderItem{
-        padding:6px;
+        padding:5px;
+
+        gap:5px;
+
+        margin-bottom:4px;
     }
 
     .orderEmoji{
-        font-size:19px;
+        width:23px;
+
+        font-size:17px;
     }
 
     .orderName{
-        font-size:11px;
+        font-size:10px;
     }
 
     .orderCount{
-        font-size:11px;
+        font-size:10px;
+    }
+
+    #eventBox{
+        top:50%;
+        width:85%;
+
+        text-align:center;
+
+        white-space:normal;
+    }
+
+    #prompt{
+        display:none;
     }
 
     #mobileControls{
         display:block;
     }
 
-    #prompt{
-        bottom:165px;
-        font-size:12px;
+    #message{
+        top:52%;
+
+        max-width:85%;
+
+        text-align:center;
+
+        font-size:14px;
+
+        white-space:normal;
+    }
+
+    .menuBox{
+        padding:30px 20px;
+    }
+
+    .menuInfo{
+        gap:6px;
+    }
+
+    .info{
+        padding:11px 4px;
+    }
+
+    .info b{
+        font-size:21px;
+    }
+
+    .info span{
+        font-size:8px;
     }
 }
 
-/* ================= GAME OVER ================= */
+/* telas muito pequenas */
 
-#gameOver{
-    display:none;
-    position:fixed;
-    inset:0;
-    z-index:200;
-    background:rgba(2,6,23,.88);
-    align-items:center;
-    justify-content:center;
-}
+@media(max-height:600px){
 
-.gameOverBox{
-    width:min(500px,90%);
-    text-align:center;
-    padding:35px;
-    border-radius:25px;
-    background:#0f172a;
-    border:2px solid rgba(255,255,255,.12);
-    box-shadow:0 25px 80px #000;
-}
+    #joystickArea{
+        bottom:10px;
+    }
 
-.gameOverBox h1{
-    font-size:48px;
-    margin-bottom:10px;
-}
+    #actionArea{
+        bottom:15px;
+    }
 
-.result{
-    color:#cbd5e1;
-    line-height:2;
-    margin:20px 0;
-}
+    #joystick{
+        width:105px;
+        height:105px;
+    }
 
-#restartBtn{
-    border:0;
-    border-radius:14px;
-    padding:15px 35px;
-    background:#f59e0b;
-    color:#111827;
-    font-size:18px;
-    font-weight:1000;
-    cursor:pointer;
+    #stick{
+        width:48px;
+        height:48px;
+
+        left:28px;
+        top:28px;
+    }
+
+    #actionBtn{
+        width:75px;
+        height:75px;
+    }
 }
 </style>
 </head>
 
 <body>
 
+<!-- =====================================================
+     MENU
+===================================================== -->
+
 <div id="menu">
+
     <div class="menuBox">
-        <div class="logo">🛒 <span>Mercado</span> Maluco</div>
+
+        <div class="logo">
+            🛒 <span>Mercado</span> Maluco
+        </div>
+
         <div class="subtitle">
             O supermercado onde fazer compras virou um esporte.
         </div>
 
         <div class="menuInfo">
+
             <div class="info">
                 <b>🛒</b>
                 <span>PEGUE OS ITENS</span>
             </div>
+
             <div class="info">
                 <b>💰</b>
                 <span>GANHE DINHEIRO</span>
             </div>
+
             <div class="info">
                 <b>⚡</b>
                 <span>AGUENTE O CAOS</span>
             </div>
+
         </div>
 
-        <button id="startBtn">▶ COMEÇAR JOGO</button>
+        <button id="startBtn">
+            ▶ COMEÇAR JOGO
+        </button>
 
-        <div class="controls">
-            🖥️ <b>PC:</b> WASD / Setas para andar • Mouse para olhar • E para pegar<br>
-            📱 <b>Celular:</b> Joystick para andar • Botão PEGAR para interagir
+        <div class="controlsInfo">
+
+            🖥️ <b>PC:</b>
+            WASD para andar • Mouse para câmera • E para interagir
+
+            <br>
+
+            📱 <b>Celular:</b>
+            Joystick para andar • PEGAR para interagir
+
         </div>
+
     </div>
+
 </div>
+
+<!-- =====================================================
+     HUD
+===================================================== -->
 
 <div id="hud">
 
-    <div class="topbar">
+    <!-- STATUS ESQUERDO -->
 
-        <div class="stats">
-            <div class="stat">
-                <small>💰 Dinheiro</small>
-                <strong id="money">R$ 0</strong>
-            </div>
+    <div id="statsPanel">
 
-            <div class="stat">
-                <small>⭐ Pontos</small>
-                <strong id="score">0</strong>
-            </div>
-
-            <div class="stat">
-                <small>📦 Pedidos</small>
-                <strong id="ordersDone">0</strong>
-            </div>
-
-            <div class="stat">
-                <small>🏆 Recorde</small>
-                <strong id="best">0</strong>
-            </div>
-
-            <div class="stat">
-                <small>⏱️ Tempo</small>
-                <strong id="gameTime">180</strong>
-            </div>
+        <div class="stat">
+            <small>💰 Dinheiro</small>
+            <strong id="money">R$ 0</strong>
         </div>
 
-        <div id="orderPanel">
-            <div class="orderHeader">
-                <span>📋 PEDIDO</span>
-                <span id="orderNumber">#001</span>
-            </div>
+        <div class="stat">
+            <small>⭐ Pontos</small>
+            <strong id="score">0</strong>
+        </div>
 
-            <div class="orderBody">
-                <div id="orderTitle">Cliente esperando...</div>
-                <div id="orderItems"></div>
+        <div class="stat">
+            <small>📦 Pedidos</small>
+            <strong id="ordersDone">0</strong>
+        </div>
 
-                <div class="progressWrap">
-                    <div class="progressText">
-                        <span>PROGRESSO</span>
-                        <span id="progressText">0/0</span>
-                    </div>
+        <div class="stat">
+            <small>🏆 Recorde</small>
+            <strong id="best">0</strong>
+        </div>
 
-                    <div class="progressBar">
-                        <div id="progressFill"></div>
-                    </div>
-                </div>
-            </div>
+        <div class="stat">
+            <small>⏱️ Tempo</small>
+            <strong id="gameTime">180</strong>
         </div>
 
     </div>
 
-    <div id="prompt"></div>
-    <div id="message"></div>
-    <div id="eventBox"></div>
+    <!-- PEDIDO DIREITA -->
 
-    <div id="mobileControls">
-        <div id="joystick">
-            <div id="stick"></div>
+    <div id="orderPanel">
+
+        <div class="orderHeader">
+
+            <span>
+                📋 PEDIDO
+            </span>
+
+            <span id="orderNumber">
+                #001
+            </span>
+
         </div>
 
-        <button id="actionBtn">PEGAR</button>
+        <div class="orderBody">
+
+            <div id="orderTitle">
+                Cliente esperando...
+            </div>
+
+            <div id="orderItems"></div>
+
+            <div class="progressWrap">
+
+                <div class="progressText">
+
+                    <span>
+                        PROGRESSO
+                    </span>
+
+                    <span id="progressText">
+                        0/0
+                    </span>
+
+                </div>
+
+                <div class="progressBar">
+
+                    <div id="progressFill"></div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- MENSAGEM -->
+
+    <div id="message"></div>
+
+    <!-- EVENTO -->
+
+    <div id="eventBox"></div>
+
+    <!-- PROMPT PC -->
+
+    <div id="prompt"></div>
+
+    <!-- =================================================
+         CONTROLES MOBILE
+    ================================================= -->
+
+    <div id="mobileControls">
+
+        <div id="joystickArea">
+
+            <div id="joystick">
+
+                <div id="stick"></div>
+
+            </div>
+
+        </div>
+
+        <div id="actionArea">
+
+            <button id="actionBtn">
+                PEGAR
+            </button>
+
+        </div>
+
     </div>
 
 </div>
 
+<!-- =====================================================
+     GAME OVER
+===================================================== -->
+
 <div id="gameOver">
+
     <div class="gameOverBox">
-        <h1>🛒 FIM DE JOGO</h1>
+
+        <h1>
+            🛒 FIM DE JOGO
+        </h1>
 
         <div class="result">
-            <div>💰 Dinheiro: <b id="finalMoney">R$ 0</b></div>
-            <div>⭐ Pontos: <b id="finalScore">0</b></div>
-            <div>📦 Pedidos: <b id="finalOrders">0</b></div>
-            <div>🏆 Recorde: <b id="finalBest">0</b></div>
+
+            <div>
+                💰 Dinheiro:
+                <b id="finalMoney">R$ 0</b>
+            </div>
+
+            <div>
+                ⭐ Pontos:
+                <b id="finalScore">0</b>
+            </div>
+
+            <div>
+                📦 Pedidos:
+                <b id="finalOrders">0</b>
+            </div>
+
+            <div>
+                🏆 Recorde:
+                <b id="finalBest">0</b>
+            </div>
+
         </div>
 
-        <button id="restartBtn">🔄 JOGAR NOVAMENTE</button>
+        <button id="restartBtn">
+            🔄 JOGAR NOVAMENTE
+        </button>
+
     </div>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 
 <script>
-/* =========================================================
-   MERCADO MALUCO 3D
-   ========================================================= */
+
+/* =====================================================
+   VARIÁVEIS
+===================================================== */
 
 let scene;
 let camera;
@@ -606,9 +1087,15 @@ let score=0;
 let ordersDone=0;
 let gameSeconds=180;
 
-let best=Number(localStorage.getItem("mercadoMalucoBest") || 0);
+let best=
+    Number(
+        localStorage.getItem(
+            "mercadoMalucoBest"
+        ) || 0
+    );
 
 let orderNumber=0;
+
 let currentOrder=null;
 
 let products=[];
@@ -619,12 +1106,16 @@ let obstacles=[];
 let keys={};
 
 let yaw=0;
-let pitch=-0.15;
 
-let lastOrderTime=0;
+let mobileX=0;
+let mobileZ=0;
+
 let eventTimer=20;
 
+let messageTimeout;
+
 const PRODUCT_TYPES=[
+
     {
         id:"apple",
         name:"Maçã",
@@ -633,6 +1124,7 @@ const PRODUCT_TYPES=[
         section:"FRUTAS",
         shape:"sphere"
     },
+
     {
         id:"banana",
         name:"Banana",
@@ -641,6 +1133,7 @@ const PRODUCT_TYPES=[
         section:"FRUTAS",
         shape:"banana"
     },
+
     {
         id:"orange",
         name:"Laranja",
@@ -649,6 +1142,7 @@ const PRODUCT_TYPES=[
         section:"FRUTAS",
         shape:"sphere"
     },
+
     {
         id:"milk",
         name:"Leite",
@@ -657,6 +1151,7 @@ const PRODUCT_TYPES=[
         section:"LATICÍNIOS",
         shape:"box"
     },
+
     {
         id:"cheese",
         name:"Queijo",
@@ -665,6 +1160,7 @@ const PRODUCT_TYPES=[
         section:"LATICÍNIOS",
         shape:"box"
     },
+
     {
         id:"bread",
         name:"Pão",
@@ -673,6 +1169,7 @@ const PRODUCT_TYPES=[
         section:"PADARIA",
         shape:"bread"
     },
+
     {
         id:"cookie",
         name:"Biscoito",
@@ -681,6 +1178,7 @@ const PRODUCT_TYPES=[
         section:"DOCES",
         shape:"cylinder"
     },
+
     {
         id:"cola",
         name:"Refrigerante",
@@ -689,6 +1187,7 @@ const PRODUCT_TYPES=[
         section:"BEBIDAS",
         shape:"cylinder"
     },
+
     {
         id:"water",
         name:"Água",
@@ -697,6 +1196,7 @@ const PRODUCT_TYPES=[
         section:"BEBIDAS",
         shape:"cylinder"
     },
+
     {
         id:"soap",
         name:"Sabão",
@@ -705,25 +1205,56 @@ const PRODUCT_TYPES=[
         section:"LIMPEZA",
         shape:"box"
     }
+
 ];
 
 const SECTION_POSITIONS={
-    "FRUTAS": {x:-22,z:-12},
-    "LATICÍNIOS": {x:0,z:-12},
-    "PADARIA": {x:22,z:-12},
-    "DOCES": {x:-22,z:12},
-    "BEBIDAS": {x:0,z:12},
-    "LIMPEZA": {x:22,z:12}
+
+    "FRUTAS":{
+        x:-22,
+        z:-12
+    },
+
+    "LATICÍNIOS":{
+        x:0,
+        z:-12
+    },
+
+    "PADARIA":{
+        x:22,
+        z:-12
+    },
+
+    "DOCES":{
+        x:-22,
+        z:12
+    },
+
+    "BEBIDAS":{
+        x:0,
+        z:12
+    },
+
+    "LIMPEZA":{
+        x:22,
+        z:12
+    }
+
 };
 
-/* =========================================================
-   START
-   ========================================================= */
+/* =====================================================
+   INICIAR
+===================================================== */
 
-document.getElementById("startBtn").onclick=startGame;
-document.getElementById("restartBtn").onclick=()=>{
-    location.reload();
-};
+document
+    .getElementById("startBtn")
+    .onclick=startGame;
+
+document
+    .getElementById("restartBtn")
+    .onclick=()=>{
+        location.reload();
+    };
 
 function startGame(){
 
@@ -731,12 +1262,20 @@ function startGame(){
 
     started=true;
 
-    document.getElementById("menu").style.display="none";
-    document.getElementById("hud").style.display="block";
+    document
+        .getElementById("menu")
+        .style.display="none";
+
+    document
+        .getElementById("hud")
+        .style.display="block";
 
     init3D();
+
     createMarket();
+
     createPlayer();
+
     createCustomers();
 
     newOrder();
@@ -746,53 +1285,78 @@ function startGame(){
     animate();
 }
 
-/* =========================================================
-   THREE
-   ========================================================= */
+/* =====================================================
+   THREE.JS
+===================================================== */
 
 function init3D(){
 
     scene=new THREE.Scene();
 
-    scene.background=new THREE.Color(0x8ecae6);
+    scene.background=
+        new THREE.Color(0x8ecae6);
 
-    scene.fog=new THREE.Fog(0x8ecae6,55,120);
+    scene.fog=
+        new THREE.Fog(
+            0x8ecae6,
+            55,
+            120
+        );
 
-    camera=new THREE.PerspectiveCamera(
-        65,
-        innerWidth/innerHeight,
-        .1,
-        200
+    camera=
+        new THREE.PerspectiveCamera(
+            65,
+            innerWidth/innerHeight,
+            .1,
+            200
+        );
+
+    renderer=
+        new THREE.WebGLRenderer({
+            antialias:true
+        });
+
+    renderer.setSize(
+        innerWidth,
+        innerHeight
     );
 
-    renderer=new THREE.WebGLRenderer({
-        antialias:true
-    });
-
-    renderer.setSize(innerWidth,innerHeight);
-
-    renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+    renderer.setPixelRatio(
+        Math.min(
+            devicePixelRatio,
+            2
+        )
+    );
 
     renderer.shadowMap.enabled=true;
 
-    renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+    renderer.shadowMap.type=
+        THREE.PCFSoftShadowMap;
 
-    document.body.appendChild(renderer.domElement);
-
-    const hemi=new THREE.HemisphereLight(
-        0xffffff,
-        0x475569,
-        2
+    document.body.appendChild(
+        renderer.domElement
     );
+
+    const hemi=
+        new THREE.HemisphereLight(
+            0xffffff,
+            0x475569,
+            2
+        );
 
     scene.add(hemi);
 
-    const sun=new THREE.DirectionalLight(
-        0xffffff,
-        2.5
-    );
+    const sun=
+        new THREE.DirectionalLight(
+            0xffffff,
+            2.5
+        );
 
-    sun.position.set(-30,45,20);
+    sun.position.set(
+        -30,
+        45,
+        20
+    );
 
     sun.castShadow=true;
 
@@ -806,26 +1370,35 @@ function init3D(){
 
     scene.add(sun);
 
-    window.addEventListener("resize",resize);
+    window.addEventListener(
+        "resize",
+        resize
+    );
 
     setupControls();
 }
 
-/* =========================================================
-   MARKET
-   ========================================================= */
+/* =====================================================
+   MERCADO
+===================================================== */
 
 function createMarket(){
 
-    const floorMat=new THREE.MeshStandardMaterial({
-        color:0xdbe4ea,
-        roughness:.8
-    });
+    const floorMat=
+        new THREE.MeshStandardMaterial({
+            color:0xdbe4ea,
+            roughness:.8
+        });
 
-    const floor=new THREE.Mesh(
-        new THREE.BoxGeometry(100,.4,80),
-        floorMat
-    );
+    const floor=
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                100,
+                .4,
+                80
+            ),
+            floorMat
+        );
 
     floor.position.y=-.2;
 
@@ -833,12 +1406,41 @@ function createMarket(){
 
     scene.add(floor);
 
-    addWall(0,5,-40,100,10,1);
-    addWall(0,5,40,100,10,1);
-    addWall(-50,5,0,1,10,80);
-    addWall(50,5,0,1,10,80);
+    addWall(
+        0,
+        5,
+        -40,
+        100,
+        10,
+        1
+    );
 
-    /* ENTRADA */
+    addWall(
+        0,
+        5,
+        40,
+        100,
+        10,
+        1
+    );
+
+    addWall(
+        -50,
+        5,
+        0,
+        1,
+        10,
+        80
+    );
+
+    addWall(
+        50,
+        5,
+        0,
+        1,
+        10,
+        80
+    );
 
     addTextSign(
         "🛒 MERCADO MALUCO",
@@ -847,54 +1449,82 @@ function createMarket(){
         -38
     );
 
-    /* CHECKOUT */
-
     createCheckout();
-
-    /* CORREDORES */
 
     createSection("FRUTAS");
     createSection("LATICÍNIOS");
     createSection("PADARIA");
+
     createSection("DOCES");
     createSection("BEBIDAS");
     createSection("LIMPEZA");
 
-    /* DECORAÇÃO */
+    for(
+        let i=0;
+        i<14;
+        i++
+    ){
 
-    for(let i=0;i<14;i++){
+        const x=
+            -42+
+            Math.random()*84;
 
-        const x=-42+Math.random()*84;
-        const z=-34+Math.random()*68;
+        const z=
+            -34+
+            Math.random()*68;
 
-        createCeilingLight(x,z);
+        createCeilingLight(
+            x,
+            z
+        );
     }
 
     createCart(36,25);
     createCart(39,25);
     createCart(42,25);
 
-    createPromoStand(-37,0);
+    createPromoStand(
+        -37,
+        0
+    );
 }
 
-/* =========================================================
-   WALL
-   ========================================================= */
+/* =====================================================
+   PAREDES
+===================================================== */
 
-function addWall(x,y,z,w,h,d){
+function addWall(
+    x,
+    y,
+    z,
+    w,
+    h,
+    d
+){
 
-    const mat=new THREE.MeshStandardMaterial({
-        color:0xf8fafc
-    });
+    const mat=
+        new THREE.MeshStandardMaterial({
+            color:0xf8fafc
+        });
 
-    const mesh=new THREE.Mesh(
-        new THREE.BoxGeometry(w,h,d),
-        mat
+    const mesh=
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                w,
+                h,
+                d
+            ),
+            mat
+        );
+
+    mesh.position.set(
+        x,
+        y,
+        z
     );
 
-    mesh.position.set(x,y,z);
-
     mesh.castShadow=true;
+
     mesh.receiveShadow=true;
 
     scene.add(mesh);
@@ -902,17 +1532,21 @@ function addWall(x,y,z,w,h,d){
     obstacles.push(mesh);
 }
 
-/* =========================================================
-   SECTIONS
-   ========================================================= */
+/* =====================================================
+   SEÇÕES
+===================================================== */
 
 function createSection(section){
 
-    const pos=SECTION_POSITIONS[section];
+    const pos=
+        SECTION_POSITIONS[
+            section
+        ];
 
-    const types=PRODUCT_TYPES.filter(
-        p=>p.section===section
-    );
+    const types=
+        PRODUCT_TYPES.filter(
+            p=>p.section===section
+        );
 
     addTextSign(
         section,
@@ -921,115 +1555,224 @@ function createSection(section){
         pos.z-5
     );
 
-    for(let row=0;row<2;row++){
+    for(
+        let row=0;
+        row<2;
+        row++
+    ){
 
-        const shelfZ=pos.z+row*3;
+        const shelfZ=
+            pos.z+
+            row*3;
 
         createShelf(
             pos.x,
             shelfZ
         );
 
-        for(let i=0;i<types.length;i++){
+        for(
+            let i=0;
+            i<types.length;
+            i++
+        ){
 
-            for(let level=0;level<2;level++){
+            for(
+                let level=0;
+                level<2;
+                level++
+            ){
 
-                const product=types[i];
+                const product=
+                    types[i];
 
-                const x=pos.x-2+i*2.2;
+                const x=
+                    pos.x-
+                    2+
+                    i*2.2;
 
-                const z=shelfZ;
+                const y=
+                    1+
+                    level*1.2;
 
-                const y=1+level*1.2;
-
-                createProduct(product,x,y,z);
+                createProduct(
+                    product,
+                    x,
+                    y,
+                    shelfZ
+                );
             }
         }
     }
 }
 
-/* =========================================================
-   SHELF
-   ========================================================= */
+/* =====================================================
+   PRATELEIRA
+===================================================== */
 
-function createShelf(x,z){
+function createShelf(
+    x,
+    z
+){
 
-    const wood=new THREE.MeshStandardMaterial({
-        color:0x7c4a2d
-    });
+    const wood=
+        new THREE.MeshStandardMaterial({
+            color:0x7c4a2d
+        });
 
-    const shelf=new THREE.Group();
+    const shelf=
+        new THREE.Group();
 
-    const back=new THREE.Mesh(
-        new THREE.BoxGeometry(14,5,.35),
-        wood
-    );
+    const back=
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                14,
+                5,
+                .35
+            ),
+            wood
+        );
 
     back.position.y=2.5;
 
     shelf.add(back);
 
-    for(let y of [0.5,1.7,2.9,4.1]){
+    for(
+        let y of [
+            .5,
+            1.7,
+            2.9,
+            4.1
+        ]
+    ){
 
-        const board=new THREE.Mesh(
-            new THREE.BoxGeometry(14,.18,2.2),
-            wood
+        const board=
+            new THREE.Mesh(
+                new THREE.BoxGeometry(
+                    14,
+                    .18,
+                    2.2
+                ),
+                wood
+            );
+
+        board.position.set(
+            0,
+            y,
+            0
         );
 
-        board.position.set(0,y,0);
-
         board.castShadow=true;
+
         board.receiveShadow=true;
 
         shelf.add(board);
     }
 
-    shelf.position.set(x,0,z);
+    shelf.position.set(
+        x,
+        0,
+        z
+    );
 
     scene.add(shelf);
 
     obstacles.push(shelf);
+
     shelves.push(shelf);
 }
 
-/* =========================================================
-   PRODUCTS
-   ========================================================= */
+/* =====================================================
+   PRODUTOS
+===================================================== */
 
-function createProduct(type,x,y,z){
+function createProduct(
+    type,
+    x,
+    y,
+    z
+){
 
     let geo;
 
-    if(type.shape==="sphere"){
-        geo=new THREE.SphereGeometry(.42,16,12);
+    if(
+        type.shape==="sphere"
+    ){
+
+        geo=
+            new THREE.SphereGeometry(
+                .42,
+                16,
+                12
+            );
+
+    }else if(
+        type.shape==="cylinder"
+    ){
+
+        geo=
+            new THREE.CylinderGeometry(
+                .28,
+                .28,
+                .75,
+                16
+            );
+
+    }else if(
+        type.shape==="bread"
+    ){
+
+        geo=
+            new THREE.SphereGeometry(
+                .48,
+                12,
+                8
+            );
+
+    }else if(
+        type.shape==="banana"
+    ){
+
+        geo=
+            new THREE.TorusGeometry(
+                .38,
+                .13,
+                8,
+                18,
+                Math.PI
+            );
+
+    }else{
+
+        geo=
+            new THREE.BoxGeometry(
+                .65,
+                .8,
+                .55
+            );
     }
 
-    else if(type.shape==="cylinder"){
-        geo=new THREE.CylinderGeometry(.28,.28,.75,16);
-    }
+    const mat=
+        new THREE.MeshStandardMaterial({
+            color:type.color,
+            roughness:.6
+        });
 
-    else if(type.shape==="bread"){
-        geo=new THREE.SphereGeometry(.48,12,8);
-    }
+    const mesh=
+        new THREE.Mesh(
+            geo,
+            mat
+        );
 
-    else if(type.shape==="banana"){
-        geo=new THREE.TorusGeometry(.38,.13,8,18,Math.PI);
-    }
+    mesh.position.set(
+        x,
+        y,
+        z
+    );
 
-    else{
-        geo=new THREE.BoxGeometry(.65,.8,.55);
-    }
+    if(
+        type.shape==="banana"
+    ){
 
-    const mat=new THREE.MeshStandardMaterial({
-        color:type.color,
-        roughness:.6
-    });
-
-    const mesh=new THREE.Mesh(geo,mat);
-
-    mesh.position.set(x,y,z);
-
-    if(type.shape==="banana"){
         mesh.rotation.z=-.4;
     }
 
@@ -1038,71 +1781,117 @@ function createProduct(type,x,y,z){
     scene.add(mesh);
 
     products.push({
-        mesh,
-        type,
+        mesh:mesh,
+        type:type,
         collected:false,
         baseY:y
     });
 }
 
-/* =========================================================
-   SIGN
-   ========================================================= */
+/* =====================================================
+   PLACAS
+===================================================== */
 
-function addTextSign(text,x,y,z){
+function addTextSign(
+    text,
+    x,
+    y,
+    z
+){
 
-    const canvas=document.createElement("canvas");
+    const canvas=
+        document.createElement(
+            "canvas"
+        );
 
     canvas.width=512;
     canvas.height=128;
 
-    const ctx=canvas.getContext("2d");
+    const ctx=
+        canvas.getContext("2d");
 
     ctx.fillStyle="#111827";
-    ctx.fillRect(0,0,512,128);
 
-    ctx.fillStyle="#fbbf24";
-    ctx.font="bold 42px Arial";
-    ctx.textAlign="center";
-    ctx.textBaseline="middle";
-
-    ctx.fillText(text,256,64);
-
-    const texture=new THREE.CanvasTexture(canvas);
-
-    const mat=new THREE.MeshBasicMaterial({
-        map:texture
-    });
-
-    const plane=new THREE.Mesh(
-        new THREE.PlaneGeometry(8,2),
-        mat
+    ctx.fillRect(
+        0,
+        0,
+        512,
+        128
     );
 
-    plane.position.set(x,y,z);
+    ctx.fillStyle="#fbbf24";
 
-    plane.rotation.x=-Math.PI/2;
+    ctx.font=
+        "bold 42px Arial";
+
+    ctx.textAlign="center";
+
+    ctx.textBaseline="middle";
+
+    ctx.fillText(
+        text,
+        256,
+        64
+    );
+
+    const texture=
+        new THREE.CanvasTexture(
+            canvas
+        );
+
+    const mat=
+        new THREE.MeshBasicMaterial({
+            map:texture
+        });
+
+    const plane=
+        new THREE.Mesh(
+            new THREE.PlaneGeometry(
+                8,
+                2
+            ),
+            mat
+        );
+
+    plane.position.set(
+        x,
+        y,
+        z
+    );
+
+    plane.rotation.x=
+        -Math.PI/2;
 
     scene.add(plane);
 }
 
-/* =========================================================
-   CHECKOUT
-   ========================================================= */
+/* =====================================================
+   CAIXAS
+===================================================== */
 
 function createCheckout(){
 
-    for(let i=0;i<4;i++){
+    for(
+        let i=0;
+        i<4;
+        i++
+    ){
 
-        const counter=new THREE.Mesh(
-            new THREE.BoxGeometry(5,1.5,3),
-            new THREE.MeshStandardMaterial({
-                color:0x334155
-            })
-        );
+        const counter=
+            new THREE.Mesh(
+                new THREE.BoxGeometry(
+                    5,
+                    1.5,
+                    3
+                ),
+                new THREE.MeshStandardMaterial({
+                    color:0x334155
+                })
+            );
 
         counter.position.set(
-            -15+i*10,
+            -15+
+            i*10,
             .75,
             31
         );
@@ -1113,13 +1902,18 @@ function createCheckout(){
 
         obstacles.push(counter);
 
-        const scanner=new THREE.Mesh(
-            new THREE.BoxGeometry(1.2,.15,.8),
-            new THREE.MeshStandardMaterial({
-                color:0x22c55e,
-                emissive:0x052e16
-            })
-        );
+        const scanner=
+            new THREE.Mesh(
+                new THREE.BoxGeometry(
+                    1.2,
+                    .15,
+                    .8
+                ),
+                new THREE.MeshStandardMaterial({
+                    color:0x22c55e,
+                    emissive:0x052e16
+                })
+            );
 
         scanner.position.set(
             counter.position.x,
@@ -1138,69 +1932,111 @@ function createCheckout(){
     );
 }
 
-/* =========================================================
-   CARTS
-   ========================================================= */
+/* =====================================================
+   CARRINHOS
+===================================================== */
 
-function createCart(x,z){
+function createCart(
+    x,
+    z
+){
 
-    const group=new THREE.Group();
+    const group=
+        new THREE.Group();
 
-    const metal=new THREE.MeshStandardMaterial({
-        color:0x64748b,
-        metalness:.7,
-        roughness:.3
-    });
+    const metal=
+        new THREE.MeshStandardMaterial({
+            color:0x64748b,
+            metalness:.7,
+            roughness:.3
+        });
 
-    const basket=new THREE.Mesh(
-        new THREE.BoxGeometry(2.2,1.2,1.4),
-        metal
-    );
+    const basket=
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                2.2,
+                1.2,
+                1.4
+            ),
+            metal
+        );
 
     basket.position.y=1.1;
 
     group.add(basket);
 
-    for(const dx of [-.8,.8]){
+    for(
+        const dx of [-.8,.8]
+    ){
 
-        for(const dz of [-.5,.5]){
+        for(
+            const dz of [-.5,.5]
+        ){
 
-            const wheel=new THREE.Mesh(
-                new THREE.CylinderGeometry(.18,.18,.15,12),
-                new THREE.MeshStandardMaterial({
-                    color:0x111827
-                })
+            const wheel=
+                new THREE.Mesh(
+                    new THREE.CylinderGeometry(
+                        .18,
+                        .18,
+                        .15,
+                        12
+                    ),
+                    new THREE.MeshStandardMaterial({
+                        color:0x111827
+                    })
+                );
+
+            wheel.rotation.z=
+                Math.PI/2;
+
+            wheel.position.set(
+                dx,
+                .35,
+                dz
             );
-
-            wheel.rotation.z=Math.PI/2;
-
-            wheel.position.set(dx,.35,dz);
 
             group.add(wheel);
         }
     }
 
-    group.position.set(x,0,z);
+    group.position.set(
+        x,
+        0,
+        z
+    );
 
-    group.rotation.y=Math.random()*Math.PI;
+    group.rotation.y=
+        Math.random()*Math.PI;
 
     scene.add(group);
 }
 
-/* =========================================================
-   PROMO
-   ========================================================= */
+/* =====================================================
+   PROMOÇÃO
+===================================================== */
 
-function createPromoStand(x,z){
+function createPromoStand(
+    x,
+    z
+){
 
-    const stand=new THREE.Mesh(
-        new THREE.BoxGeometry(4,2.5,2),
-        new THREE.MeshStandardMaterial({
-            color:0xdc2626
-        })
+    const stand=
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                4,
+                2.5,
+                2
+            ),
+            new THREE.MeshStandardMaterial({
+                color:0xdc2626
+            })
+        );
+
+    stand.position.set(
+        x,
+        1.25,
+        z
     );
-
-    stand.position.set(x,1.25,z);
 
     stand.castShadow=true;
 
@@ -1214,48 +2050,72 @@ function createPromoStand(x,z){
     );
 }
 
-/* =========================================================
-   LIGHT
-   ========================================================= */
+/* =====================================================
+   LUZES
+===================================================== */
 
-function createCeilingLight(x,z){
+function createCeilingLight(
+    x,
+    z
+){
 
-    const light=new THREE.PointLight(
-        0xffffff,
-        1.5,
-        18
+    const light=
+        new THREE.PointLight(
+            0xffffff,
+            1.5,
+            18
+        );
+
+    light.position.set(
+        x,
+        8,
+        z
     );
-
-    light.position.set(x,8,z);
 
     scene.add(light);
 
-    const bulb=new THREE.Mesh(
-        new THREE.BoxGeometry(2,.15,.5),
-        new THREE.MeshBasicMaterial({
-            color:0xffffff
-        })
-    );
+    const bulb=
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                2,
+                .15,
+                .5
+            ),
+            new THREE.MeshBasicMaterial({
+                color:0xffffff
+            })
+        );
 
-    bulb.position.set(x,8,z);
+    bulb.position.set(
+        x,
+        8,
+        z
+    );
 
     scene.add(bulb);
 }
 
-/* =========================================================
+/* =====================================================
    PLAYER
-   ========================================================= */
+===================================================== */
 
 function createPlayer(){
 
-    playerGroup=new THREE.Group();
+    playerGroup=
+        new THREE.Group();
 
-    const body=new THREE.Mesh(
-        new THREE.CapsuleGeometry(.55,1.2,6,12),
-        new THREE.MeshStandardMaterial({
-            color:0x2563eb
-        })
-    );
+    const body=
+        new THREE.Mesh(
+            new THREE.CapsuleGeometry(
+                .55,
+                1.2,
+                6,
+                12
+            ),
+            new THREE.MeshStandardMaterial({
+                color:0x2563eb
+            })
+        );
 
     body.position.y=1.2;
 
@@ -1263,12 +2123,17 @@ function createPlayer(){
 
     playerGroup.add(body);
 
-    const head=new THREE.Mesh(
-        new THREE.SphereGeometry(.48,16,12),
-        new THREE.MeshStandardMaterial({
-            color:0xf1c27d
-        })
-    );
+    const head=
+        new THREE.Mesh(
+            new THREE.SphereGeometry(
+                .48,
+                16,
+                12
+            ),
+            new THREE.MeshStandardMaterial({
+                color:0xf1c27d
+            })
+        );
 
     head.position.y=2.25;
 
@@ -1276,33 +2141,51 @@ function createPlayer(){
 
     playerGroup.add(head);
 
-    const hair=new THREE.Mesh(
-        new THREE.SphereGeometry(.5,16,8,0,Math.PI*2,0,Math.PI/2),
-        new THREE.MeshStandardMaterial({
-            color:0x3f2818
-        })
-    );
+    const hair=
+        new THREE.Mesh(
+            new THREE.SphereGeometry(
+                .5,
+                16,
+                8,
+                0,
+                Math.PI*2,
+                0,
+                Math.PI/2
+            ),
+            new THREE.MeshStandardMaterial({
+                color:0x3f2818
+            })
+        );
 
     hair.position.y=2.48;
 
     playerGroup.add(hair);
 
-    playerGroup.position.set(0,0,26);
+    playerGroup.position.set(
+        0,
+        0,
+        26
+    );
 
     scene.add(playerGroup);
 
     player=playerGroup;
 }
 
-/* =========================================================
-   CUSTOMERS
-   ========================================================= */
+/* =====================================================
+   CLIENTES
+===================================================== */
 
 function createCustomers(){
 
-    for(let i=0;i<5;i++){
+    for(
+        let i=0;
+        i<5;
+        i++
+    ){
 
-        const g=new THREE.Group();
+        const g=
+            new THREE.Group();
 
         const colors=[
             0xef4444,
@@ -1312,30 +2195,42 @@ function createCustomers(){
             0xec4899
         ];
 
-        const body=new THREE.Mesh(
-            new THREE.CapsuleGeometry(.45,1,6,10),
-            new THREE.MeshStandardMaterial({
-                color:colors[i]
-            })
-        );
+        const body=
+            new THREE.Mesh(
+                new THREE.CapsuleGeometry(
+                    .45,
+                    1,
+                    6,
+                    10
+                ),
+                new THREE.MeshStandardMaterial({
+                    color:colors[i]
+                })
+            );
 
         body.position.y=1;
 
         g.add(body);
 
-        const head=new THREE.Mesh(
-            new THREE.SphereGeometry(.38,12,10),
-            new THREE.MeshStandardMaterial({
-                color:0xf1c27d
-            })
-        );
+        const head=
+            new THREE.Mesh(
+                new THREE.SphereGeometry(
+                    .38,
+                    12,
+                    10
+                ),
+                new THREE.MeshStandardMaterial({
+                    color:0xf1c27d
+                })
+            );
 
         head.position.y=2;
 
         g.add(head);
 
         g.position.set(
-            -35+i*17,
+            -35+
+            i*17,
             0,
             20
         );
@@ -1344,136 +2239,235 @@ function createCustomers(){
 
         customers.push({
             group:g,
-            targetX:-35+i*17,
-            targetZ:Math.random()*35-15,
-            speed:.8+Math.random()*.7
+            targetX:
+                -35+
+                i*17,
+            targetZ:
+                Math.random()*35-15,
+            speed:
+                .8+
+                Math.random()*.7
         });
     }
 }
 
-/* =========================================================
-   ORDERS
-   ========================================================= */
+/* =====================================================
+   PEDIDO
+===================================================== */
 
 function newOrder(){
 
     orderNumber++;
 
-    const amount=Math.min(
-        3+Math.floor(ordersDone/3),
-        6
-    );
+    const amount=
+        Math.min(
+            3+
+            Math.floor(
+                ordersDone/3
+            ),
+            6
+        );
 
-    const shuffled=[...PRODUCT_TYPES]
-        .sort(()=>Math.random()-.5);
+    const shuffled=
+        [...PRODUCT_TYPES]
+        .sort(
+            ()=>Math.random()-.5
+        );
 
-    const chosen=shuffled.slice(0,amount);
+    const chosen=
+        shuffled.slice(
+            0,
+            amount
+        );
 
     currentOrder={
-        items:chosen.map(type=>({
-            type,
-            required:1+Math.floor(Math.random()*2),
-            collected:0
-        }))
+        items:
+            chosen.map(
+                type=>({
+                    type:type,
+                    required:
+                        1+
+                        Math.floor(
+                            Math.random()*2
+                        ),
+                    collected:0
+                })
+            )
     };
 
-    document.getElementById("orderNumber").textContent=
-        "#"+String(orderNumber).padStart(3,"0");
+    document
+        .getElementById(
+            "orderNumber"
+        )
+        .textContent=
+            "#"+
+            String(orderNumber)
+            .padStart(
+                3,
+                "0"
+            );
 
     renderOrder();
 
     showMessage(
-        "📋 NOVO PEDIDO!",
-        "#fbbf24"
+        "📋 NOVO PEDIDO!"
     );
 }
 
-/* =========================================================
-   ORDER UI
-   ========================================================= */
+/* =====================================================
+   PEDIDO NA TELA
+===================================================== */
 
 function renderOrder(){
 
-    const container=document.getElementById("orderItems");
+    const container=
+        document.getElementById(
+            "orderItems"
+        );
 
     container.innerHTML="";
 
     let total=0;
     let got=0;
 
-    currentOrder.items.forEach(item=>{
+    currentOrder.items.forEach(
+        item=>{
 
-        total+=item.required;
-        got+=item.collected;
+            total+=item.required;
 
-        const div=document.createElement("div");
+            got+=item.collected;
 
-        div.className=
-            "orderItem "+
-            (item.collected>=item.required ? "done":"");
+            const div=
+                document.createElement(
+                    "div"
+                );
 
-        div.innerHTML=`
-            <div class="orderEmoji">${item.type.emoji}</div>
-            <div class="orderName">${item.type.name}</div>
-            <div class="orderCount">
-                ${item.collected}/${item.required}
-            </div>
-        `;
+            div.className=
+                "orderItem "+
+                (
+                    item.collected>=
+                    item.required
+                    ?
+                    "done"
+                    :
+                    ""
+                );
 
-        container.appendChild(div);
-    });
+            div.innerHTML=`
+                <div class="orderEmoji">
+                    ${item.type.emoji}
+                </div>
 
-    document.getElementById("progressText").textContent=
-        got+"/"+total;
+                <div class="orderName">
+                    ${item.type.name}
+                </div>
 
-    document.getElementById("progressFill").style.width=
-        ((got/total)*100)+"%";
+                <div class="orderCount">
+                    ${item.collected}/${item.required}
+                </div>
+            `;
 
-    document.getElementById("orderTitle").textContent=
-        got===total
-        ? "✅ PEDIDO COMPLETO! Vá ao caixa!"
-        : "Pegue todos os produtos abaixo:";
+            container.appendChild(
+                div
+            );
+        }
+    );
+
+    document
+        .getElementById(
+            "progressText"
+        )
+        .textContent=
+            got+
+            "/"+
+            total;
+
+    document
+        .getElementById(
+            "progressFill"
+        )
+        .style.width=
+            (
+                got/
+                total*
+                100
+            )+
+            "%";
+
+    document
+        .getElementById(
+            "orderTitle"
+        )
+        .textContent=
+            got===total
+            ?
+            "✅ PEDIDO COMPLETO! Vá ao caixa!"
+            :
+            "Pegue todos os produtos abaixo:";
 }
 
-/* =========================================================
-   INTERAÇÃO
-   ========================================================= */
+/* =====================================================
+   PRODUTO MAIS PRÓXIMO
+===================================================== */
 
 function getNearestProduct(){
 
     let closest=null;
+
     let dist=Infinity;
 
-    for(const p of products){
+    for(
+        const p of products
+    ){
 
-        if(p.collected)continue;
+        if(p.collected)
+            continue;
 
-        const d=player.position.distanceTo(
-            p.mesh.position
-        );
+        const d=
+            player.position.distanceTo(
+                p.mesh.position
+            );
 
         if(d<dist){
 
             dist=d;
+
             closest=p;
         }
     }
 
-    return dist<3 ? closest:null;
+    return dist<3
+        ?
+        closest
+        :
+        null;
 }
+
+/* =====================================================
+   INTERAÇÃO
+===================================================== */
 
 function interact(){
 
-    if(!started || gameEnded)return;
+    if(
+        !started ||
+        gameEnded
+    )
+        return;
 
-    const product=getNearestProduct();
+    const product=
+        getNearestProduct();
 
     if(product){
 
-        const needed=currentOrder.items.find(
-            i=>i.type.id===product.type.id &&
-            i.collected<i.required
-        );
+        const needed=
+            currentOrder.items.find(
+                i=>
+                    i.type.id===
+                    product.type.id &&
+                    i.collected<
+                    i.required
+            );
 
         if(needed){
 
@@ -1487,9 +2481,9 @@ function interact(){
 
             showMessage(
                 product.type.emoji+
-                " "+product.type.name+
-                " colocado no carrinho!",
-                "#86efac"
+                " "+
+                product.type.name+
+                " colocado no carrinho!"
             );
 
             renderOrder();
@@ -1499,63 +2493,70 @@ function interact(){
         }else{
 
             showMessage(
-                "❌ Esse item não está no pedido!",
-                "#f87171"
+                "❌ Esse item não está no pedido!"
             );
         }
 
         return;
     }
 
-    const complete=currentOrder.items.every(
-        i=>i.collected>=i.required
-    );
+    const complete=
+        currentOrder.items.every(
+            i=>
+                i.collected>=
+                i.required
+        );
 
     const nearCheckout=
         player.position.z>27;
 
-    if(complete && nearCheckout){
+    if(
+        complete &&
+        nearCheckout
+    ){
 
         finishOrder();
 
-    }else if(complete){
+    }else if(
+        complete
+    ){
 
         showMessage(
-            "📋 Pedido pronto! Vá até os caixas!",
-            "#fbbf24"
+            "📋 Pedido pronto! Vá até os caixas!"
         );
 
     }else{
 
         showMessage(
-            "Aproxime-se de um produto.",
-            "#cbd5e1"
+            "Aproxime-se de um produto."
         );
     }
 }
 
-/* =========================================================
-   CHECK ORDER
-   ========================================================= */
+/* =====================================================
+   CHECAR PEDIDO
+===================================================== */
 
 function checkOrder(){
 
-    const complete=currentOrder.items.every(
-        i=>i.collected>=i.required
-    );
+    const complete=
+        currentOrder.items.every(
+            i=>
+                i.collected>=
+                i.required
+        );
 
     if(complete){
 
         showMessage(
-            "🎉 TUDO CERTO! AGORA VÁ AO CAIXA!",
-            "#4ade80"
+            "🎉 TUDO CERTO! AGORA VÁ AO CAIXA!"
         );
     }
 }
 
-/* =========================================================
-   FINISH
-   ========================================================= */
+/* =====================================================
+   FINALIZAR PEDIDO
+===================================================== */
 
 function finishOrder(){
 
@@ -1563,8 +2564,11 @@ function finishOrder(){
 
     const reward=
         100+
-        currentOrder.items.length*30+
-        Math.floor(gameSeconds);
+        currentOrder.items.length*
+        30+
+        Math.floor(
+            gameSeconds
+        );
 
     money+=reward;
 
@@ -1580,39 +2584,59 @@ function finishOrder(){
         );
     }
 
-    document.getElementById("money").textContent=
-        "R$ "+money;
+    document
+        .getElementById(
+            "money"
+        )
+        .textContent=
+            "R$ "+
+            money;
 
-    document.getElementById("score").textContent=
-        score;
+    document
+        .getElementById(
+            "score"
+        )
+        .textContent=
+            score;
 
-    document.getElementById("ordersDone").textContent=
-        ordersDone;
+    document
+        .getElementById(
+            "ordersDone"
+        )
+        .textContent=
+            ordersDone;
 
-    document.getElementById("best").textContent=
-        best;
+    document
+        .getElementById(
+            "best"
+        )
+        .textContent=
+            best;
 
     showMessage(
-        "💰 PEDIDO ENTREGUE! +R$"+reward,
-        "#fbbf24"
+        "💰 PEDIDO ENTREGUE! +R$"+
+        reward
     );
 
-    setTimeout(()=>{
+    setTimeout(
+        ()=>{
+            resetProducts();
 
-        resetProducts();
-
-        newOrder();
-
-    },900);
+            newOrder();
+        },
+        900
+    );
 }
 
-/* =========================================================
-   RESET PRODUCTS
-   ========================================================= */
+/* =====================================================
+   RESETAR PRODUTOS
+===================================================== */
 
 function resetProducts(){
 
-    for(const p of products){
+    for(
+        const p of products
+    ){
 
         p.collected=false;
 
@@ -1620,29 +2644,56 @@ function resetProducts(){
     }
 }
 
-/* =========================================================
-   MOVEMENT
-   ========================================================= */
+/* =====================================================
+   MOVIMENTO
+===================================================== */
 
 function updatePlayer(dt){
 
-    if(!player)return;
+    if(!player)
+        return;
 
     let x=0;
     let z=0;
 
-    if(keys["w"]||keys["arrowup"])z-=1;
-    if(keys["s"]||keys["arrowdown"])z+=1;
-    if(keys["a"]||keys["arrowleft"])x-=1;
-    if(keys["d"]||keys["arrowright"])x+=1;
+    if(
+        keys["w"] ||
+        keys["arrowup"]
+    )
+        z-=1;
 
-    if(mobileX!==0 || mobileZ!==0){
+    if(
+        keys["s"] ||
+        keys["arrowdown"]
+    )
+        z+=1;
+
+    if(
+        keys["a"] ||
+        keys["arrowleft"]
+    )
+        x-=1;
+
+    if(
+        keys["d"] ||
+        keys["arrowright"]
+    )
+        x+=1;
+
+    if(
+        mobileX!==0 ||
+        mobileZ!==0
+    ){
 
         x+=mobileX;
         z+=mobileZ;
     }
 
-    const length=Math.hypot(x,z);
+    const length=
+        Math.hypot(
+            x,
+            z
+        );
 
     if(length>0){
 
@@ -1651,21 +2702,43 @@ function updatePlayer(dt){
 
         const speed=7;
 
-        const moveX=x*Math.cos(yaw)-z*Math.sin(yaw);
-        const moveZ=x*Math.sin(yaw)+z*Math.cos(yaw);
+        const moveX=
+            x*Math.cos(yaw)-
+            z*Math.sin(yaw);
 
-        const oldX=player.position.x;
-        const oldZ=player.position.z;
+        const moveZ=
+            x*Math.sin(yaw)+
+            z*Math.cos(yaw);
 
-        player.position.x+=moveX*speed*dt;
-        player.position.z+=moveZ*speed*dt;
+        const oldX=
+            player.position.x;
 
-        player.rotation.y=Math.atan2(moveX,moveZ);
+        const oldZ=
+            player.position.z;
+
+        player.position.x+=
+            moveX*
+            speed*
+            dt;
+
+        player.position.z+=
+            moveZ*
+            speed*
+            dt;
+
+        player.rotation.y=
+            Math.atan2(
+                moveX,
+                moveZ
+            );
 
         if(collides()){
 
-            player.position.x=oldX;
-            player.position.z=oldZ;
+            player.position.x=
+                oldX;
+
+            player.position.z=
+                oldZ;
         }
     }
 
@@ -1684,19 +2757,27 @@ function updatePlayer(dt){
         );
 }
 
-/* =========================================================
-   COLLISION
-   ========================================================= */
+/* =====================================================
+   COLISÃO
+===================================================== */
 
 function collides(){
 
-    const px=player.position.x;
-    const pz=player.position.z;
+    const px=
+        player.position.x;
 
-    for(const shelf of shelves){
+    const pz=
+        player.position.z;
 
-        const box=new THREE.Box3()
-            .setFromObject(shelf);
+    for(
+        const shelf of shelves
+    ){
+
+        const box=
+            new THREE.Box3()
+            .setFromObject(
+                shelf
+            );
 
         box.expandByScalar(.7);
 
@@ -1714,67 +2795,101 @@ function collides(){
     return false;
 }
 
-/* =========================================================
-   CAMERA
-   ========================================================= */
+/* =====================================================
+   CÂMERA
+===================================================== */
 
 function updateCamera(){
 
-    if(!player)return;
+    if(!player)
+        return;
 
     const distance=9;
 
     const targetX=
         player.position.x-
-        Math.sin(yaw)*distance;
+        Math.sin(yaw)*
+        distance;
 
     const targetZ=
         player.position.z-
-        Math.cos(yaw)*distance;
+        Math.cos(yaw)*
+        distance;
 
     const targetY=5;
 
     camera.position.x+=
-        (targetX-camera.position.x)*.12;
+        (
+            targetX-
+            camera.position.x
+        )*.12;
 
     camera.position.y+=
-        (targetY-camera.position.y)*.12;
+        (
+            targetY-
+            camera.position.y
+        )*.12;
 
     camera.position.z+=
-        (targetZ-camera.position.z)*.12;
+        (
+            targetZ-
+            camera.position.z
+        )*.12;
 
-    const lookAt=new THREE.Vector3(
-        player.position.x,
-        1.5,
-        player.position.z
+    const lookAt=
+        new THREE.Vector3(
+            player.position.x,
+            1.5,
+            player.position.z
+        );
+
+    camera.lookAt(
+        lookAt
     );
-
-    camera.lookAt(lookAt);
 }
 
-/* =========================================================
-   CUSTOMER UPDATE
-   ========================================================= */
+/* =====================================================
+   CLIENTES
+===================================================== */
 
 function updateCustomers(dt){
 
-    for(const c of customers){
+    for(
+        const c of customers
+    ){
 
-        const dx=c.targetX-c.group.position.x;
-        const dz=c.targetZ-c.group.position.z;
+        const dx=
+            c.targetX-
+            c.group.position.x;
 
-        const dist=Math.hypot(dx,dz);
+        const dz=
+            c.targetZ-
+            c.group.position.z;
+
+        const dist=
+            Math.hypot(
+                dx,
+                dz
+            );
 
         if(dist>.5){
 
             c.group.position.x+=
-                dx/dist*c.speed*dt;
+                dx/dist*
+                c.speed*
+                dt;
 
             c.group.position.z+=
-                dz/dist*c.speed*dt;
+                dz/dist*
+                c.speed*
+                dt;
 
             c.group.rotation.y=
-                Math.atan2(dx,dz);
+                Math.atan2(
+                    dx,
+                    dz
+                );
+
         }else{
 
             c.targetX=
@@ -1794,43 +2909,60 @@ function updateCustomers(dt){
     }
 }
 
-/* =========================================================
+/* =====================================================
    HUD
-   ========================================================= */
+===================================================== */
 
 function updateHUD(dt){
 
     gameSeconds-=dt;
 
-    if(gameSeconds<=0){
+    if(
+        gameSeconds<=0
+    ){
 
         gameSeconds=0;
 
         endGame();
-
     }
 
-    document.getElementById("gameTime").textContent=
-        Math.ceil(gameSeconds);
+    document
+        .getElementById(
+            "gameTime"
+        )
+        .textContent=
+            Math.ceil(
+                gameSeconds
+            );
 
-    const product=getNearestProduct();
+    const product=
+        getNearestProduct();
 
-    const prompt=document.getElementById("prompt");
+    const prompt=
+        document.getElementById(
+            "prompt"
+        );
 
     if(product){
 
         prompt.innerHTML=
             "🖐️ <b>E</b> — PEGAR "+
             product.type.emoji+
-            " "+product.type.name;
+            " "+
+            product.type.name;
 
-        prompt.classList.add("show");
+        prompt.classList.add(
+            "show"
+        );
 
     }else{
 
-        const complete=currentOrder &&
+        const complete=
+            currentOrder &&
             currentOrder.items.every(
-                i=>i.collected>=i.required
+                i=>
+                    i.collected>=
+                    i.required
             );
 
         if(
@@ -1841,137 +2973,228 @@ function updateHUD(dt){
             prompt.innerHTML=
                 "💳 <b>E</b> — ENTREGAR PEDIDO";
 
-            prompt.classList.add("show");
+            prompt.classList.add(
+                "show"
+            );
 
         }else{
 
-            prompt.classList.remove("show");
+            prompt.classList.remove(
+                "show"
+            );
         }
     }
 }
 
-/* =========================================================
-   EVENTS
-   ========================================================= */
+/* =====================================================
+   EVENTOS
+===================================================== */
 
 function randomEvent(dt){
 
     eventTimer-=dt;
 
-    if(eventTimer>0)return;
+    if(eventTimer>0)
+        return;
 
     eventTimer=
         25+
         Math.random()*20;
 
     const events=[
+
         "🛒 CUIDADO! UM CARRINHO ESTÁ NO CAMINHO!",
+
         "💡 As luzes piscaram!",
+
         "📢 ATENÇÃO: promoção relâmpago!",
+
         "🐔 ALGUÉM DEIXOU UMA GALINHA SOLTA!",
+
         "🧹 O CHÃO ESTÁ SENDO LIMPO!",
+
         "🚨 O MERCADO ESTÁ UMA LOUCURA!"
+
     ];
 
     const event=
-        events[Math.floor(Math.random()*events.length)];
+        events[
+            Math.floor(
+                Math.random()*
+                events.length
+            )
+        ];
 
-    const box=document.getElementById("eventBox");
+    const box=
+        document.getElementById(
+            "eventBox"
+        );
 
-    box.textContent=event;
+    box.textContent=
+        event;
 
-    box.classList.add("show");
+    box.classList.add(
+        "show"
+    );
 
-    setTimeout(()=>{
-        box.classList.remove("show");
-    },3500);
+    setTimeout(
+        ()=>{
+            box.classList.remove(
+                "show"
+            );
+        },
+        3500
+    );
 }
 
-/* =========================================================
-   MESSAGE
-   ========================================================= */
-
-let messageTimeout;
+/* =====================================================
+   MENSAGEM
+===================================================== */
 
 function showMessage(text){
 
-    const el=document.getElementById("message");
+    const el=
+        document.getElementById(
+            "message"
+        );
 
-    el.textContent=text;
+    el.textContent=
+        text;
 
-    el.classList.add("show");
+    el.classList.add(
+        "show"
+    );
 
-    clearTimeout(messageTimeout);
+    clearTimeout(
+        messageTimeout
+    );
 
-    messageTimeout=setTimeout(()=>{
-        el.classList.remove("show");
-    },1800);
+    messageTimeout=
+        setTimeout(
+            ()=>{
+                el.classList.remove(
+                    "show"
+                );
+            },
+            1800
+        );
 }
 
-/* =========================================================
+/* =====================================================
    GAME OVER
-   ========================================================= */
+===================================================== */
 
 function endGame(){
 
-    if(gameEnded)return;
+    if(gameEnded)
+        return;
 
     gameEnded=true;
 
-    document.getElementById("finalMoney").textContent=
-        "R$ "+money;
+    document
+        .getElementById(
+            "finalMoney"
+        )
+        .textContent=
+            "R$ "+
+            money;
 
-    document.getElementById("finalScore").textContent=
-        score;
+    document
+        .getElementById(
+            "finalScore"
+        )
+        .textContent=
+            score;
 
-    document.getElementById("finalOrders").textContent=
-        ordersDone;
+    document
+        .getElementById(
+            "finalOrders"
+        )
+        .textContent=
+            ordersDone;
 
-    document.getElementById("finalBest").textContent=
-        best;
+    document
+        .getElementById(
+            "finalBest"
+        )
+        .textContent=
+            best;
 
-    document.getElementById("gameOver").style.display=
-        "flex";
+    document
+        .getElementById(
+            "gameOver"
+        )
+        .style.display=
+            "flex";
 }
 
-/* =========================================================
-   KEYBOARD
-   ========================================================= */
+/* =====================================================
+   CONTROLES PC
+===================================================== */
 
 function setupControls(){
 
-    window.addEventListener("keydown",e=>{
+    window.addEventListener(
+        "keydown",
+        e=>{
 
-        keys[e.key.toLowerCase()]=true;
+            keys[
+                e.key.toLowerCase()
+            ]=true;
 
-        if(
-            e.key.toLowerCase()==="e" ||
-            e.code==="Space"
-        ){
+            if(
+                e.key.toLowerCase()==="e"
+            ){
 
-            interact();
+                interact();
+            }
+
         }
-    });
+    );
 
-    window.addEventListener("keyup",e=>{
-        keys[e.key.toLowerCase()]=false;
-    });
+    window.addEventListener(
+        "keyup",
+        e=>{
+
+            keys[
+                e.key.toLowerCase()
+            ]=false;
+
+        }
+    );
+
+    /*
+       CÂMERA DO MOUSE
+    */
 
     let dragging=false;
+
     let lastX=0;
 
     renderer.domElement.addEventListener(
         "mousedown",
         e=>{
+
+            if(e.button!==0)
+                return;
+
             dragging=true;
+
             lastX=e.clientX;
+
+            renderer.domElement.style.cursor=
+                "grabbing";
         }
     );
 
     window.addEventListener(
         "mouseup",
         ()=>{
+
             dragging=false;
+
+            renderer.domElement.style.cursor=
+                "default";
         }
     );
 
@@ -1979,79 +3202,143 @@ function setupControls(){
         "mousemove",
         e=>{
 
-            if(!dragging)return;
+            if(!dragging)
+                return;
 
-            const dx=e.clientX-lastX;
+            const dx=
+                e.clientX-
+                lastX;
 
-            yaw-=dx*.006;
+            yaw-=
+                dx*
+                .006;
 
-            lastX=e.clientX;
+            lastX=
+                e.clientX;
+        }
+    );
+
+    /*
+       ESC SOLTA O MOUSE
+    */
+
+    window.addEventListener(
+        "keydown",
+        e=>{
+
+            if(
+                e.key==="Escape"
+            ){
+
+                dragging=false;
+
+                renderer.domElement.style.cursor=
+                    "default";
+            }
         }
     );
 
     setupMobile();
 }
 
-/* =========================================================
-   MOBILE
-   ========================================================= */
-
-let mobileX=0;
-let mobileZ=0;
+/* =====================================================
+   CONTROLES MOBILE
+===================================================== */
 
 function setupMobile(){
 
     const joystick=
-        document.getElementById("joystick");
+        document.getElementById(
+            "joystick"
+        );
 
     const stick=
-        document.getElementById("stick");
+        document.getElementById(
+            "stick"
+        );
 
     let active=false;
 
-    function moveTouch(clientX,clientY){
+    function moveTouch(
+        clientX,
+        clientY
+    ){
 
-        const rect=joystick.getBoundingClientRect();
+        const rect=
+            joystick.getBoundingClientRect();
 
-        const cx=rect.left+rect.width/2;
-        const cy=rect.top+rect.height/2;
+        const centerX=
+            rect.left+
+            rect.width/2;
 
-        let dx=clientX-cx;
-        let dy=clientY-cy;
+        const centerY=
+            rect.top+
+            rect.height/2;
+
+        let dx=
+            clientX-
+            centerX;
+
+        let dy=
+            clientY-
+            centerY;
 
         const max=42;
 
-        const len=Math.hypot(dx,dy);
+        const len=
+            Math.hypot(
+                dx,
+                dy
+            );
 
         if(len>max){
 
-            dx=dx/len*max;
-            dy=dy/len*max;
+            dx=
+                dx/
+                len*
+                max;
+
+            dy=
+                dy/
+                len*
+                max;
         }
 
         stick.style.transform=
             `translate(${dx}px,${dy}px)`;
 
-        mobileX=dx/max;
-        mobileZ=dy/max;
+        mobileX=
+            dx/
+            max;
+
+        mobileZ=
+            dy/
+            max;
     }
 
     joystick.addEventListener(
         "touchstart",
         e=>{
+
             active=true;
+
             e.preventDefault();
+
         },
-        {passive:false}
+        {
+            passive:false
+        }
     );
 
     joystick.addEventListener(
         "touchmove",
         e=>{
 
-            if(!active)return;
+            if(!active)
+                return;
 
-            const t=e.touches[0];
+            const t=
+                e.touches[0];
 
             moveTouch(
                 t.clientX,
@@ -2059,68 +3346,97 @@ function setupMobile(){
             );
 
             e.preventDefault();
+
         },
-        {passive:false}
+        {
+            passive:false
+        }
     );
 
     joystick.addEventListener(
         "touchend",
         ()=>{
+
             active=false;
+
             mobileX=0;
             mobileZ=0;
-            stick.style.transform="";
+
+            stick.style.transform=
+                "";
         }
     );
 
-    document
-        .getElementById("actionBtn")
-        .addEventListener(
-            "touchstart",
-            e=>{
-                e.preventDefault();
-                interact();
-            },
-            {passive:false}
+    const actionBtn=
+        document.getElementById(
+            "actionBtn"
         );
+
+    actionBtn.addEventListener(
+        "touchstart",
+        e=>{
+
+            e.preventDefault();
+
+            interact();
+
+        },
+        {
+            passive:false
+        }
+    );
 }
 
-/* =========================================================
-   ANIMATE
-   ========================================================= */
+/* =====================================================
+   LOOP
+===================================================== */
 
 function animate(){
 
-    requestAnimationFrame(animate);
-
-    if(!started)return;
-
-    const dt=Math.min(
-        clock.getDelta(),
-        .05
+    requestAnimationFrame(
+        animate
     );
+
+    if(!started)
+        return;
+
+    const dt=
+        Math.min(
+            clock.getDelta(),
+            .05
+        );
 
     if(!gameEnded){
 
         updatePlayer(dt);
+
         updateCamera();
+
         updateCustomers(dt);
+
         updateHUD(dt);
+
         randomEvent(dt);
 
-        /* anima produtos */
+        const time=
+            performance.now()*
+            .002;
 
-        const time=performance.now()*.002;
+        for(
+            const p of products
+        ){
 
-        for(const p of products){
-
-            if(!p.collected){
+            if(
+                !p.collected
+            ){
 
                 p.mesh.position.y=
                     p.baseY+
                     Math.sin(
-                        time+p.mesh.position.x
-                    )*.025;
+                        time+
+                        p.mesh.position.x
+                    )*
+                    .025;
             }
         }
     }
@@ -2131,16 +3447,21 @@ function animate(){
     );
 }
 
-/* =========================================================
+/* =====================================================
    RESIZE
-   ========================================================= */
+===================================================== */
 
 function resize(){
 
-    if(!camera||!renderer)return;
+    if(
+        !camera ||
+        !renderer
+    )
+        return;
 
     camera.aspect=
-        innerWidth/innerHeight;
+        innerWidth/
+        innerHeight;
 
     camera.updateProjectionMatrix();
 
@@ -2149,6 +3470,7 @@ function resize(){
         innerHeight
     );
 }
+
 </script>
 
 </body>

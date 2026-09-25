@@ -3,7 +3,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>🐔 Fuga da Galinha</title>
 
 <style>
@@ -12,20 +12,14 @@
   margin:0;
   padding:0;
   user-select:none;
-  -webkit-user-select:none;
 }
 
 html,body{
   width:100%;
   height:100%;
   overflow:hidden;
-  background:#101814;
-  font-family:Arial,Helvetica,sans-serif;
-  color:white;
-}
-
-body{
-  touch-action:none;
+  background:#17251a;
+  font-family:Arial,sans-serif;
 }
 
 canvas{
@@ -33,74 +27,58 @@ canvas{
   width:100vw;
   height:100vh;
   touch-action:none;
-  image-rendering:auto;
 }
-
-/* =========================
-   TELAS
-========================= */
 
 .screen{
   position:fixed;
   inset:0;
-  z-index:30;
+  z-index:100;
   display:flex;
   align-items:center;
   justify-content:center;
-  background:
-    radial-gradient(circle at center,#416b37 0%,#18271c 55%,#080c09 100%);
+  background:radial-gradient(circle,#527b3c,#18251b 65%,#070a08);
 }
 
 .menu{
-  width:min(620px,92%);
-  max-height:90vh;
-  overflow:auto;
-  text-align:center;
+  width:min(600px,92%);
   padding:35px 25px;
-  border:2px solid #8ed45a;
-  border-radius:28px;
-  background:rgba(9,18,11,.92);
-  box-shadow:
-    0 0 50px rgba(126,211,73,.25),
-    inset 0 0 30px rgba(255,255,255,.025);
+  text-align:center;
+  border:2px solid #91d85c;
+  border-radius:25px;
+  background:rgba(7,14,9,.95);
+  box-shadow:0 0 50px rgba(120,210,70,.25);
 }
 
 .logo{
-  font-size:clamp(48px,10vw,82px);
-  font-weight:900;
-  line-height:1;
+  font-size:75px;
   margin-bottom:10px;
 }
 
-.menu h1{
-  font-size:clamp(27px,6vw,48px);
+h1{
+  color:white;
+  font-size:clamp(28px,7vw,48px);
   margin-bottom:10px;
 }
 
 .subtitle{
-  color:#b8d8a5;
-  margin-bottom:28px;
+  color:#bcd6ac;
+  margin-bottom:25px;
   font-size:18px;
   line-height:1.5;
 }
 
 button{
+  display:inline-block;
   border:0;
+  border-bottom:5px solid #315e1c;
+  border-radius:14px;
+  padding:15px 30px;
+  margin:7px;
+  background:linear-gradient(#7bc849,#4e8d2d);
   color:white;
-  background:linear-gradient(#78bd42,#4f8e2c);
-  border-bottom:5px solid #35651d;
-  padding:15px 32px;
-  border-radius:15px;
   font-size:20px;
   font-weight:bold;
   cursor:pointer;
-  margin:7px;
-  transition:.12s;
-}
-
-button:hover{
-  filter:brightness(1.1);
-  transform:translateY(-1px);
 }
 
 button:active{
@@ -109,103 +87,84 @@ button:active{
 }
 
 .info{
+  color:#aab9a6;
+  line-height:1.6;
   margin-top:20px;
-  color:#aab8a7;
-  line-height:1.7;
 }
 
 .hidden{
   display:none!important;
 }
 
-/* =========================
-   HUD
-========================= */
-
 #hud{
   position:fixed;
-  z-index:10;
-  left:15px;
+  z-index:20;
   top:12px;
+  left:12px;
   display:flex;
   gap:8px;
   flex-wrap:wrap;
-  pointer-events:none;
 }
 
-.hudBox{
-  background:rgba(8,14,10,.84);
-  border:1px solid rgba(190,240,150,.35);
-  border-radius:12px;
+.hud{
   padding:8px 12px;
+  border-radius:12px;
+  background:rgba(5,12,7,.85);
+  border:1px solid #5e824d;
+  color:white;
   font-weight:bold;
-  backdrop-filter:blur(5px);
-  box-shadow:0 3px 12px rgba(0,0,0,.2);
 }
 
-#pauseBtn{
+#pause{
   position:fixed;
-  z-index:11;
-  top:12px;
+  z-index:21;
   right:12px;
-  padding:9px 13px;
-  font-size:17px;
+  top:12px;
   margin:0;
+  padding:9px 13px;
+  font-size:18px;
 }
 
-/* =========================
-   MENSAGENS
-========================= */
-
-#message{
+#msg{
   position:fixed;
-  z-index:12;
+  z-index:25;
+  top:75px;
   left:50%;
-  top:82px;
   transform:translateX(-50%);
-  background:rgba(8,12,8,.92);
-  border:1px solid #8ed45a;
-  border-radius:13px;
-  padding:10px 17px;
+  background:rgba(5,10,6,.92);
+  border:1px solid #91d85c;
+  border-radius:12px;
+  padding:10px 18px;
+  color:white;
   opacity:0;
-  transition:.25s;
+  transition:.2s;
   pointer-events:none;
-  text-align:center;
   white-space:nowrap;
 }
 
-/* =========================
-   CONTROLES MOBILE
-========================= */
-
-#touchControls{
+#mobileControls{
   position:fixed;
-  z-index:15;
-  bottom:18px;
+  z-index:30;
   left:18px;
+  bottom:18px;
   width:150px;
   height:150px;
   display:none;
 }
 
-.touch{
+.dpad{
   position:absolute;
   width:52px;
   height:52px;
-  border-radius:16px;
-  background:rgba(30,50,35,.82);
-  border:2px solid rgba(180,230,150,.55);
+  border-radius:15px;
+  border:2px solid #8bad79;
+  background:rgba(15,30,18,.85);
   color:white;
-  font-size:24px;
   display:flex;
   align-items:center;
   justify-content:center;
+  font-size:23px;
   touch-action:none;
-  box-shadow:0 4px 15px rgba(0,0,0,.25);
-}
-
-.touch:active{
-  background:rgba(120,190,65,.9);
 }
 
 .up{left:49px;top:0}
@@ -213,49 +172,31 @@ button:active{
 .down{left:49px;top:98px}
 .right{left:98px;top:49px}
 
-#actionControls{
+#actions{
   position:fixed;
-  z-index:15;
+  z-index:30;
   right:18px;
   bottom:25px;
   display:none;
-  gap:12px;
+  gap:10px;
 }
 
 .action{
-  width:68px;
-  height:68px;
+  width:65px;
+  height:65px;
   border-radius:50%;
-  background:rgba(30,50,35,.85);
-  border:2px solid rgba(180,230,150,.6);
+  border:2px solid #8bad79;
+  background:rgba(15,30,18,.88);
   color:white;
-  font-size:27px;
   display:flex;
   align-items:center;
   justify-content:center;
-  box-shadow:0 4px 15px rgba(0,0,0,.25);
+  font-size:26px;
   touch-action:none;
 }
 
 @media(max-width:800px){
-  #touchControls,
-  #actionControls{
-    display:block;
-  }
-
-  #hud{
-    max-width:75%;
-  }
-
-  .hudBox{
-    padding:6px 9px;
-    font-size:13px;
-  }
-}
-
-@media(pointer:coarse){
-  #touchControls,
-  #actionControls{
+  #mobileControls,#actions{
     display:block;
   }
 }
@@ -266,33 +207,20 @@ button:active{
 
 <canvas id="game"></canvas>
 
-<!-- HUD -->
 <div id="hud" class="hidden">
-  <div class="hudBox">🐔 ❤️ <span id="lives">3</span></div>
-  <div class="hudBox">🥚 <span id="eggs">0</span></div>
-  <div class="hudBox">🏆 <span id="score">0</span></div>
-  <div class="hudBox">🌾 Fase <span id="level">1</span>/6</div>
+  <div class="hud">🐔 ❤️ <span id="lifeText">3</span></div>
+  <div class="hud">🥚 <span id="eggText">0</span></div>
+  <div class="hud">🏆 <span id="scoreText">0</span></div>
+  <div class="hud">🌾 <span id="levelText">1</span>/6</div>
 </div>
 
-<button id="pauseBtn" class="hidden">⏸️</button>
+<button id="pause" class="hidden" onclick="togglePause()">⏸️</button>
 
-<div id="message"></div>
-
-<!-- CONTROLES -->
-<div id="touchControls">
-  <div class="touch up" data-key="up">▲</div>
-  <div class="touch left" data-key="left">◀</div>
-  <div class="touch down" data-key="down">▼</div>
-  <div class="touch right" data-key="right">▶</div>
-</div>
-
-<div id="actionControls">
-  <div class="action" id="dashBtn">💨</div>
-  <div class="action" id="noiseBtn">🐔</div>
-</div>
+<div id="msg"></div>
 
 <!-- MENU -->
 <div id="menu" class="screen">
+
   <div class="menu">
 
     <div class="logo">🐔💨</div>
@@ -300,355 +228,140 @@ button:active{
     <h1>FUGA DA GALINHA</h1>
 
     <div class="subtitle">
-      A maior fuga da fazenda começou.
+      A galinha precisa escapar da fazenda!
     </div>
 
-    <button id="startBtn">▶️ JOGAR</button>
+    <!-- IMPORTANTE: botão direto -->
+    <button onclick="startGame()">
+      ▶️ JOGAR
+    </button>
 
-    <button id="howBtn">❓ COMO JOGAR</button>
+    <button onclick="showInstructions()">
+      ❓ COMO JOGAR
+    </button>
 
     <div id="instructions" class="info hidden">
       <b>PC:</b> WASD ou setas para andar.<br>
-      <b>💨 Espaço:</b> impulso.<br>
-      <b>🐔 E:</b> fazer barulho e distrair inimigos.<br>
-      Pegue ovos 🥚, evite os inimigos e encontre a saída 🚪.<br><br>
-      <b>Celular:</b> use os controles na tela.
+      <b>ESPAÇO:</b> impulso 💨<br>
+      <b>E:</b> fazer COCÓÓÓÓÓ 🐔<br><br>
+      Pegue ovos 🥚, esconda-se nas moitas 🌿,
+      fuja dos inimigos e chegue até a 🚪 saída.
     </div>
 
     <div class="info">
-      🏆 Recorde:
-      <span id="bestScore">0</span>
+      🏆 Recorde: <span id="best">0</span>
     </div>
 
   </div>
+
 </div>
 
 <!-- FINAL -->
-<div id="endScreen" class="screen hidden">
+<div id="end" class="screen hidden">
+
   <div class="menu">
 
-    <div class="logo" id="endEmoji">🎉</div>
+    <div class="logo" id="endIcon">🐔</div>
 
-    <h1 id="endTitle">VOCÊ ESCAPOU!</h1>
+    <h1 id="endTitle">FIM</h1>
 
-    <p id="endText" class="subtitle"></p>
+    <div class="subtitle" id="endText"></div>
 
-    <button id="restartBtn">
+    <button onclick="startGame()">
       🔄 JOGAR NOVAMENTE
     </button>
 
-    <button id="menuBtn">
+    <button onclick="goMenu()">
       🏠 MENU
     </button>
 
   </div>
+
+</div>
+
+<!-- CONTROLES CELULAR -->
+
+<div id="mobileControls">
+
+  <div
+    class="dpad up"
+    data-key="up">
+    ▲
+  </div>
+
+  <div
+    class="dpad left"
+    data-key="left">
+    ◀
+  </div>
+
+  <div
+    class="dpad down"
+    data-key="down">
+    ▼
+  </div>
+
+  <div
+    class="dpad right"
+    data-key="right">
+    ▶
+  </div>
+
+</div>
+
+<div id="actions">
+
+  <div
+    class="action"
+    id="dashButton">
+    💨
+  </div>
+
+  <div
+    class="action"
+    id="noiseButton">
+    🐔
+  </div>
+
 </div>
 
 <script>
-"use strict";
 
-/* =========================================================
-   CANVAS
-========================================================= */
+/* =====================================================
+   VARIÁVEIS
+===================================================== */
 
-const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
+var canvas = document.getElementById("game");
+var ctx = canvas.getContext("2d");
 
-let W = window.innerWidth;
-let H = window.innerHeight;
+var W = 0;
+var H = 0;
 
-function resize(){
-  W = canvas.width = window.innerWidth;
-  H = canvas.height = window.innerHeight;
-}
+var playing = false;
+var paused = false;
 
-window.addEventListener("resize", resize);
-resize();
+var level = 1;
+var lives = 3;
+var eggs = 0;
+var score = 0;
 
-/* =========================================================
-   ÁUDIO
-========================================================= */
+var particles = [];
 
-let audio = null;
-
-function initAudio(){
-
-  try{
-
-    if(!audio){
-
-      const AudioCtx =
-        window.AudioContext ||
-        window.webkitAudioContext;
-
-      if(AudioCtx){
-        audio = new AudioCtx();
-      }
-    }
-
-    if(audio && audio.state === "suspended"){
-      audio.resume().catch(()=>{});
-    }
-
-  }catch(error){
-
-    console.log("Áudio indisponível:", error);
-    audio = null;
-
-  }
-}
-
-function sound(type){
-
-  if(!audio) return;
-
-  try{
-
-    const oscillator = audio.createOscillator();
-    const gain = audio.createGain();
-
-    oscillator.connect(gain);
-    gain.connect(audio.destination);
-
-    let frequency = 440;
-    let duration = .08;
-
-    if(type === "egg"){
-      frequency = 700;
-      duration = .12;
-    }
-
-    if(type === "hit"){
-      frequency = 120;
-      duration = .22;
-    }
-
-    if(type === "dash"){
-      frequency = 250;
-      duration = .08;
-    }
-
-    if(type === "win"){
-      frequency = 880;
-      duration = .3;
-    }
-
-    if(type === "noise"){
-      frequency = 180;
-      duration = .15;
-    }
-
-    oscillator.frequency.value = frequency;
-
-    oscillator.type =
-      type === "hit"
-      ? "sawtooth"
-      : "square";
-
-    gain.gain.setValueAtTime(
-      .0001,
-      audio.currentTime
-    );
-
-    gain.gain.exponentialRampToValueAtTime(
-      .13,
-      audio.currentTime + .01
-    );
-
-    gain.gain.exponentialRampToValueAtTime(
-      .0001,
-      audio.currentTime + duration
-    );
-
-    oscillator.start();
-
-    oscillator.stop(
-      audio.currentTime + duration
-    );
-
-  }catch(error){
-
-    console.log("Som indisponível:", error);
-
-  }
-}
-
-/* =========================================================
-   ESTADO DO JOGO
-========================================================= */
-
-let playing = false;
-let paused = false;
-
-let level = 1;
-let lives = 3;
-let eggs = 0;
-let score = 0;
-
-let camera = {
+var camera = {
   x:0,
   y:0
 };
 
-let shake = 0;
-
-let best =
-  Number(localStorage.getItem("chickenBest") || 0);
-
-document.getElementById("bestScore").textContent = best;
-
-/* =========================================================
-   CONTROLES
-========================================================= */
-
-const keys = {
+var keys = {
   up:false,
   down:false,
   left:false,
   right:false
 };
 
-window.addEventListener("keydown", function(e){
-
-  initAudio();
-
-  if(
-    e.key === "ArrowUp" ||
-    e.key.toLowerCase() === "w"
-  ){
-    keys.up = true;
-  }
-
-  if(
-    e.key === "ArrowDown" ||
-    e.key.toLowerCase() === "s"
-  ){
-    keys.down = true;
-  }
-
-  if(
-    e.key === "ArrowLeft" ||
-    e.key.toLowerCase() === "a"
-  ){
-    keys.left = true;
-  }
-
-  if(
-    e.key === "ArrowRight" ||
-    e.key.toLowerCase() === "d"
-  ){
-    keys.right = true;
-  }
-
-  if(e.code === "Space"){
-    e.preventDefault();
-    dash();
-  }
-
-  if(e.key.toLowerCase() === "e"){
-    noise();
-  }
-
-  if(e.key === "Escape"){
-    togglePause();
-  }
-
-});
-
-window.addEventListener("keyup", function(e){
-
-  if(
-    e.key === "ArrowUp" ||
-    e.key.toLowerCase() === "w"
-  ){
-    keys.up = false;
-  }
-
-  if(
-    e.key === "ArrowDown" ||
-    e.key.toLowerCase() === "s"
-  ){
-    keys.down = false;
-  }
-
-  if(
-    e.key === "ArrowLeft" ||
-    e.key.toLowerCase() === "a"
-  ){
-    keys.left = false;
-  }
-
-  if(
-    e.key === "ArrowRight" ||
-    e.key.toLowerCase() === "d"
-  ){
-    keys.right = false;
-  }
-
-});
-
-/* =========================================================
-   CONTROLES TOUCH
-========================================================= */
-
-document.querySelectorAll(".touch").forEach(button=>{
-
-  const key = button.dataset.key;
-
-  function press(event){
-
-    event.preventDefault();
-
-    initAudio();
-
-    keys[key] = true;
-  }
-
-  function release(event){
-
-    event.preventDefault();
-
-    keys[key] = false;
-  }
-
-  button.addEventListener("pointerdown", press);
-  button.addEventListener("pointerup", release);
-  button.addEventListener("pointercancel", release);
-  button.addEventListener("pointerleave", release);
-
-});
-
-document.getElementById("dashBtn")
-.addEventListener("pointerdown",function(event){
-
-  event.preventDefault();
-
-  initAudio();
-
-  dash();
-
-});
-
-document.getElementById("noiseBtn")
-.addEventListener("pointerdown",function(event){
-
-  event.preventDefault();
-
-  initAudio();
-
-  noise();
-
-});
-
-/* =========================================================
-   MUNDO
-========================================================= */
-
-const TILE = 64;
-
-let world = {
-  width:1400,
-  height:850,
+var world = {
+  width:1600,
+  height:950,
   obstacles:[],
   bushes:[],
   eggs:[],
@@ -656,350 +369,321 @@ let world = {
   exit:null
 };
 
-const chicken = {
-
+var chicken = {
   x:120,
-  y:120,
-
-  r:22,
-
-  speed:3.2,
-
-  vx:0,
-  vy:0,
-
+  y:200,
+  r:20,
+  speed:4,
   dash:0,
-
   invincible:0,
-
   hidden:false
-
 };
 
-/* =========================================================
-   COLISÃO
-========================================================= */
+var bestScore =
+  Number(localStorage.getItem("fugaGalinhaBest") || 0);
 
-function rect(x,y,w,h){
-  return {
+document.getElementById("best").textContent=bestScore;
+
+/* =====================================================
+   TAMANHO
+===================================================== */
+
+function resize(){
+
+  W=window.innerWidth;
+  H=window.innerHeight;
+
+  canvas.width=W;
+  canvas.height=H;
+}
+
+window.addEventListener("resize",resize);
+
+resize();
+
+/* =====================================================
+   INICIAR JOGO
+===================================================== */
+
+function startGame(){
+
+  console.log("JOGO INICIADO");
+
+  document.getElementById("menu")
+    .classList.add("hidden");
+
+  document.getElementById("end")
+    .classList.add("hidden");
+
+  document.getElementById("hud")
+    .classList.remove("hidden");
+
+  document.getElementById("pause")
+    .classList.remove("hidden");
+
+  playing=true;
+  paused=false;
+
+  level=1;
+  lives=3;
+  eggs=0;
+  score=0;
+
+  particles=[];
+
+  camera.x=0;
+  camera.y=0;
+
+  createLevel();
+
+  updateHUD();
+
+  message("🐔 CORRA!");
+
+}
+
+/* =====================================================
+   MENU
+===================================================== */
+
+function goMenu(){
+
+  playing=false;
+
+  document.getElementById("end")
+    .classList.add("hidden");
+
+  document.getElementById("hud")
+    .classList.add("hidden");
+
+  document.getElementById("pause")
+    .classList.add("hidden");
+
+  document.getElementById("menu")
+    .classList.remove("hidden");
+
+}
+
+/* =====================================================
+   INSTRUÇÕES
+===================================================== */
+
+function showInstructions(){
+
+  document
+    .getElementById("instructions")
+    .classList.toggle("hidden");
+
+}
+
+/* =====================================================
+   PAUSA
+===================================================== */
+
+function togglePause(){
+
+  if(!playing)return;
+
+  paused=!paused;
+
+  document.getElementById("pause")
+    .textContent=paused?"▶️":"⏸️";
+
+  if(paused){
+    message("⏸️ PAUSADO");
+  }
+
+}
+
+/* =====================================================
+   CRIAR FASE
+===================================================== */
+
+function createLevel(){
+
+  world.width=1600+level*50;
+  world.height=950+level*30;
+
+  world.obstacles=[];
+  world.bushes=[];
+  world.eggs=[];
+  world.enemies=[];
+
+  chicken.x=120;
+  chicken.y=200;
+  chicken.dash=0;
+  chicken.invincible=0;
+
+  /* bordas */
+
+  world.obstacles.push(
+    {x:-100,y:-100,w:world.width+200,h:80},
+    {x:-100,y:world.height-20,w:world.width+200,h:100},
+    {x:-100,y:-100,w:80,h:world.height+200},
+    {x:world.width-20,y:-100,w:100,h:world.height+200}
+  );
+
+  /* construções */
+
+  addObstacle(40,40,230,150);
+  addObstacle(370,100,180,120);
+  addObstacle(680,280,230,120);
+  addObstacle(1030,100,220,150);
+  addObstacle(280,500,220,120);
+  addObstacle(700,650,220,130);
+  addObstacle(1110,500,230,120);
+
+  if(level>=2){
+    addObstacle(550,430,100,180);
+    addObstacle(930,350,90,150);
+  }
+
+  if(level>=4){
+    addObstacle(100,350,130,100);
+    addObstacle(1280,700,180,90);
+  }
+
+  if(level>=6){
+    addObstacle(600,160,90,100);
+    addObstacle(950,550,100,100);
+  }
+
+  /* moitas */
+
+  for(
+    var i=0;
+    i<18+level*2;
+    i++
+  ){
+
+    var bush=findFreePoint();
+
+    world.bushes.push({
+      x:bush.x,
+      y:bush.y,
+      r:30+Math.random()*12
+    });
+
+  }
+
+  /* ovos */
+
+  for(
+    var j=0;
+    j<7+level;
+    j++
+  ){
+
+    var egg=findFreePoint();
+
+    world.eggs.push({
+      x:egg.x,
+      y:egg.y,
+      collected:false,
+      pulse:Math.random()*10
+    });
+
+  }
+
+  /* inimigos */
+
+  for(
+    var k=0;
+    k<2+level;
+    k++
+  ){
+
+    var enemy=findFreePoint();
+
+    world.enemies.push({
+      x:enemy.x,
+      y:enemy.y,
+      r:k%3===0&&level>=3?22:24,
+      type:k%3===0&&level>=3?"dog":"farmer",
+      speed:k%3===0&&level>=3?1.7:1.2,
+      targetX:enemy.x,
+      targetY:enemy.y,
+      state:"patrol",
+      alert:0
+    });
+
+  }
+
+  /* saída */
+
+  world.exit={
+    x:world.width-120,
+    y:world.height-150,
+    w:60,
+    h:80
+  };
+
+  message(
+    "🌾 FASE "+level+
+    " — "+levelName()
+  );
+
+}
+
+/* =====================================================
+   OBSTÁCULO
+===================================================== */
+
+function addObstacle(x,y,w,h){
+
+  world.obstacles.push({
     x:x,
     y:y,
     w:w,
     h:h
-  };
-}
-
-function circleRectCollision(cx,cy,r,o){
-
-  const nx =
-    Math.max(
-      o.x,
-      Math.min(cx,o.x+o.w)
-    );
-
-  const ny =
-    Math.max(
-      o.y,
-      Math.min(cy,o.y+o.h)
-    );
-
-  const dx = cx-nx;
-  const dy = cy-ny;
-
-  return dx*dx+dy*dy < r*r;
-}
-
-/* =========================================================
-   CRIAR FASE
-========================================================= */
-
-function buildLevel(n){
-
-  world.width = 1400 + n * 70;
-  world.height = 850 + n * 35;
-
-  world.obstacles = [];
-  world.bushes = [];
-  world.eggs = [];
-  world.enemies = [];
-
-  chicken.x = 110;
-  chicken.y = 110;
-
-  chicken.vx = 0;
-  chicken.vy = 0;
-
-  chicken.dash = 0;
-  chicken.invincible = 0;
-
-  /* Bordas */
-
-  world.obstacles.push(
-
-    rect(
-      -50,
-      -50,
-      world.width+100,
-      50
-    ),
-
-    rect(
-      -50,
-      world.height,
-      world.width+100,
-      50
-    ),
-
-    rect(
-      -50,
-      -50,
-      50,
-      world.height+100
-    ),
-
-    rect(
-      world.width,
-      -50,
-      50,
-      world.height+100
-    )
-
-  );
-
-  /* Galinheiro */
-
-  world.obstacles.push(
-    rect(20,20,230,130)
-  );
-
-  /* Construções */
-
-  const structures = [
-
-    [360,90,170,110],
-    [650,250,200,100],
-    [980,100,190,130],
-    [270,480,220,100],
-    [700,560,190,120],
-    [1050,450,210,110]
-
-  ];
-
-  structures.forEach(data=>{
-    world.obstacles.push(
-      rect(...data)
-    );
   });
 
-  if(n >= 2){
-
-    world.obstacles.push(
-      rect(520,400,100,180),
-      rect(900,300,90,150)
-    );
-
-  }
-
-  if(n >= 4){
-
-    world.obstacles.push(
-      rect(120,300,130,90),
-      rect(1120,650,170,80)
-    );
-
-  }
-
-  if(n >= 6){
-
-    world.obstacles.push(
-      rect(530,150,80,100),
-      rect(850,420,100,90)
-    );
-
-  }
-
-  /* Moitas */
-
-  for(
-    let i=0;
-    i<16+n*2;
-    i++
-  ){
-
-    const p = randomFreePoint(80);
-
-    world.bushes.push({
-
-      x:p.x,
-      y:p.y,
-
-      r:
-        30 +
-        Math.random()*14
-
-    });
-
-  }
-
-  /* Ovos */
-
-  for(
-    let i=0;
-    i<6+n;
-    i++
-  ){
-
-    const p = randomFreePoint(50);
-
-    world.eggs.push({
-
-      x:p.x,
-      y:p.y,
-
-      r:12,
-
-      collected:false,
-
-      pulse:
-        Math.random()*10
-
-    });
-
-  }
-
-  /* Inimigos */
-
-  const enemyCount = 2+n;
-
-  for(
-    let i=0;
-    i<enemyCount;
-    i++
-  ){
-
-    const p =
-      randomFreePoint(100);
-
-    const type =
-      n>=3 && i%3===0
-      ? "dog"
-      : "farmer";
-
-    world.enemies.push({
-
-      x:p.x,
-      y:p.y,
-
-      r:
-        type==="dog"
-        ? 22
-        : 24,
-
-      type:type,
-
-      speed:
-        type==="dog"
-        ? 1.6+n*.1
-        : 1.05+n*.08,
-
-      angle:
-        Math.random()*Math.PI*2,
-
-      state:"patrol",
-
-      alert:0,
-
-      targetX:p.x,
-      targetY:p.y
-
-    });
-
-  }
-
-  /* Saída */
-
-  world.exit = {
-
-    x:world.width-95,
-    y:world.height-100,
-
-    w:55,
-    h:70
-
-  };
-
-  showMessage(
-    "Fase "+n+" — "+levelName(n)
-  );
-
 }
 
-/* =========================================================
-   NOME DAS FASES
-========================================================= */
-
-function levelName(n){
-
-  const names = [
-
-    "",
-
-    "A GALINHEIRA",
-
-    "CAMPO DE MILHO",
-
-    "O CACHORRO",
-
-    "TRATOR DESCONTROLADO",
-
-    "FUGA NOTURNA",
-
-    "A ESTRADA"
-
-  ];
-
-  return names[n] || "";
-}
-
-/* =========================================================
+/* =====================================================
    PONTO LIVRE
-========================================================= */
+===================================================== */
 
-function randomFreePoint(min){
+function findFreePoint(){
 
-  for(let i=0;i<500;i++){
+  for(
+    var i=0;
+    i<500;
+    i++
+  ){
 
-    const p = {
-
-      x:
-        min +
-        Math.random() *
-        (world.width-min*2),
-
-      y:
-        min +
-        Math.random() *
-        (world.height-min*2)
-
+    var p={
+      x:100+Math.random()*(world.width-200),
+      y:100+Math.random()*(world.height-200)
     };
 
-    const blocked =
-      world.obstacles.some(o=>
-        circleRectCollision(
-          p.x,
-          p.y,
-          25,
-          o
-        )
-      );
+    var blocked=false;
 
-    const tooClose =
+    for(
+      var j=0;
+      j<world.obstacles.length;
+      j++
+    ){
+
+      if(circleRect(
+        p.x,
+        p.y,
+        30,
+        world.obstacles[j]
+      )){
+        blocked=true;
+        break;
+      }
+
+    }
+
+    if(
+      !blocked &&
       Math.hypot(
         p.x-chicken.x,
         p.y-chicken.y
-      ) < 180;
-
-    if(!blocked && !tooClose){
+      )>220
+    ){
       return p;
     }
 
@@ -1007,52 +691,743 @@ function randomFreePoint(min){
 
   return {
     x:500,
-    y:300
+    y:400
   };
+
 }
 
-/* =========================================================
+/* =====================================================
+   NOME FASE
+===================================================== */
+
+function levelName(){
+
+  var names=[
+    "A GALINHEIRA",
+    "CAMPO DE MILHO",
+    "O CACHORRO",
+    "TRATOR DESCONTROLADO",
+    "FUGA NOTURNA",
+    "A ESTRADA"
+  ];
+
+  return names[level-1]||"";
+
+}
+
+/* =====================================================
+   COLISÃO
+===================================================== */
+
+function circleRect(cx,cy,r,o){
+
+  var nx=Math.max(
+    o.x,
+    Math.min(cx,o.x+o.w)
+  );
+
+  var ny=Math.max(
+    o.y,
+    Math.min(cy,o.y+o.h)
+  );
+
+  var dx=cx-nx;
+  var dy=cy-ny;
+
+  return dx*dx+dy*dy<r*r;
+
+}
+
+/* =====================================================
+   MOVIMENTO
+===================================================== */
+
+function moveChicken(){
+
+  var dx=0;
+  var dy=0;
+
+  if(keys.left)dx--;
+  if(keys.right)dx++;
+
+  if(keys.up)dy--;
+  if(keys.down)dy++;
+
+  if(dx||dy){
+
+    var length=Math.hypot(dx,dy);
+
+    dx/=length;
+    dy/=length;
+
+    var speed=
+      chicken.dash>0
+      ? 9
+      : chicken.speed;
+
+    moveObject(
+      chicken,
+      dx*speed,
+      dy*speed
+    );
+
+    particle(
+      chicken.x-8,
+      chicken.y+15,
+      "#e8ead1"
+    );
+
+  }
+
+  if(chicken.dash>0){
+    chicken.dash--;
+  }
+
+  if(chicken.invincible>0){
+    chicken.invincible--;
+  }
+
+  chicken.hidden=false;
+
+  for(
+    var i=0;
+    i<world.bushes.length;
+    i++
+  ){
+
+    var b=world.bushes[i];
+
+    if(
+      Math.hypot(
+        chicken.x-b.x,
+        chicken.y-b.y
+      )<b.r
+    ){
+
+      chicken.hidden=true;
+      break;
+
+    }
+
+  }
+
+}
+
+/* =====================================================
+   MOVIMENTO COM COLISÃO
+===================================================== */
+
+function moveObject(obj,dx,dy){
+
+  obj.x+=dx;
+
+  for(
+    var i=0;
+    i<world.obstacles.length;
+    i++
+  ){
+
+    var o=world.obstacles[i];
+
+    if(
+      circleRect(
+        obj.x,
+        obj.y,
+        obj.r,
+        o
+      )
+    ){
+
+      if(dx>0)obj.x=o.x-obj.r;
+      if(dx<0)obj.x=o.x+o.w+obj.r;
+
+    }
+
+  }
+
+  obj.y+=dy;
+
+  for(
+    var j=0;
+    j<world.obstacles.length;
+    j++
+  ){
+
+    var q=world.obstacles[j];
+
+    if(
+      circleRect(
+        obj.x,
+        obj.y,
+        obj.r,
+        q
+      )
+    ){
+
+      if(dy>0)obj.y=q.y-obj.r;
+      if(dy<0)obj.y=q.y+q.h+obj.r;
+
+    }
+
+  }
+
+}
+
+/* =====================================================
+   IMPULSO
+===================================================== */
+
+function dash(){
+
+  if(!playing||paused)return;
+
+  chicken.dash=20;
+
+  particle(
+    chicken.x,
+    chicken.y,
+    "#fff36a",
+    "burst"
+  );
+
+}
+
+/* =====================================================
+   BARULHO
+===================================================== */
+
+var noiseTimer=0;
+
+function chickenNoise(){
+
+  if(!playing||paused||noiseTimer>0)return;
+
+  noiseTimer=100;
+
+  message("🐔 COCÓÓÓÓÓ!");
+
+  for(
+    var i=0;
+    i<world.enemies.length;
+    i++
+  ){
+
+    var e=world.enemies[i];
+
+    if(
+      Math.hypot(
+        e.x-chicken.x,
+        e.y-chicken.y
+      )<550
+    ){
+
+      e.state="chase";
+      e.targetX=chicken.x;
+      e.targetY=chicken.y;
+
+    }
+
+  }
+
+  particle(
+    chicken.x,
+    chicken.y,
+    "#fff36a",
+    "burst"
+  );
+
+}
+
+/* =====================================================
+   INIMIGOS
+===================================================== */
+
+function updateEnemies(){
+
+  if(noiseTimer>0)noiseTimer--;
+
+  for(
+    var i=0;
+    i<world.enemies.length;
+    i++
+  ){
+
+    var e=world.enemies[i];
+
+    var distance=Math.hypot(
+      e.x-chicken.x,
+      e.y-chicken.y
+    );
+
+    /* detectar */
+
+    if(
+      !chicken.hidden &&
+      distance<260
+    ){
+
+      e.state="chase";
+
+    }
+
+    if(e.state==="patrol"){
+
+      if(
+        Math.hypot(
+          e.x-e.targetX,
+          e.y-e.targetY
+        )<25
+      ){
+
+        e.targetX=
+          100+
+          Math.random()*
+          (world.width-200);
+
+        e.targetY=
+          100+
+          Math.random()*
+          (world.height-200);
+
+      }
+
+    }
+
+    if(e.state==="chase"){
+
+      e.targetX=chicken.x;
+      e.targetY=chicken.y;
+
+      if(
+        chicken.hidden ||
+        distance>500
+      ){
+
+        e.state="patrol";
+
+      }
+
+    }
+
+    var dx=e.targetX-e.x;
+    var dy=e.targetY-e.y;
+
+    var len=Math.hypot(dx,dy)||1;
+
+    dx/=len;
+    dy/=len;
+
+    moveEnemy(
+      e,
+      dx*e.speed,
+      dy*e.speed
+    );
+
+    if(
+      distance<e.r+chicken.r &&
+      !chicken.hidden &&
+      chicken.invincible<=0
+    ){
+
+      damage();
+
+    }
+
+  }
+
+}
+
+/* =====================================================
+   MOVIMENTO INIMIGO
+===================================================== */
+
+function moveEnemy(e,dx,dy){
+
+  e.x+=dx;
+
+  for(
+    var i=0;
+    i<world.obstacles.length;
+    i++
+  ){
+
+    if(
+      circleRect(
+        e.x,
+        e.y,
+        e.r,
+        world.obstacles[i]
+      )
+    ){
+
+      e.x-=dx;
+
+      e.targetX=
+        100+
+        Math.random()*
+        (world.width-200);
+
+      e.targetY=
+        100+
+        Math.random()*
+        (world.height-200);
+
+      break;
+
+    }
+
+  }
+
+  e.y+=dy;
+
+  for(
+    var j=0;
+    j<world.obstacles.length;
+    j++
+  ){
+
+    if(
+      circleRect(
+        e.x,
+        e.y,
+        e.r,
+        world.obstacles[j]
+      )
+    ){
+
+      e.y-=dy;
+
+      e.targetX=
+        100+
+        Math.random()*
+        (world.width-200);
+
+      e.targetY=
+        100+
+        Math.random()*
+        (world.height-200);
+
+      break;
+
+    }
+
+  }
+
+}
+
+/* =====================================================
+   DANO
+===================================================== */
+
+function damage(){
+
+  lives--;
+
+  chicken.invincible=100;
+
+  chicken.x=120;
+  chicken.y=200;
+
+  updateHUD();
+
+  particle(
+    chicken.x,
+    chicken.y,
+    "#ff5555",
+    "burst"
+  );
+
+  if(lives<=0){
+
+    gameOver();
+
+  }else{
+
+    message("😵 VOCÊ FOI PEGO!");
+
+  }
+
+}
+
+/* =====================================================
+   ITENS
+===================================================== */
+
+function updateItems(){
+
+  for(
+    var i=0;
+    i<world.eggs.length;
+    i++
+  ){
+
+    var egg=world.eggs[i];
+
+    egg.pulse+=.08;
+
+    if(
+      !egg.collected &&
+      Math.hypot(
+        egg.x-chicken.x,
+        egg.y-chicken.y
+      )<35
+    ){
+
+      egg.collected=true;
+
+      eggs++;
+      score+=100;
+
+      particle(
+        egg.x,
+        egg.y,
+        "#fff2a0",
+        "burst"
+      );
+
+      message("🥚 +100!");
+
+      updateHUD();
+
+    }
+
+  }
+
+  /* saída */
+
+  var ex=world.exit;
+
+  if(
+    chicken.x>ex.x-20 &&
+    chicken.x<ex.x+ex.w+20 &&
+    chicken.y>ex.y-20 &&
+    chicken.y<ex.y+ex.h+20
+  ){
+
+    var collected=0;
+
+    for(
+      var j=0;
+      j<world.eggs.length;
+      j++
+    ){
+
+      if(world.eggs[j].collected){
+        collected++;
+      }
+
+    }
+
+    if(
+      collected>=
+      Math.ceil(world.eggs.length*.45)
+    ){
+
+      nextLevel();
+
+    }else{
+
+      message("🥚 Pegue mais ovos!");
+
+    }
+
+  }
+
+}
+
+/* =====================================================
+   PRÓXIMA FASE
+===================================================== */
+
+function nextLevel(){
+
+  score+=500*level;
+
+  if(level<6){
+
+    level++;
+
+    createLevel();
+
+    updateHUD();
+
+  }else{
+
+    victory();
+
+  }
+
+}
+
+/* =====================================================
+   VITÓRIA
+===================================================== */
+
+function victory(){
+
+  playing=false;
+
+  saveBest();
+
+  document
+    .getElementById("hud")
+    .classList.add("hidden");
+
+  document
+    .getElementById("pause")
+    .classList.add("hidden");
+
+  document
+    .getElementById("endIcon")
+    .textContent="🐔🏆";
+
+  document
+    .getElementById("endTitle")
+    .textContent="VOCÊ ESCAPOU!";
+
+  document
+    .getElementById("endText")
+    .innerHTML=
+      "A galinha chegou à estrada!<br><br>"+
+      "🏆 Pontuação: <b>"+score+"</b><br>"+
+      "🥚 Ovos: <b>"+eggs+"</b><br><br>"+
+      "A fazenda nunca mais será a mesma! 😂";
+
+  document
+    .getElementById("end")
+    .classList.remove("hidden");
+
+}
+
+/* =====================================================
+   GAME OVER
+===================================================== */
+
+function gameOver(){
+
+  playing=false;
+
+  saveBest();
+
+  document
+    .getElementById("hud")
+    .classList.add("hidden");
+
+  document
+    .getElementById("pause")
+    .classList.add("hidden");
+
+  document
+    .getElementById("endIcon")
+    .textContent="😵🐔";
+
+  document
+    .getElementById("endTitle")
+    .textContent="A GALINHA FOI PEGA!";
+
+  document
+    .getElementById("endText")
+    .innerHTML=
+      "A fuga terminou!<br><br>"+
+      "🏆 Pontuação: <b>"+score+"</b><br>"+
+      "🌾 Você chegou até a fase <b>"+level+"</b>.";
+
+  document
+    .getElementById("end")
+    .classList.remove("hidden");
+
+}
+
+/* =====================================================
+   RECORDE
+===================================================== */
+
+function saveBest(){
+
+  if(score>bestScore){
+
+    bestScore=score;
+
+    localStorage.setItem(
+      "fugaGalinhaBest",
+      bestScore
+    );
+
+  }
+
+}
+
+/* =====================================================
+   HUD
+===================================================== */
+
+function updateHUD(){
+
+  document.getElementById("lifeText")
+    .textContent=lives;
+
+  document.getElementById("eggText")
+    .textContent=eggs;
+
+  document.getElementById("scoreText")
+    .textContent=score;
+
+  document.getElementById("levelText")
+    .textContent=level;
+
+}
+
+/* =====================================================
+   MENSAGEM
+===================================================== */
+
+var messageTimeout;
+
+function message(text){
+
+  var el=document.getElementById("msg");
+
+  el.textContent=text;
+  el.style.opacity="1";
+
+  clearTimeout(messageTimeout);
+
+  messageTimeout=setTimeout(function(){
+
+    el.style.opacity="0";
+
+  },1800);
+
+}
+
+/* =====================================================
    PARTÍCULAS
-========================================================= */
+===================================================== */
 
-let particles = [];
+function particle(x,y,color,type){
 
-function particle(
-  x,
-  y,
-  color,
-  type="normal"
-){
-
-  const amount =
+  var amount=
     type==="burst"
     ? 18
-    : 4;
+    : 3;
 
-  for(let i=0;i<amount;i++){
+  for(
+    var i=0;
+    i<amount;
+    i++
+  ){
 
     particles.push({
 
       x:x,
       y:y,
 
-      vx:
-        (Math.random()-.5) *
-        (type==="burst"?8:3),
+      vx:(Math.random()-.5)*7,
+      vy:(Math.random()-.5)*7,
 
-      vy:
-        (Math.random()-.5) *
-        (type==="burst"?8:3),
+      life:40+Math.random()*30,
 
-      life:
-        35+
-        Math.random()*30,
-
-      max:65,
-
-      size:
-        2+
-        Math.random()*4,
+      size:2+Math.random()*4,
 
       color:color
 
@@ -1065,12 +1440,12 @@ function particle(
 function updateParticles(){
 
   for(
-    let i=particles.length-1;
+    var i=particles.length-1;
     i>=0;
     i--
   ){
 
-    const p=particles[i];
+    var p=particles[i];
 
     p.x+=p.vx;
     p.y+=p.vy;
@@ -1087,800 +1462,43 @@ function updateParticles(){
 
 }
 
-/* =========================================================
-   GALINHA
-========================================================= */
-
-function moveChicken(){
-
-  if(paused) return;
-
-  let dx=0;
-  let dy=0;
-
-  if(keys.left) dx--;
-  if(keys.right) dx++;
-
-  if(keys.up) dy--;
-  if(keys.down) dy++;
-
-  if(dx || dy){
-
-    const length =
-      Math.hypot(dx,dy);
-
-    dx/=length;
-    dy/=length;
-
-    let speed=chicken.speed;
-
-    if(chicken.dash>0){
-      speed=8;
-    }
-
-    chicken.vx=dx*speed;
-    chicken.vy=dy*speed;
-
-  }else{
-
-    chicken.vx*=.75;
-    chicken.vy*=.75;
-
-  }
-
-  moveWithCollision(
-    chicken,
-    chicken.vx,
-    chicken.vy
-  );
-
-  if(chicken.dash>0){
-    chicken.dash--;
-  }
-
-  if(chicken.invincible>0){
-    chicken.invincible--;
-  }
-
-  if(
-    Math.abs(chicken.vx)+
-    Math.abs(chicken.vy)>1
-  ){
-
-    particle(
-      chicken.x-10,
-      chicken.y+12,
-      "#d8e8c4"
-    );
-
-  }
-
-  chicken.hidden =
-    world.bushes.some(b=>
-      Math.hypot(
-        chicken.x-b.x,
-        chicken.y-b.y
-      ) < b.r+5
-    );
-
-}
-
-function moveWithCollision(
-  object,
-  dx,
-  dy
-){
-
-  object.x+=dx;
-
-  for(const o of world.obstacles){
-
-    if(
-      circleRectCollision(
-        object.x,
-        object.y,
-        object.r,
-        o
-      )
-    ){
-
-      if(dx>0){
-        object.x =
-          o.x-object.r;
-      }
-
-      if(dx<0){
-        object.x =
-          o.x+o.w+object.r;
-      }
-
-    }
-
-  }
-
-  object.y+=dy;
-
-  for(const o of world.obstacles){
-
-    if(
-      circleRectCollision(
-        object.x,
-        object.y,
-        object.r,
-        o
-      )
-    ){
-
-      if(dy>0){
-        object.y =
-          o.y-object.r;
-      }
-
-      if(dy<0){
-        object.y =
-          o.y+o.h+object.r;
-      }
-
-    }
-
-  }
-
-}
-
-/* =========================================================
-   IMPULSO
-========================================================= */
-
-function dash(){
-
-  if(
-    !playing ||
-    paused ||
-    chicken.dash>0
-  ){
-    return;
-  }
-
-  let dx=0;
-  let dy=0;
-
-  if(keys.left) dx--;
-  if(keys.right) dx++;
-
-  if(keys.up) dy--;
-  if(keys.down) dy++;
-
-  if(!dx && !dy){
-    dx=1;
-  }
-
-  const length =
-    Math.hypot(dx,dy);
-
-  chicken.vx =
-    dx/length*8;
-
-  chicken.vy =
-    dy/length*8;
-
-  chicken.dash=18;
-
-  particle(
-    chicken.x,
-    chicken.y,
-    "#f5e85e",
-    "burst"
-  );
-
-  sound("dash");
-
-}
-
-/* =========================================================
-   BARULHO
-========================================================= */
-
-let noiseCooldown=0;
-
-function noise(){
-
-  if(
-    !playing ||
-    paused ||
-    noiseCooldown>0
-  ){
-    return;
-  }
-
-  noiseCooldown=100;
-
-  sound("noise");
-
-  showMessage(
-    "🐔 COCÓÓÓÓÓ!"
-  );
-
-  world.enemies.forEach(enemy=>{
-
-    const distance =
-      Math.hypot(
-        enemy.x-chicken.x,
-        enemy.y-chicken.y
-      );
-
-    if(distance<500){
-
-      enemy.state="alert";
-
-      enemy.targetX=chicken.x;
-      enemy.targetY=chicken.y;
-
-      enemy.alert=180;
-
-    }
-
-  });
-
-  particle(
-    chicken.x,
-    chicken.y,
-    "#fff16a",
-    "burst"
-  );
-
-}
-
-/* =========================================================
-   INIMIGOS
-========================================================= */
-
-function updateEnemies(){
-
-  if(noiseCooldown>0){
-    noiseCooldown--;
-  }
-
-  for(const enemy of world.enemies){
-
-    const distance =
-      Math.hypot(
-        enemy.x-chicken.x,
-        enemy.y-chicken.y
-      );
-
-    /* Detectar galinha */
-
-    if(
-      !chicken.hidden &&
-      distance <
-      (
-        enemy.type==="dog"
-        ? 310
-        : 240
-      )
-    ){
-
-      enemy.state="chase";
-
-      enemy.targetX=
-        chicken.x;
-
-      enemy.targetY=
-        chicken.y;
-
-    }
-
-    /* Alerta */
-
-    if(enemy.state==="alert"){
-
-      enemy.alert--;
-
-      if(enemy.alert<=0){
-        enemy.state="patrol";
-      }
-
-    }
-
-    /* Patrulha */
-
-    if(enemy.state==="patrol"){
-
-      if(
-        Math.hypot(
-          enemy.x-enemy.targetX,
-          enemy.y-enemy.targetY
-        )<20
-      ){
-
-        enemy.targetX =
-          80+
-          Math.random()*
-          (world.width-160);
-
-        enemy.targetY =
-          80+
-          Math.random()*
-          (world.height-160);
-
-      }
-
-    }
-
-    /* Perseguição */
-
-    if(enemy.state==="chase"){
-
-      enemy.targetX=
-        chicken.x;
-
-      enemy.targetY=
-        chicken.y;
-
-      if(
-        chicken.hidden ||
-        distance>430
-      ){
-
-        enemy.state="patrol";
-
-      }
-
-    }
-
-    let dx =
-      enemy.targetX-enemy.x;
-
-    let dy =
-      enemy.targetY-enemy.y;
-
-    const length =
-      Math.hypot(dx,dy)||1;
-
-    dx/=length;
-    dy/=length;
-
-    moveEnemy(
-      enemy,
-      dx*enemy.speed,
-      dy*enemy.speed
-    );
-
-    /* Acertou */
-
-    if(
-      distance <
-      enemy.r+chicken.r &&
-      chicken.invincible<=0 &&
-      !chicken.hidden
-    ){
-
-      hitChicken();
-
-    }
-
-  }
-
-}
-
-function moveEnemy(
-  enemy,
-  dx,
-  dy
-){
-
-  enemy.x+=dx;
-
-  if(
-    world.obstacles.some(o=>
-      circleRectCollision(
-        enemy.x,
-        enemy.y,
-        enemy.r,
-        o
-      )
-    )
-  ){
-
-    enemy.x-=dx;
-
-    enemy.targetX =
-      80+
-      Math.random()*
-      (world.width-160);
-
-    enemy.targetY =
-      80+
-      Math.random()*
-      (world.height-160);
-
-  }
-
-  enemy.y+=dy;
-
-  if(
-    world.obstacles.some(o=>
-      circleRectCollision(
-        enemy.x,
-        enemy.y,
-        enemy.r,
-        o
-      )
-    )
-  ){
-
-    enemy.y-=dy;
-
-    enemy.targetX =
-      80+
-      Math.random()*
-      (world.width-160);
-
-    enemy.targetY =
-      80+
-      Math.random()*
-      (world.height-160);
-
-  }
-
-}
-
-/* =========================================================
-   DANO
-========================================================= */
-
-function hitChicken(){
-
-  lives--;
-
-  chicken.invincible=100;
-
-  chicken.x=120;
-  chicken.y=120;
-
-  shake=15;
-
-  particle(
-    chicken.x,
-    chicken.y,
-    "#ff5757",
-    "burst"
-  );
-
-  sound("hit");
-
-  updateHUD();
-
-  if(lives<=0){
-
-    gameOver();
-
-  }else{
-
-    showMessage(
-      "😵 Você foi pego! Cuidado!"
-    );
-
-  }
-
-}
-
-/* =========================================================
-   ITENS
-========================================================= */
-
-function updateItems(){
-
-  for(const egg of world.eggs){
-
-    egg.pulse+=.08;
-
-    if(
-      !egg.collected &&
-      Math.hypot(
-        egg.x-chicken.x,
-        egg.y-chicken.y
-      )<35
-    ){
-
-      egg.collected=true;
-
-      eggs++;
-
-      score+=100;
-
-      particle(
-        egg.x,
-        egg.y,
-        "#fff1a1",
-        "burst"
-      );
-
-      sound("egg");
-
-      showMessage(
-        "+100 pontos! 🥚"
-      );
-
-      updateHUD();
-
-    }
-
-  }
-
-  /* Saída */
-
-  const exit=world.exit;
-
-  if(
-    chicken.x>exit.x-15 &&
-    chicken.x<
-      exit.x+exit.w+15 &&
-    chicken.y>exit.y-15 &&
-    chicken.y<
-      exit.y+exit.h+15
-  ){
-
-    const collected =
-      world.eggs.filter(
-        egg=>egg.collected
-      ).length;
-
-    if(
-      collected >=
-      Math.ceil(
-        world.eggs.length*.45
-      )
-    ){
-
-      completeLevel();
-
-    }else{
-
-      showMessage(
-        "🥚 Pegue mais ovos antes de escapar!"
-      );
-
-    }
-
-  }
-
-}
-
-/* =========================================================
-   FASE
-========================================================= */
-
-function completeLevel(){
-
-  score += 500*level;
-
-  sound("win");
-
-  particle(
-    chicken.x,
-    chicken.y,
-    "#a8ff75",
-    "burst"
-  );
-
-  if(level<6){
-
-    level++;
-
-    buildLevel(level);
-
-    updateHUD();
-
-  }else{
-
-    victory();
-
-  }
-
-}
-
-/* =========================================================
-   VITÓRIA
-========================================================= */
-
-function victory(){
-
-  playing=false;
-
-  if(score>best){
-
-    best=score;
-
-    localStorage.setItem(
-      "chickenBest",
-      best
-    );
-
-  }
-
-  document
-    .getElementById("hud")
-    .classList.add("hidden");
-
-  document
-    .getElementById("pauseBtn")
-    .classList.add("hidden");
-
-  document
-    .getElementById("endEmoji")
-    .textContent="🐔🏆";
-
-  document
-    .getElementById("endTitle")
-    .textContent="VOCÊ ESCAPOU!";
-
-  document
-    .getElementById("endText")
-    .innerHTML=
-      "A galinha finalmente chegou à estrada!<br><br>"+
-      "🏆 Pontuação: <b>"+score+"</b><br>"+
-      "🥚 Ovos coletados: <b>"+eggs+"</b><br><br>"+
-      "A fazenda nunca mais será a mesma. 😂";
-
-  document
-    .getElementById("endScreen")
-    .classList.remove("hidden");
-
-}
-
-/* =========================================================
-   GAME OVER
-========================================================= */
-
-function gameOver(){
-
-  playing=false;
-
-  if(score>best){
-
-    best=score;
-
-    localStorage.setItem(
-      "chickenBest",
-      best
-    );
-
-  }
-
-  document
-    .getElementById("hud")
-    .classList.add("hidden");
-
-  document
-    .getElementById("pauseBtn")
-    .classList.add("hidden");
-
-  document
-    .getElementById("endEmoji")
-    .textContent="💀🐔";
-
-  document
-    .getElementById("endTitle")
-    .textContent="A GALINHA FOI PEGA!";
-
-  document
-    .getElementById("endText")
-    .innerHTML=
-      "A fuga terminou...<br>"+
-      "Mas dá para tentar novamente!<br><br>"+
-      "🏆 Pontuação: <b>"+score+"</b>";
-
-  document
-    .getElementById("endScreen")
-    .classList.remove("hidden");
-
-}
-
-/* =========================================================
-   HUD
-========================================================= */
-
-function updateHUD(){
-
-  document.getElementById("lives")
-    .textContent=lives;
-
-  document.getElementById("eggs")
-    .textContent=eggs;
-
-  document.getElementById("score")
-    .textContent=score;
-
-  document.getElementById("level")
-    .textContent=level;
-
-}
-
-/* =========================================================
-   MENSAGEM
-========================================================= */
-
-function showMessage(text){
-
-  const element =
-    document.getElementById("message");
-
-  element.textContent=text;
-
-  element.style.opacity="1";
-
-  clearTimeout(showMessage.timer);
-
-  showMessage.timer =
-    setTimeout(()=>{
-      element.style.opacity="0";
-    },1800);
-
-}
-
-/* =========================================================
+/* =====================================================
    CÂMERA
-========================================================= */
+===================================================== */
 
 function updateCamera(){
 
-  const targetX =
-    chicken.x-W/2;
+  var targetX=chicken.x-W/2;
+  var targetY=chicken.y-H/2;
 
-  const targetY =
-    chicken.y-H/2;
+  camera.x+=(targetX-camera.x)*.08;
+  camera.y+=(targetY-camera.y)*.08;
 
-  camera.x +=
-    (targetX-camera.x)*.08;
+  camera.x=Math.max(
+    0,
+    Math.min(
+      camera.x,
+      Math.max(0,world.width-W)
+    )
+  );
 
-  camera.y +=
-    (targetY-camera.y)*.08;
-
-  camera.x =
-    Math.max(
-      0,
-      Math.min(
-        camera.x,
-        Math.max(0,world.width-W)
-      )
-    );
-
-  camera.y =
-    Math.max(
-      0,
-      Math.min(
-        camera.y,
-        Math.max(0,world.height-H)
-      )
-    );
-
-  if(shake>0){
-
-    camera.x +=
-      (Math.random()-.5)*shake;
-
-    camera.y +=
-      (Math.random()-.5)*shake;
-
-    shake--;
-
-  }
+  camera.y=Math.max(
+    0,
+    Math.min(
+      camera.y,
+      Math.max(0,world.height-H)
+    )
+  );
 
 }
 
-/* =========================================================
-   DESENHO
-========================================================= */
+/* =====================================================
+   DESENHAR
+===================================================== */
 
 function draw(){
 
-  ctx.clearRect(
-    0,
-    0,
-    W,
-    H
-  );
+  ctx.clearRect(0,0,W,H);
 
   ctx.save();
 
@@ -1889,12 +1507,12 @@ function draw(){
     -camera.y
   );
 
-  /* Chão */
+  /* chão */
 
-  ctx.fillStyle =
+  ctx.fillStyle=
     level>=5
-    ? "#27382b"
-    : "#527b3c";
+    ? "#263729"
+    : "#4f7b3c";
 
   ctx.fillRect(
     0,
@@ -1903,16 +1521,15 @@ function draw(){
     world.height
   );
 
-  /* Linhas do campo */
+  /* linhas */
 
-  ctx.globalAlpha=.12;
-
-  ctx.strokeStyle="#d7e4a7";
+  ctx.strokeStyle=
+    "rgba(220,240,170,.12)";
 
   ctx.lineWidth=2;
 
   for(
-    let x=0;
+    var x=0;
     x<world.width;
     x+=64
   ){
@@ -1927,7 +1544,7 @@ function draw(){
   }
 
   for(
-    let y=0;
+    var y=0;
     y<world.height;
     y+=64
   ){
@@ -1941,8 +1558,6 @@ function draw(){
 
   }
 
-  ctx.globalAlpha=1;
-
   drawObstacles();
   drawBushes();
   drawEggs();
@@ -1953,115 +1568,74 @@ function draw(){
 
   ctx.restore();
 
-  /* Vinheta */
-
-  const gradient =
-    ctx.createRadialGradient(
-      W/2,
-      H/2,
-      Math.min(W,H)*.2,
-      W/2,
-      H/2,
-      Math.max(W,H)*.7
-    );
-
-  gradient.addColorStop(
-    0,
-    "rgba(0,0,0,0)"
-  );
-
-  gradient.addColorStop(
-    1,
-    "rgba(0,0,0,.35)"
-  );
-
-  ctx.fillStyle=gradient;
-
-  ctx.fillRect(
-    0,
-    0,
-    W,
-    H
-  );
-
-  if(level>=5){
-
-    ctx.fillStyle=
-      "rgba(5,12,30,.22)";
-
-    ctx.fillRect(
-      0,
-      0,
-      W,
-      H
-    );
-
-  }
-
 }
 
-/* =========================================================
+/* =====================================================
    OBSTÁCULOS
-========================================================= */
+===================================================== */
 
 function drawObstacles(){
 
-  for(const obstacle of world.obstacles){
+  for(
+    var i=0;
+    i<world.obstacles.length;
+    i++
+  ){
+
+    var o=world.obstacles[i];
 
     if(
-      obstacle.x<0 ||
-      obstacle.y<0 ||
-      obstacle.x+obstacle.w>world.width ||
-      obstacle.y+obstacle.h>world.height
-    ){
-      continue;
-    }
+      o.x<0 ||
+      o.y<0 ||
+      o.x+o.w>world.width ||
+      o.y+o.h>world.height
+    )continue;
 
-    ctx.fillStyle="#725333";
+    ctx.fillStyle="#704e30";
 
     ctx.fillRect(
-      obstacle.x,
-      obstacle.y,
-      obstacle.w,
-      obstacle.h
+      o.x,
+      o.y,
+      o.w,
+      o.h
     );
 
-    ctx.fillStyle="#916b43";
+    ctx.fillStyle="#936b42";
 
     ctx.fillRect(
-      obstacle.x,
-      obstacle.y,
-      obstacle.w,
+      o.x,
+      o.y,
+      o.w,
       10
     );
 
     ctx.strokeStyle=
-      "rgba(0,0,0,.25)";
+      "rgba(0,0,0,.3)";
 
     ctx.strokeRect(
-      obstacle.x,
-      obstacle.y,
-      obstacle.w,
-      obstacle.h
+      o.x,
+      o.y,
+      o.w,
+      o.h
     );
 
     if(
-      obstacle.w>130 &&
-      obstacle.h>80
+      o.w>130 &&
+      o.h>80
     ){
 
-      ctx.fillStyle="#8bc1c4";
+      ctx.fillStyle="#8cc5c7";
 
       ctx.fillRect(
-        obstacle.x+25,
-        obstacle.y+30,
+        o.x+25,
+        o.y+30,
         35,
         30
       );
 
       ctx.fillRect(
-        obstacle.x+obstacle.w-60,
-        obstacle.y+30,
+        o.x+o.w-60,
+        o.y+30,
         35,
         30
       );
@@ -2072,44 +1646,50 @@ function drawObstacles(){
 
 }
 
-/* =========================================================
+/* =====================================================
    MOITAS
-========================================================= */
+===================================================== */
 
 function drawBushes(){
 
-  for(const bush of world.bushes){
+  for(
+    var i=0;
+    i<world.bushes.length;
+    i++
+  ){
 
-    ctx.fillStyle="#2d612d";
+    var b=world.bushes[i];
+
+    ctx.fillStyle="#285e2d";
 
     ctx.beginPath();
 
     ctx.arc(
-      bush.x,
-      bush.y,
-      bush.r,
+      b.x,
+      b.y,
+      b.r,
       0,
       Math.PI*2
     );
 
     ctx.fill();
 
-    ctx.fillStyle="#3e7b36";
+    ctx.fillStyle="#3e7c38";
 
     ctx.beginPath();
 
     ctx.arc(
-      bush.x-13,
-      bush.y-8,
-      bush.r*.55,
+      b.x-12,
+      b.y-8,
+      b.r*.55,
       0,
       Math.PI*2
     );
 
     ctx.arc(
-      bush.x+14,
-      bush.y-7,
-      bush.r*.5,
+      b.x+13,
+      b.y-6,
+      b.r*.5,
       0,
       Math.PI*2
     );
@@ -2120,33 +1700,31 @@ function drawBushes(){
 
 }
 
-/* =========================================================
+/* =====================================================
    OVOS
-========================================================= */
+===================================================== */
 
 function drawEggs(){
 
-  for(const egg of world.eggs){
+  for(
+    var i=0;
+    i<world.eggs.length;
+    i++
+  ){
 
-    if(egg.collected)continue;
+    var e=world.eggs[i];
 
-    const bob =
-      Math.sin(egg.pulse)*3;
+    if(e.collected)continue;
 
-    ctx.save();
+    var bob=Math.sin(e.pulse)*3;
 
-    ctx.translate(
-      egg.x,
-      egg.y+bob
-    );
-
-    ctx.fillStyle="#fff5d0";
+    ctx.fillStyle="#fff6d5";
 
     ctx.beginPath();
 
     ctx.ellipse(
-      0,
-      0,
+      e.x,
+      e.y+bob,
       11,
       15,
       0,
@@ -2156,60 +1734,43 @@ function drawEggs(){
 
     ctx.fill();
 
-    ctx.fillStyle=
-      "rgba(255,215,80,.35)";
-
-    ctx.beginPath();
-
-    ctx.arc(
-      -3,
-      -4,
-      4,
-      0,
-      Math.PI*2
-    );
-
-    ctx.fill();
-
-    ctx.restore();
-
   }
 
 }
 
-/* =========================================================
+/* =====================================================
    SAÍDA
-========================================================= */
+===================================================== */
 
 function drawExit(){
 
-  const exit=world.exit;
+  var e=world.exit;
 
-  ctx.fillStyle="#53361f";
-
-  ctx.fillRect(
-    exit.x,
-    exit.y,
-    exit.w,
-    exit.h
-  );
-
-  ctx.fillStyle="#8e6338";
+  ctx.fillStyle="#4d301d";
 
   ctx.fillRect(
-    exit.x+7,
-    exit.y+8,
-    exit.w-14,
-    exit.h-8
+    e.x,
+    e.y,
+    e.w,
+    e.h
   );
 
-  ctx.fillStyle="#ffdf62";
+  ctx.fillStyle="#93663b";
+
+  ctx.fillRect(
+    e.x+7,
+    e.y+8,
+    e.w-14,
+    e.h-8
+  );
+
+  ctx.fillStyle="#ffe269";
 
   ctx.beginPath();
 
   ctx.arc(
-    exit.x+exit.w-13,
-    exit.y+exit.h/2,
+    e.x+e.w-13,
+    e.y+e.h/2,
     4,
     0,
     Math.PI*2
@@ -2218,56 +1779,39 @@ function drawExit(){
   ctx.fill();
 
   ctx.fillStyle="white";
-
   ctx.font="bold 18px Arial";
-
   ctx.textAlign="center";
 
   ctx.fillText(
     "SAÍDA",
-    exit.x+exit.w/2,
-    exit.y-10
+    e.x+e.w/2,
+    e.y-10
   );
 
 }
 
-/* =========================================================
+/* =====================================================
    INIMIGOS
-========================================================= */
+===================================================== */
 
 function drawEnemies(){
 
-  for(const enemy of world.enemies){
+  for(
+    var i=0;
+    i<world.enemies.length;
+    i++
+  ){
+
+    var e=world.enemies[i];
 
     ctx.save();
 
     ctx.translate(
-      enemy.x,
-      enemy.y
+      e.x,
+      e.y
     );
 
-    /* sombra */
-
-    ctx.fillStyle=
-      "rgba(0,0,0,.2)";
-
-    ctx.beginPath();
-
-    ctx.ellipse(
-      0,
-      22,
-      25,
-      9,
-      0,
-      0,
-      Math.PI*2
-    );
-
-    ctx.fill();
-
-    if(enemy.type==="dog"){
-
-      /* cachorro */
+    if(e.type==="dog"){
 
       ctx.fillStyle="#70452d";
 
@@ -2283,27 +1827,23 @@ function drawEnemies(){
 
       ctx.fill();
 
-      /* orelhas */
-
       ctx.fillStyle="#4b2c1c";
 
       ctx.beginPath();
 
-      ctx.moveTo(-15,-13);
-      ctx.lineTo(-28,-28);
-      ctx.lineTo(-9,-21);
+      ctx.moveTo(-13,-13);
+      ctx.lineTo(-27,-28);
+      ctx.lineTo(-7,-20);
 
       ctx.fill();
 
       ctx.beginPath();
 
-      ctx.moveTo(15,-13);
-      ctx.lineTo(28,-28);
-      ctx.lineTo(9,-21);
+      ctx.moveTo(13,-13);
+      ctx.lineTo(27,-28);
+      ctx.lineTo(7,-20);
 
       ctx.fill();
-
-      /* olhos */
 
       ctx.fillStyle="white";
 
@@ -2327,58 +1867,34 @@ function drawEnemies(){
 
       ctx.fill();
 
-      ctx.fillStyle="#111";
-
-      ctx.beginPath();
-
-      ctx.arc(
-        -7,
-        -3,
-        2,
-        0,
-        Math.PI*2
-      );
-
-      ctx.arc(
-        7,
-        -3,
-        2,
-        0,
-        Math.PI*2
-      );
-
-      ctx.fill();
-
     }else{
 
-      /* fazendeiro */
-
-      ctx.fillStyle="#49301c";
+      ctx.fillStyle="#4a301d";
 
       ctx.fillRect(
         -27,
-        -25,
+        -27,
         54,
-        9
+        10
       );
 
       ctx.fillRect(
         -15,
-        -38,
+        -40,
         30,
-        15
+        17
       );
 
-      ctx.fillStyle="#9a5b32";
+      ctx.fillStyle="#9a5c35";
 
       ctx.fillRect(
         -18,
         -8,
         36,
-        37
+        38
       );
 
-      ctx.fillStyle="#d79a63";
+      ctx.fillStyle="#d59a65";
 
       ctx.beginPath();
 
@@ -2392,7 +1908,7 @@ function drawEnemies(){
 
       ctx.fill();
 
-      ctx.fillStyle="#222";
+      ctx.fillStyle="#111";
 
       ctx.beginPath();
 
@@ -2414,22 +1930,13 @@ function drawEnemies(){
 
       ctx.fill();
 
-      ctx.fillStyle="#e84b3d";
-
-      ctx.fillRect(
-        -13,
-        5,
-        26,
-        4
-      );
-
     }
 
-    if(enemy.state==="chase"){
+    if(e.state==="chase"){
 
-      ctx.fillStyle="#ff4c42";
+      ctx.fillStyle="#ff4040";
 
-      ctx.font="bold 24px Arial";
+      ctx.font="bold 25px Arial";
 
       ctx.textAlign="center";
 
@@ -2447,9 +1954,9 @@ function drawEnemies(){
 
 }
 
-/* =========================================================
+/* =====================================================
    GALINHA
-========================================================= */
+===================================================== */
 
 function drawChicken(){
 
@@ -2461,8 +1968,8 @@ function drawChicken(){
   );
 
   if(
-    chicken.invincible%10<5 &&
-    chicken.invincible>0
+    chicken.invincible>0 &&
+    chicken.invincible%10<5
   ){
 
     ctx.globalAlpha=.4;
@@ -2478,9 +1985,9 @@ function drawChicken(){
 
   ctx.ellipse(
     0,
-    22,
+    23,
     25,
-    9,
+    8,
     0,
     0,
     Math.PI*2
@@ -2508,7 +2015,7 @@ function drawChicken(){
 
   /* asa */
 
-  ctx.fillStyle="#ded9bf";
+  ctx.fillStyle="#ddd9bf";
 
   ctx.beginPath();
 
@@ -2542,7 +2049,7 @@ function drawChicken(){
 
   /* crista */
 
-  ctx.fillStyle="#e94545";
+  ctx.fillStyle="#e84444";
 
   ctx.beginPath();
 
@@ -2574,7 +2081,7 @@ function drawChicken(){
 
   /* bico */
 
-  ctx.fillStyle="#f2a632";
+  ctx.fillStyle="#f1a332";
 
   ctx.beginPath();
 
@@ -2604,8 +2111,7 @@ function drawChicken(){
 
   /* pernas */
 
-  ctx.strokeStyle="#e3a13d";
-
+  ctx.strokeStyle="#df9f3b";
   ctx.lineWidth=4;
 
   ctx.beginPath();
@@ -2622,9 +2128,7 @@ function drawChicken(){
 
   if(chicken.dash>0){
 
-    ctx.strokeStyle=
-      "rgba(255,255,120,.8)";
-
+    ctx.strokeStyle="#fff36a";
     ctx.lineWidth=4;
 
     ctx.beginPath();
@@ -2643,19 +2147,22 @@ function drawChicken(){
 
 }
 
-/* =========================================================
+/* =====================================================
    PARTÍCULAS
-========================================================= */
+===================================================== */
 
 function drawParticles(){
 
-  for(const p of particles){
+  for(
+    var i=0;
+    i<particles.length;
+    i++
+  ){
 
-    ctx.globalAlpha =
-      Math.max(
-        0,
-        p.life/p.max
-      );
+    var p=particles[i];
+
+    ctx.globalAlpha=
+      Math.max(0,p.life/70);
 
     ctx.fillStyle=p.color;
 
@@ -2677,11 +2184,11 @@ function drawParticles(){
 
 }
 
-/* =========================================================
-   LOOP
-========================================================= */
+/* =====================================================
+   LOOP PRINCIPAL
+===================================================== */
 
-function loop(){
+function gameLoop(){
 
   if(
     playing &&
@@ -2689,195 +2196,210 @@ function loop(){
   ){
 
     moveChicken();
-
     updateEnemies();
-
     updateItems();
-
     updateParticles();
-
     updateCamera();
 
   }
 
   draw();
 
-  requestAnimationFrame(loop);
+  requestAnimationFrame(gameLoop);
 
 }
 
-loop();
+/* =====================================================
+   TECLADO
+===================================================== */
 
-/* =========================================================
-   COMEÇAR
-========================================================= */
+document.addEventListener(
+  "keydown",
+  function(e){
 
-function startGame(){
+    if(
+      e.key==="w" ||
+      e.key==="W" ||
+      e.key==="ArrowUp"
+    ){
+      keys.up=true;
+    }
 
-  /*
-    IMPORTANTE:
-    O áudio NÃO pode impedir o jogo
-    de começar.
-  */
+    if(
+      e.key==="s" ||
+      e.key==="S" ||
+      e.key==="ArrowDown"
+    ){
+      keys.down=true;
+    }
 
-  initAudio();
+    if(
+      e.key==="a" ||
+      e.key==="A" ||
+      e.key==="ArrowLeft"
+    ){
+      keys.left=true;
+    }
 
-  document
-    .getElementById("menu")
-    .classList.add("hidden");
+    if(
+      e.key==="d" ||
+      e.key==="D" ||
+      e.key==="ArrowRight"
+    ){
+      keys.right=true;
+    }
 
-  document
-    .getElementById("endScreen")
-    .classList.add("hidden");
+    if(e.code==="Space"){
 
-  document
-    .getElementById("hud")
-    .classList.remove("hidden");
+      e.preventDefault();
 
-  document
-    .getElementById("pauseBtn")
-    .classList.remove("hidden");
+      dash();
 
-  level=1;
+    }
 
-  lives=3;
+    if(
+      e.key==="e" ||
+      e.key==="E"
+    ){
 
-  eggs=0;
+      chickenNoise();
 
-  score=0;
+    }
 
-  particles=[];
+    if(e.key==="Escape"){
 
-  paused=false;
+      togglePause();
 
-  playing=true;
-
-  camera.x=0;
-  camera.y=0;
-
-  buildLevel(level);
-
-  updateHUD();
-
-  showMessage(
-    "🐔 CORRA, GALINHA! FUJA!"
-  );
-
-}
-
-/* =========================================================
-   PAUSA
-========================================================= */
-
-function togglePause(){
-
-  if(!playing)return;
-
-  paused=!paused;
-
-  document
-    .getElementById("pauseBtn")
-    .textContent =
-      paused
-      ? "▶️"
-      : "⏸️";
-
-  if(paused){
-
-    showMessage(
-      "⏸️ Jogo pausado"
-    );
+    }
 
   }
-
-}
-
-/* =========================================================
-   BOTÕES
-========================================================= */
-
-document
-  .getElementById("startBtn")
-  .addEventListener(
-    "click",
-    startGame
-  );
-
-document
-  .getElementById("restartBtn")
-  .addEventListener(
-    "click",
-    startGame
-  );
-
-document
-  .getElementById("pauseBtn")
-  .addEventListener(
-    "click",
-    togglePause
-  );
-
-document
-  .getElementById("menuBtn")
-  .addEventListener(
-    "click",
-    function(){
-
-      playing=false;
-
-      document
-        .getElementById("endScreen")
-        .classList.add("hidden");
-
-      document
-        .getElementById("hud")
-        .classList.add("hidden");
-
-      document
-        .getElementById("pauseBtn")
-        .classList.add("hidden");
-
-      document
-        .getElementById("menu")
-        .classList.remove("hidden");
-
-      document
-        .getElementById("bestScore")
-        .textContent=best;
-
-    }
-  );
-
-document
-  .getElementById("howBtn")
-  .addEventListener(
-    "click",
-    function(){
-
-      document
-        .getElementById("instructions")
-        .classList.toggle("hidden");
-
-    }
-  );
-
-/* =========================================================
-   IMPEDIR SCROLL NO CELULAR
-========================================================= */
-
-window.addEventListener(
-  "touchmove",
-  function(event){
-    event.preventDefault();
-  },
-  {passive:false}
 );
 
-/* =========================================================
-   HUD INICIAL
-========================================================= */
+document.addEventListener(
+  "keyup",
+  function(e){
+
+    if(
+      e.key==="w" ||
+      e.key==="W" ||
+      e.key==="ArrowUp"
+    ){
+      keys.up=false;
+    }
+
+    if(
+      e.key==="s" ||
+      e.key==="S" ||
+      e.key==="ArrowDown"
+    ){
+      keys.down=false;
+    }
+
+    if(
+      e.key==="a" ||
+      e.key==="A" ||
+      e.key==="ArrowLeft"
+    ){
+      keys.left=false;
+    }
+
+    if(
+      e.key==="d" ||
+      e.key==="D" ||
+      e.key==="ArrowRight"
+    ){
+      keys.right=false;
+    }
+
+  }
+);
+
+/* =====================================================
+   CELULAR
+===================================================== */
+
+var touchButtons=
+  document.querySelectorAll(".dpad");
+
+touchButtons.forEach(function(button){
+
+  var key=button.dataset.key;
+
+  button.addEventListener(
+    "pointerdown",
+    function(e){
+
+      e.preventDefault();
+
+      keys[key]=true;
+
+    }
+  );
+
+  button.addEventListener(
+    "pointerup",
+    function(e){
+
+      e.preventDefault();
+
+      keys[key]=false;
+
+    }
+  );
+
+  button.addEventListener(
+    "pointercancel",
+    function(){
+
+      keys[key]=false;
+
+    }
+  );
+
+  button.addEventListener(
+    "pointerleave",
+    function(){
+
+      keys[key]=false;
+
+    }
+  );
+
+});
+
+document
+  .getElementById("dashButton")
+  .addEventListener(
+    "pointerdown",
+    function(e){
+
+      e.preventDefault();
+
+      dash();
+
+    }
+  );
+
+document
+  .getElementById("noiseButton")
+  .addEventListener(
+    "pointerdown",
+    function(e){
+
+      e.preventDefault();
+
+      chickenNoise();
+
+    }
+  );
+
+/* =====================================================
+   INICIAR LOOP
+===================================================== */
 
 updateHUD();
+
+gameLoop();
 
 </script>
 

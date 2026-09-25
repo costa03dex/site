@@ -3,321 +3,285 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-
 <title>🐔 Fuga da Galinha</title>
 
 <style>
-
 *{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-    user-select:none;
-    -webkit-user-select:none;
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  user-select:none;
+  -webkit-user-select:none;
 }
 
 html,body{
-    width:100%;
-    height:100%;
-    overflow:hidden;
-    background:#101810;
-    font-family:Arial,sans-serif;
-    touch-action:none;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:#17251a;
+  font-family:Arial,sans-serif;
+}
+
+body{
+  touch-action:none;
 }
 
 canvas{
-    display:block;
-    width:100vw;
-    height:100vh;
-    touch-action:none;
-}
-
-button{
-    border:0;
-    border-radius:14px;
-    padding:14px 25px;
-    margin:6px;
-    background:linear-gradient(#7bd34b,#3d8629);
-    border-bottom:5px solid #245719;
-    color:white;
-    font-size:19px;
-    font-weight:bold;
-    cursor:pointer;
-    touch-action:manipulation;
-}
-
-button:active{
-    transform:translateY(3px);
-    border-bottom-width:2px;
+  display:block;
+  width:100vw;
+  height:100vh;
+  touch-action:none;
 }
 
 .hidden{
-    display:none!important;
+  display:none!important;
 }
 
-/* MENU */
+/* ================= MENU ================= */
 
 .screen{
-    position:fixed;
-    inset:0;
-    z-index:100;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    background:
-        radial-gradient(
-            circle at center,
-            #507b3c,
-            #172619 60%,
-            #070b08
-        );
+  position:fixed;
+  inset:0;
+  z-index:100;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:
+    radial-gradient(circle at center,#527b3c 0%,#18251b 65%,#070a08 100%);
 }
 
 .menu{
-    width:min(650px,94%);
-    max-height:90vh;
-    overflow:auto;
-    text-align:center;
-    padding:30px 20px;
-    border-radius:25px;
-
-    background:rgba(5,12,7,.96);
-
-    border:2px solid #86ce58;
-
-    box-shadow:
-        0 0 50px rgba(110,210,70,.25);
+  width:min(600px,92%);
+  max-height:90vh;
+  overflow:auto;
+  padding:35px 25px;
+  text-align:center;
+  border:2px solid #91d85c;
+  border-radius:25px;
+  background:rgba(7,14,9,.96);
+  box-shadow:0 0 50px rgba(120,210,70,.25);
 }
 
 .logo{
-    font-size:75px;
-    margin-bottom:5px;
+  font-size:75px;
+  margin-bottom:10px;
 }
 
 h1{
-    color:white;
-    font-size:clamp(28px,7vw,50px);
-    margin-bottom:8px;
+  color:white;
+  font-size:clamp(28px,7vw,48px);
+  margin-bottom:10px;
 }
 
 .subtitle{
-    color:#c5d8bb;
-    line-height:1.5;
-    margin-bottom:20px;
+  color:#bcd6ac;
+  margin-bottom:25px;
+  font-size:18px;
+  line-height:1.5;
+}
+
+button{
+  display:inline-block;
+  border:0;
+  border-bottom:5px solid #315e1c;
+  border-radius:14px;
+  padding:15px 30px;
+  margin:7px;
+  background:linear-gradient(#7bc849,#4e8d2d);
+  color:white;
+  font-size:20px;
+  font-weight:bold;
+  cursor:pointer;
+  touch-action:manipulation;
+}
+
+button:hover{
+  filter:brightness(1.08);
+}
+
+button:active{
+  transform:translateY(3px);
+  border-bottom-width:2px;
 }
 
 .info{
-    color:#9eb398;
-    line-height:1.6;
-    margin-top:15px;
+  color:#aab9a6;
+  line-height:1.6;
+  margin-top:20px;
 }
 
-/* MAPAS */
-
-#mapMenu{
-    margin-top:15px;
-}
-
-.mapGrid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:10px;
-    margin-top:15px;
-}
-
-.mapButton{
-    min-height:90px;
-    margin:0;
-    border:2px solid rgba(255,255,255,.18);
-    border-bottom:4px solid rgba(0,0,0,.3);
-    font-size:16px;
-}
-
-.mapButton.selected{
-    outline:3px solid #fff;
-    transform:scale(1.02);
-}
-
-/* HUD */
+/* ================= HUD ================= */
 
 #hud{
-    position:fixed;
-    top:12px;
-    left:12px;
-    z-index:30;
-
-    display:flex;
-    gap:8px;
-    flex-wrap:wrap;
-
-    pointer-events:none;
+  position:fixed;
+  z-index:20;
+  top:12px;
+  left:12px;
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  pointer-events:none;
 }
 
 .hud{
-    padding:8px 12px;
-    border-radius:12px;
-
-    background:rgba(5,10,7,.88);
-
-    border:1px solid rgba(255,255,255,.2);
-
-    color:white;
-    font-weight:bold;
-
-    box-shadow:0 3px 10px rgba(0,0,0,.25);
+  padding:8px 12px;
+  border-radius:12px;
+  background:rgba(5,12,7,.88);
+  border:1px solid #5e824d;
+  color:white;
+  font-weight:bold;
+  box-shadow:0 3px 10px rgba(0,0,0,.2);
 }
 
 #pause{
-    position:fixed;
-    right:12px;
-    top:12px;
-    z-index:31;
-
-    margin:0;
-    padding:9px 13px;
-
-    font-size:18px;
+  position:fixed;
+  z-index:21;
+  right:12px;
+  top:12px;
+  margin:0;
+  padding:9px 13px;
+  font-size:18px;
 }
 
-/* MENSAGEM */
+/* ================= MENSAGEM ================= */
 
 #msg{
-    position:fixed;
-    z-index:35;
-
-    top:75px;
-    left:50%;
-
-    transform:translateX(-50%);
-
-    padding:10px 18px;
-
-    border-radius:12px;
-
-    background:rgba(5,10,7,.94);
-
-    border:1px solid white;
-
-    color:white;
-
-    opacity:0;
-
-    pointer-events:none;
-
-    transition:.2s;
-
-    white-space:nowrap;
+  position:fixed;
+  z-index:25;
+  top:75px;
+  left:50%;
+  transform:translateX(-50%);
+  background:rgba(5,10,6,.94);
+  border:1px solid #91d85c;
+  border-radius:12px;
+  padding:10px 18px;
+  color:white;
+  opacity:0;
+  transition:.2s;
+  pointer-events:none;
+  white-space:nowrap;
+  box-shadow:0 4px 15px rgba(0,0,0,.25);
 }
 
-/* MOBILE */
+/* ================= ERRO ================= */
+
+#errorBox{
+  position:fixed;
+  z-index:9999;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:min(700px,92%);
+  padding:22px;
+  border:2px solid #ff5555;
+  border-radius:18px;
+  background:#160606;
+  color:white;
+  font-family:monospace;
+  text-align:left;
+  box-shadow:0 0 40px rgba(255,0,0,.25);
+}
+
+#errorBox h2{
+  color:#ff7777;
+  margin-bottom:10px;
+}
+
+/* ================= CELULAR ================= */
 
 #mobileControls{
-    position:fixed;
-    z-index:40;
-
-    left:18px;
-    bottom:18px;
-
-    width:155px;
-    height:155px;
-
-    display:none;
+  position:fixed;
+  z-index:30;
+  left:18px;
+  bottom:18px;
+  width:150px;
+  height:150px;
+  display:none;
 }
 
 .dpad{
-    position:absolute;
+  position:absolute;
+  width:52px;
+  height:52px;
+  border-radius:15px;
+  border:2px solid #8bad79;
+  background:rgba(15,30,18,.88);
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:23px;
+  touch-action:none;
+  -webkit-tap-highlight-color:transparent;
+}
 
-    width:52px;
-    height:52px;
-
-    border-radius:15px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    background:rgba(10,20,12,.85);
-
-    border:2px solid rgba(255,255,255,.3);
-
-    color:white;
-
-    font-size:22px;
-
-    touch-action:none;
+.dpad:active,
+.action:active{
+  background:rgba(70,120,60,.95);
+  transform:scale(.94);
 }
 
 .up{
-    top:0;
-    left:51px;
+  left:49px;
+  top:0;
 }
 
 .left{
-    top:51px;
-    left:0;
+  left:0;
+  top:49px;
 }
 
 .down{
-    top:102px;
-    left:51px;
+  left:49px;
+  top:98px;
 }
 
 .right{
-    top:51px;
-    left:102px;
+  left:98px;
+  top:49px;
 }
 
 #actions{
-    position:fixed;
-
-    right:18px;
-    bottom:25px;
-
-    z-index:40;
-
-    display:none;
-
-    gap:10px;
+  position:fixed;
+  z-index:30;
+  right:18px;
+  bottom:25px;
+  display:none;
+  gap:10px;
 }
 
 .action{
-    width:65px;
-    height:65px;
-
-    border-radius:50%;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    background:rgba(10,20,12,.88);
-
-    border:2px solid rgba(255,255,255,.3);
-
-    color:white;
-
-    font-size:25px;
-
-    touch-action:none;
+  width:65px;
+  height:65px;
+  border-radius:50%;
+  border:2px solid #8bad79;
+  background:rgba(15,30,18,.88);
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:26px;
+  touch-action:none;
+  -webkit-tap-highlight-color:transparent;
 }
 
 @media(max-width:800px){
+  #mobileControls{
+    display:block;
+  }
 
-    #mobileControls{
-        display:block;
-    }
+  #actions{
+    display:flex;
+  }
 
-    #actions{
-        display:flex;
-    }
+  .menu{
+    padding:25px 15px;
+  }
 
-    .mapGrid{
-        grid-template-columns:1fr 1fr;
-    }
-
+  .logo{
+    font-size:58px;
+  }
 }
-
 </style>
 </head>
 
@@ -326,2358 +290,355 @@ h1{
 <canvas id="game"></canvas>
 
 <!-- HUD -->
-
 <div id="hud" class="hidden">
-
-    <div class="hud">
-        🐔 ❤️ <span id="lifeText">3</span>
-    </div>
-
-    <div class="hud">
-        🥚 <span id="eggText">0</span>
-    </div>
-
-    <div class="hud">
-        🏆 <span id="scoreText">0</span>
-    </div>
-
-    <div class="hud">
-        🗺️ <span id="mapText">FAZENDA</span>
-    </div>
-
+  <div class="hud">🐔 ❤️ <span id="lifeText">3</span></div>
+  <div class="hud">🥚 <span id="eggText">0</span></div>
+  <div class="hud">🏆 <span id="scoreText">0</span></div>
+  <div class="hud">🌾 <span id="levelText">1</span>/6</div>
 </div>
 
-<button id="pause" class="hidden" onclick="togglePause()">
-    ⏸️
-</button>
+<button id="pause" class="hidden" onclick="togglePause()">⏸️</button>
 
 <div id="msg"></div>
 
+<!-- ERRO DE JAVASCRIPT -->
+<div id="errorBox" class="hidden">
+  <h2>🐔 O jogo encontrou um erro</h2>
+  <div id="errorText"></div>
+  <br>
+  <button onclick="location.reload()">🔄 Recarregar</button>
+</div>
 
 <!-- MENU -->
-
 <div id="menu" class="screen">
 
-    <div class="menu">
+  <div class="menu">
 
-        <div class="logo">
-            🐔💨
-        </div>
+    <div class="logo">🐔💨</div>
 
-        <h1>
-            FUGA DA GALINHA
-        </h1>
+    <h1>FUGA DA GALINHA</h1>
 
-        <div class="subtitle">
-            Fuja, pegue os ovos e atravesse todos os mapas!
-        </div>
-
-        <button onclick="startGame()">
-            ▶️ JOGAR
-        </button>
-
-        <button onclick="toggleMaps()">
-            🗺️ MAPAS
-        </button>
-
-        <button onclick="showInstructions()">
-            ❓ COMO JOGAR
-        </button>
-
-
-        <!-- MAPAS -->
-
-        <div id="mapMenu" class="hidden">
-
-            <div class="info">
-                ESCOLHA O MAPA
-            </div>
-
-            <div class="mapGrid">
-
-                <button
-                    class="mapButton"
-                    onclick="selectMap(1)"
-                    id="map1"
-                >
-                    🌾<br>
-                    FAZENDA
-                </button>
-
-                <button
-                    class="mapButton"
-                    onclick="selectMap(2)"
-                    id="map2"
-                >
-                    🌽<br>
-                    MILHARAL
-                </button>
-
-                <button
-                    class="mapButton"
-                    onclick="selectMap(3)"
-                    id="map3"
-                >
-                    🌲<br>
-                    FLORESTA
-                </button>
-
-                <button
-                    class="mapButton"
-                    onclick="selectMap(4)"
-                    id="map4"
-                >
-                    🏜️<br>
-                    DESERTO
-                </button>
-
-                <button
-                    class="mapButton"
-                    onclick="selectMap(5)"
-                    id="map5"
-                >
-                    🌙<br>
-                    NOITE
-                </button>
-
-                <button
-                    class="mapButton"
-                    onclick="selectMap(6)"
-                    id="map6"
-                >
-                    🛣️<br>
-                    ESTRADA
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <!-- INSTRUÇÕES -->
-
-        <div id="instructions" class="info hidden">
-
-            <b>PC</b><br>
-            W / ↑ = frente<br>
-            S / ↓ = trás<br>
-            A / ← = esquerda<br>
-            D / → = direita<br><br>
-
-            ESPAÇO = 💨 impulso<br>
-            E = 🐔 chamar atenção<br><br>
-
-            <b>Objetivo:</b><br>
-            Pegue os ovos 🥚 e encontre a saída 🚪.
-
-        </div>
-
-        <div class="info">
-            🏆 Recorde:
-            <span id="best">0</span>
-        </div>
-
+    <div class="subtitle">
+      A galinha precisa escapar da fazenda!
     </div>
 
-</div>
+    <button onclick="startGame()">
+      ▶️ JOGAR
+    </button>
 
+    <button onclick="showInstructions()">
+      ❓ COMO JOGAR
+    </button>
+
+    <div id="instructions" class="info hidden">
+      <b>PC:</b> WASD ou setas para andar.<br>
+      <b>ESPAÇO:</b> impulso 💨<br>
+      <b>E:</b> fazer COCÓÓÓÓÓ 🐔<br><br>
+
+      Pegue ovos 🥚, esconda-se nas moitas 🌿,
+      fuja dos inimigos e chegue até a 🚪 saída.
+    </div>
+
+    <div class="info">
+      🏆 Recorde: <span id="best">0</span>
+    </div>
+
+  </div>
+
+</div>
 
 <!-- FINAL -->
-
 <div id="end" class="screen hidden">
 
-    <div class="menu">
+  <div class="menu">
 
-        <div
-            class="logo"
-            id="endIcon"
-        >
-            🐔
-        </div>
+    <div class="logo" id="endIcon">🐔</div>
 
-        <h1 id="endTitle">
-            FIM
-        </h1>
+    <h1 id="endTitle">FIM</h1>
 
-        <div
-            class="subtitle"
-            id="endText"
-        ></div>
+    <div class="subtitle" id="endText"></div>
 
-        <button onclick="startGame()">
-            🔄 JOGAR NOVAMENTE
-        </button>
+    <button onclick="startGame()">
+      🔄 JOGAR NOVAMENTE
+    </button>
 
-        <button onclick="goMenu()">
-            🏠 MENU
-        </button>
+    <button onclick="goMenu()">
+      🏠 MENU
+    </button>
 
-    </div>
+  </div>
 
 </div>
-
 
 <!-- CONTROLES MOBILE -->
 
 <div id="mobileControls">
 
-    <div
-        class="dpad up"
-        data-key="up"
-    >
-        ▲
-    </div>
-
-    <div
-        class="dpad left"
-        data-key="left"
-    >
-        ◀
-    </div>
-
-    <div
-        class="dpad down"
-        data-key="down"
-    >
-        ▼
-    </div>
-
-    <div
-        class="dpad right"
-        data-key="right"
-    >
-        ▶
-    </div>
+  <div class="dpad up" data-key="up">▲</div>
+  <div class="dpad left" data-key="left">◀</div>
+  <div class="dpad down" data-key="down">▼</div>
+  <div class="dpad right" data-key="right">▶</div>
 
 </div>
-
 
 <div id="actions">
 
-    <div
-        class="action"
-        id="dashButton"
-    >
-        💨
-    </div>
+  <div class="action" id="dashButton">
+    💨
+  </div>
 
-    <div
-        class="action"
-        id="noiseButton"
-    >
-        🐔
-    </div>
+  <div class="action" id="noiseButton">
+    🐔
+  </div>
 
 </div>
 
-
 <script>
+
+/* =====================================================
+   CONFIGURAÇÃO
+===================================================== */
 
 "use strict";
 
-/* =====================================================
-   CANVAS
-===================================================== */
-
-var canvas =
-    document.getElementById("game");
-
-var ctx =
-    canvas.getContext("2d");
+var canvas = document.getElementById("game");
+var ctx = canvas.getContext("2d");
 
 var W = 0;
 var H = 0;
 
-
-/* =====================================================
-   ESTADO
-===================================================== */
-
 var playing = false;
-
 var paused = false;
 
+var level = 1;
 var lives = 3;
-
 var eggs = 0;
-
 var score = 0;
-
-var selectedMap = 1;
 
 var particles = [];
 
-var messageTimeout;
-
-
-/* =====================================================
-   MAPAS
-===================================================== */
-
-var maps = {
-
-    1:{
-        name:"FAZENDA",
-
-        sky:"#b8dcff",
-
-        ground:"#5d9144",
-
-        ground2:"#477b35",
-
-        path:"#c7a76b",
-
-        obstacle:"#765333",
-
-        roof:"#a74e36",
-
-        tree:"#2f7135",
-
-        tree2:"#3d873e",
-
-        exit:"#7c5a31",
-
-        night:false
-    },
-
-    2:{
-        name:"MILHARAL",
-
-        sky:"#91c9ec",
-
-        ground:"#668d35",
-
-        ground2:"#51762c",
-
-        path:"#a89054",
-
-        obstacle:"#80613b",
-
-        roof:"#bb783e",
-
-        tree:"#52752c",
-
-        tree2:"#739a35",
-
-        exit:"#79542b",
-
-        night:false
-    },
-
-    3:{
-        name:"FLORESTA",
-
-        sky:"#75a98a",
-
-        ground:"#244d32",
-
-        ground2:"#193d27",
-
-        path:"#596044",
-
-        obstacle:"#4a382a",
-
-        roof:"#473d32",
-
-        tree:"#123c25",
-
-        tree2:"#1c5831",
-
-        exit:"#6c5535",
-
-        night:false
-    },
-
-    4:{
-        name:"DESERTO",
-
-        sky:"#f1c789",
-
-        ground:"#d8a45d",
-
-        ground2:"#c58d49",
-
-        path:"#e5c27c",
-
-        obstacle:"#9c6940",
-
-        roof:"#8d4634",
-
-        tree:"#3f733d",
-
-        tree2:"#56854b",
-
-        exit:"#754b2a",
-
-        night:false
-    },
-
-    5:{
-        name:"NOITE",
-
-        sky:"#10152d",
-
-        ground:"#202f2b",
-
-        ground2:"#18251f",
-
-        path:"#3c3d3a",
-
-        obstacle:"#423c48",
-
-        roof:"#493448",
-
-        tree:"#102c27",
-
-        tree2:"#164337",
-
-        exit:"#66523a",
-
-        night:true
-    },
-
-    6:{
-        name:"ESTRADA",
-
-        sky:"#b8c7d0",
-
-        ground:"#53685a",
-
-        ground2:"#46594c",
-
-        path:"#393b3b",
-
-        obstacle:"#62574c",
-
-        roof:"#754638",
-
-        tree:"#2e5934",
-
-        tree2:"#3f7041",
-
-        exit:"#4c3929",
-
-        night:false
-    }
-
+var camera = {
+  x:0,
+  y:0
 };
 
-
-/* =====================================================
-   MUNDO
-===================================================== */
+var keys = {
+  up:false,
+  down:false,
+  left:false,
+  right:false
+};
 
 var world = {
 
-    width:2200,
+  width:1600,
+  height:950,
 
-    height:1400,
+  obstacles:[],
+  bushes:[],
+  eggs:[],
+  enemies:[],
 
-    obstacles:[],
-
-    bushes:[],
-
-    eggs:[],
-
-    enemies:[],
-
-    trees:[],
-
-    decorations:[],
-
-    exit:null
+  /*
+    IMPORTANTE:
+    agora a saída nunca começa como null.
+    Isso impede o erro que quebrava o loop
+    antes de iniciar o jogo.
+  */
+  exit:{
+    x:1500,
+    y:800,
+    w:60,
+    h:80
+  }
 
 };
-
-
-/* =====================================================
-   GALINHA
-===================================================== */
 
 var chicken = {
 
-    x:150,
+  x:120,
+  y:200,
 
-    y:200,
+  r:20,
 
-    r:20,
+  speed:4,
 
-    vx:0,
+  dash:0,
 
-    vy:0,
+  invincible:0,
 
-    maxSpeed:4.7,
-
-    acceleration:.42,
-
-    friction:.82,
-
-    dash:0,
-
-    dashCooldown:0,
-
-    invincible:0,
-
-    hidden:false,
-
-    direction:1,
-
-    walk:0
+  hidden:false
 
 };
 
+var messageTimeout = null;
+var noiseTimer = 0;
 
-/* =====================================================
-   CÂMERA
-===================================================== */
+var bestScore = loadBest();
 
-var camera = {
-
-    x:0,
-
-    y:0,
-
-    shake:0
-
-};
+document.getElementById("best").textContent = bestScore;
 
 
 /* =====================================================
-   CONTROLES
-===================================================== */
-
-var keys = {
-
-    up:false,
-
-    down:false,
-
-    left:false,
-
-    right:false
-
-};
-
-
-/* =====================================================
-   RECORD
+   LOCAL STORAGE SEGURO
 ===================================================== */
 
 function loadBest(){
 
-    try{
+  try{
 
-        return Number(
-            localStorage.getItem(
-                "fugaGalinhaBest"
-            )
-        ) || 0;
+    return Number(
+      localStorage.getItem("fugaGalinhaBest")
+    ) || 0;
 
-    }catch(e){
+  }catch(error){
 
-        return 0;
+    return 0;
 
-    }
+  }
 
 }
 
-var bestScore = loadBest();
+function saveBest(){
 
-document.getElementById(
-    "best"
-).textContent = bestScore;
+  if(score > bestScore){
+
+    bestScore = score;
+
+    try{
+
+      localStorage.setItem(
+        "fugaGalinhaBest",
+        String(bestScore)
+      );
+
+    }catch(error){
+
+      /* navegador não permite armazenamento */
+    }
+
+    var best = document.getElementById("best");
+
+    if(best){
+      best.textContent = bestScore;
+    }
+
+  }
+
+}
 
 
 /* =====================================================
-   RESIZE
+   SISTEMA DE ERRO
+===================================================== */
+
+function showError(error){
+
+  playing = false;
+  paused = false;
+
+  var box = document.getElementById("errorBox");
+  var text = document.getElementById("errorText");
+
+  if(!box || !text)return;
+
+  var message =
+    error && error.message
+      ? error.message
+      : String(error);
+
+  text.textContent = message;
+
+  box.classList.remove("hidden");
+
+}
+
+window.addEventListener("error",function(event){
+
+  console.error(event.error || event.message);
+
+});
+
+
+/* =====================================================
+   TAMANHO DO CANVAS
 ===================================================== */
 
 function resize(){
 
-    W =
-        window.innerWidth;
+  W = window.innerWidth;
+  H = window.innerHeight;
 
-    H =
-        window.innerHeight;
-
-    canvas.width = W;
-
-    canvas.height = H;
+  canvas.width = W;
+  canvas.height = H;
 
 }
 
-window.addEventListener(
-    "resize",
-    resize
-);
+window.addEventListener("resize",resize);
 
 resize();
 
 
 /* =====================================================
-   SELEÇÃO DE MAPA
-===================================================== */
-
-function toggleMaps(){
-
-    document
-        .getElementById("mapMenu")
-        .classList.toggle("hidden");
-
-}
-
-
-function selectMap(number){
-
-    selectedMap = number;
-
-    for(
-        var i=1;
-        i<=6;
-        i++
-    ){
-
-        document
-            .getElementById(
-                "map"+i
-            )
-            .classList.remove(
-                "selected"
-            );
-
-    }
-
-    document
-        .getElementById(
-            "map"+number
-        )
-        .classList.add(
-            "selected"
-        );
-
-    message(
-        "🗺️ "+
-        maps[number].name
-    );
-
-}
-
-
-/* =====================================================
-   INSTRUÇÕES
-===================================================== */
-
-function showInstructions(){
-
-    document
-        .getElementById(
-            "instructions"
-        )
-        .classList.toggle(
-            "hidden"
-        );
-
-}
-
-
-/* =====================================================
-   START
+   INICIAR
 ===================================================== */
 
 function startGame(){
 
-    try{
+  try{
 
-        document
-            .getElementById("menu")
-            .classList.add(
-                "hidden"
-            );
+    document
+      .getElementById("errorBox")
+      .classList.add("hidden");
 
-        document
-            .getElementById("end")
-            .classList.add(
-                "hidden"
-            );
+    document
+      .getElementById("menu")
+      .classList.add("hidden");
 
-        document
-            .getElementById("hud")
-            .classList.remove(
-                "hidden"
-            );
+    document
+      .getElementById("end")
+      .classList.add("hidden");
 
-        document
-            .getElementById("pause")
-            .classList.remove(
-                "hidden"
-            );
+    document
+      .getElementById("hud")
+      .classList.remove("hidden");
 
-        playing = true;
+    document
+      .getElementById("pause")
+      .classList.remove("hidden");
 
-        paused = false;
+    playing = true;
+    paused = false;
 
-        lives = 3;
+    level = 1;
+    lives = 3;
+    eggs = 0;
+    score = 0;
 
-        eggs = 0;
+    particles = [];
 
-        score = 0;
-
-        particles = [];
-
-        camera.x = 0;
-
-        camera.y = 0;
-
-        resetKeys();
-
-        createMap();
-
-        updateHUD();
-
-        message(
-            "🗺️ "+
-            maps[selectedMap].name
-        );
-
-    }catch(error){
-
-        console.error(error);
-
-    }
-
-}
-
-
-/* =====================================================
-   CRIAR MAPA
-===================================================== */
-
-function createMap(){
-
-    var map =
-        maps[selectedMap];
-
-    world.width =
-        selectedMap === 6
-            ? 2600
-            : 2200;
-
-    world.height =
-        selectedMap === 3
-            ? 1600
-            : 1400;
-
-    world.obstacles = [];
-
-    world.bushes = [];
-
-    world.eggs = [];
-
-    world.enemies = [];
-
-    world.trees = [];
-
-    world.decorations = [];
-
-
-    chicken.x = 160;
-
-    chicken.y = 220;
-
-    chicken.vx = 0;
-
-    chicken.vy = 0;
-
-    chicken.dash = 0;
-
-    chicken.dashCooldown = 0;
-
-    chicken.invincible = 0;
-
-
-    /*
-      BORDAS
-    */
-
-    addObstacle(
-        -100,
-        -100,
-        world.width+200,
-        80
-    );
-
-    addObstacle(
-        -100,
-        world.height-20,
-        world.width+200,
-        100
-    );
-
-    addObstacle(
-        -100,
-        -100,
-        80,
-        world.height+200
-    );
-
-    addObstacle(
-        world.width-20,
-        -100,
-        100,
-        world.height+200
-    );
-
-
-    /*
-      MAPA 1
-    */
-
-    if(selectedMap === 1){
-
-        createFarmMap();
-
-    }
-
-
-    /*
-      MAPA 2
-    */
-
-    if(selectedMap === 2){
-
-        createCornMap();
-
-    }
-
-
-    /*
-      MAPA 3
-    */
-
-    if(selectedMap === 3){
-
-        createForestMap();
-
-    }
-
-
-    /*
-      MAPA 4
-    */
-
-    if(selectedMap === 4){
-
-        createDesertMap();
-
-    }
-
-
-    /*
-      MAPA 5
-    */
-
-    if(selectedMap === 5){
-
-        createNightMap();
-
-    }
-
-
-    /*
-      MAPA 6
-    */
-
-    if(selectedMap === 6){
-
-        createRoadMap();
-
-    }
-
-
-    createEggs();
-
-    createEnemies();
-
-    createExit();
-
-    updateHUD();
-
-}
-
-
-/* =====================================================
-   MAPA FAZENDA
-===================================================== */
-
-function createFarmMap(){
-
-    addObstacle(
-        80,70,300,190
-    );
-
-    addObstacle(
-        530,130,250,150
-    );
-
-    addObstacle(
-        1020,80,330,190
-    );
-
-    addObstacle(
-        420,560,300,170
-    );
-
-    addObstacle(
-        1060,650,300,170
-    );
-
-
-    for(
-        var i=0;
-        i<28;
-        i++
-    ){
-
-        addTreeDecoration();
-
-    }
-
-
-    for(
-        var j=0;
-        j<22;
-        j++
-    ){
-
-        addBush();
-
-    }
-
-}
-
-
-/* =====================================================
-   MAPA MILHARAL
-===================================================== */
-
-function createCornMap(){
-
-    for(
-        var i=0;
-        i<8;
-        i++
-    ){
-
-        addObstacle(
-            350+i*190,
-            180,
-            80,
-            700
-        );
-
-    }
-
-
-    for(
-        var j=0;
-        j<40;
-        j++
-    ){
-
-        addCornDecoration();
-
-    }
-
-
-    for(
-        var k=0;
-        k<15;
-        k++
-    ){
-
-        addBush();
-
-    }
-
-}
-
-
-/* =====================================================
-   FLORESTA
-===================================================== */
-
-function createForestMap(){
-
-    for(
-        var i=0;
-        i<45;
-        i++
-    ){
-
-        addTreeDecoration();
-
-    }
-
-
-    for(
-        var j=0;
-        j<15;
-        j++
-    ){
-
-        addObstacle(
-            300+
-            Math.random()*1400,
-
-            250+
-            Math.random()*1000,
-
-            100+
-            Math.random()*100,
-
-            80+
-            Math.random()*100
-        );
-
-    }
-
-}
-
-
-/* =====================================================
-   DESERTO
-===================================================== */
-
-function createDesertMap(){
-
-    addObstacle(
-        500,220,220,150
-    );
-
-    addObstacle(
-        1200,700,250,160
-    );
-
-    addObstacle(
-        1650,300,220,140
-    );
-
-
-    for(
-        var i=0;
-        i<18;
-        i++
-    ){
-
-        addCactus();
-
-    }
-
-
-    for(
-        var j=0;
-        j<18;
-        j++
-    ){
-
-        addRock();
-
-    }
-
-}
-
-
-/* =====================================================
-   NOITE
-===================================================== */
-
-function createNightMap(){
-
-    addObstacle(
-        150,100,300,180
-    );
-
-    addObstacle(
-        850,250,250,160
-    );
-
-    addObstacle(
-        1500,650,300,180
-    );
-
-
-    for(
-        var i=0;
-        i<35;
-        i++
-    ){
-
-        addTreeDecoration();
-
-    }
-
-
-    for(
-        var j=0;
-        j<20;
-        j++
-    ){
-
-        addStarDecoration();
-
-    }
-
-}
-
-
-/* =====================================================
-   ESTRADA
-===================================================== */
-
-function createRoadMap(){
-
-    /*
-      Estrada central
-    */
-
-    addObstacle(
-        0,
-        500,
-        world.width,
-        380
-    );
-
-
-    for(
-        var i=0;
-        i<28;
-        i++
-    ){
-
-        addRoadTree(
-            100+i*90,
-            430
-        );
-
-        addRoadTree(
-            100+i*90,
-            950
-        );
-
-    }
-
-
-    /*
-      carros como obstáculos
-    */
-
-    for(
-        var j=0;
-        j<9;
-        j++
-    ){
-
-        addObstacle(
-            250+
-            j*260,
-
-            600+
-            (j%2)*170,
-
-            110,
-
-            55
-        );
-
-    }
-
-}
-
-
-/* =====================================================
-   OBSTÁCULO
-===================================================== */
-
-function addObstacle(
-    x,
-    y,
-    w,
-    h
-){
-
-    world.obstacles.push({
-
-        x:x,
-        y:y,
-        w:w,
-        h:h
-
-    });
-
-}
-
-
-/* =====================================================
-   DECORAÇÕES
-===================================================== */
-
-function addTreeDecoration(){
-
-    var p =
-        randomFreePoint();
-
-    world.trees.push({
-
-        x:p.x,
-        y:p.y,
-
-        size:
-            25+
-            Math.random()*25
-
-    });
-
-}
-
-
-function addRoadTree(x,y){
-
-    world.trees.push({
-
-        x:x,
-        y:y,
-
-        size:24
-
-    });
-
-}
-
-
-function addBush(){
-
-    var p =
-        randomFreePoint();
-
-    world.bushes.push({
-
-        x:p.x,
-        y:p.y,
-
-        r:
-            25+
-            Math.random()*15
-
-    });
-
-}
-
-
-function addCornDecoration(){
-
-    var p =
-        randomFreePoint();
-
-    world.decorations.push({
-
-        type:"corn",
-
-        x:p.x,
-        y:p.y
-
-    });
-
-}
-
-
-function addCactus(){
-
-    var p =
-        randomFreePoint();
-
-    world.decorations.push({
-
-        type:"cactus",
-
-        x:p.x,
-        y:p.y
-
-    });
-
-}
-
-
-function addRock(){
-
-    var p =
-        randomFreePoint();
-
-    world.decorations.push({
-
-        type:"rock",
-
-        x:p.x,
-        y:p.y
-
-    });
-
-}
-
-
-function addStarDecoration(){
-
-    var p =
-        randomFreePoint();
-
-    world.decorations.push({
-
-        type:"star",
-
-        x:p.x,
-        y:p.y
-
-    });
-
-}
-
-
-/* =====================================================
-   PONTO LIVRE
-===================================================== */
-
-function randomFreePoint(){
-
-    for(
-        var i=0;
-        i<150;
-        i++
-    ){
-
-        var p={
-
-            x:
-                100+
-                Math.random()*
-                (world.width-200),
-
-            y:
-                100+
-                Math.random()*
-                (world.height-200)
-
-        };
-
-
-        var blocked=false;
-
-
-        for(
-            var j=0;
-            j<world.obstacles.length;
-            j++
-        ){
-
-            if(
-                circleRect(
-                    p.x,
-                    p.y,
-                    35,
-                    world.obstacles[j]
-                )
-            ){
-
-                blocked=true;
-
-                break;
-
-            }
-
-        }
-
-
-        if(
-            !blocked &&
-            Math.hypot(
-                p.x-chicken.x,
-                p.y-chicken.y
-            )>180
-        ){
-
-            return p;
-
-        }
-
-    }
-
-
-    return{
-
-        x:
-            400+
-            Math.random()*800,
-
-        y:
-            400+
-            Math.random()*500
-
-    };
-
-}
-
-
-/* =====================================================
-   OVOS
-===================================================== */
-
-function createEggs(){
-
-    for(
-        var i=0;
-        i<10;
-        i++
-    ){
-
-        var p =
-            randomFreePoint();
-
-        world.eggs.push({
-
-            x:p.x,
-
-            y:p.y,
-
-            pulse:
-                Math.random()*10,
-
-            collected:false
-
-        });
-
-    }
-
-}
-
-
-/* =====================================================
-   INIMIGOS
-===================================================== */
-
-function createEnemies(){
-
-    var amount =
-        selectedMap===3
-            ? 6
-            : 4;
-
-
-    for(
-        var i=0;
-        i<amount;
-        i++
-    ){
-
-        var p =
-            randomFreePoint();
-
-
-        world.enemies.push({
-
-            x:p.x,
-
-            y:p.y,
-
-            r:23,
-
-            speed:
-                1.25+
-                selectedMap*.08,
-
-            targetX:p.x,
-
-            targetY:p.y,
-
-            state:"patrol",
-
-            type:
-                i%2===0
-                    ?"farmer"
-                    :"dog"
-
-        });
-
-    }
-
-}
-
-
-/* =====================================================
-   SAÍDA
-===================================================== */
-
-function createExit(){
-
-    world.exit={
-
-        x:
-            world.width-150,
-
-        y:
-            world.height-180,
-
-        w:70,
-
-        h:90
-
-    };
-
-}
-
-
-/* =====================================================
-   MOVIMENTO DA GALINHA
-===================================================== */
-
-function moveChicken(){
-
-    var ax=0;
-
-    var ay=0;
-
-
-    if(keys.up)
-        ay-=1;
-
-    if(keys.down)
-        ay+=1;
-
-    if(keys.left)
-        ax-=1;
-
-    if(keys.right)
-        ax+=1;
-
-
-    /*
-      Normaliza para não andar
-      mais rápido na diagonal.
-    */
-
-    if(ax!==0 || ay!==0){
-
-        var len =
-            Math.hypot(
-                ax,
-                ay
-            );
-
-        ax/=len;
-
-        ay/=len;
-
-
-        /*
-          ACELERAÇÃO
-        */
-
-        chicken.vx +=
-            ax*
-            chicken.acceleration;
-
-        chicken.vy +=
-            ay*
-            chicken.acceleration;
-
-
-        chicken.walk+=.25;
-
-
-        if(Math.abs(ax)>.1){
-
-            chicken.direction =
-                ax>0 ? 1 : -1;
-
-        }
-
-    }else{
-
-        /*
-          DESACELERAÇÃO
-        */
-
-        chicken.vx *=
-            chicken.friction;
-
-        chicken.vy *=
-            chicken.friction;
-
-    }
-
-
-    /*
-      LIMITAR VELOCIDADE
-    */
-
-    var speed =
-        Math.hypot(
-            chicken.vx,
-            chicken.vy
-        );
-
-
-    var max =
-        chicken.dash>0
-            ? 10
-            : chicken.maxSpeed;
-
-
-    if(speed>max){
-
-        chicken.vx =
-            chicken.vx/speed*max;
-
-        chicken.vy =
-            chicken.vy/speed*max;
-
-    }
-
-
-    moveChickenCollision();
-
-
-    if(
-        chicken.dash>0
-    ){
-
-        chicken.dash--;
-
-        particle(
-            chicken.x,
-            chicken.y,
-            "#fff36a"
-        );
-
-    }
-
-
-    if(
-        chicken.dashCooldown>0
-    ){
-
-        chicken.dashCooldown--;
-
-    }
-
-
-    if(
-        chicken.invincible>0
-    ){
-
-        chicken.invincible--;
-
-    }
-
-
-    /*
-      ESCONDER
-    */
-
-    chicken.hidden=false;
-
-
-    for(
-        var i=0;
-        i<world.bushes.length;
-        i++
-    ){
-
-        var b =
-            world.bushes[i];
-
-        if(
-            Math.hypot(
-                chicken.x-b.x,
-                chicken.y-b.y
-            )<b.r
-        ){
-
-            chicken.hidden=true;
-
-            break;
-
-        }
-
-    }
-
-}
-
-
-/* =====================================================
-   COLISÃO GALINHA
-===================================================== */
-
-function moveChickenCollision(){
-
-    var oldX =
-        chicken.x;
-
-    var oldY =
-        chicken.y;
-
-
-    chicken.x +=
-        chicken.vx;
-
-
-    if(
-        isBlocked(
-            chicken.x,
-            chicken.y,
-            chicken.r
-        )
-    ){
-
-        chicken.x =
-            oldX;
-
-        chicken.vx *= -.15;
-
-    }
-
-
-    chicken.y +=
-        chicken.vy;
-
-
-    if(
-        isBlocked(
-            chicken.x,
-            chicken.y,
-            chicken.r
-        )
-    ){
-
-        chicken.y =
-            oldY;
-
-        chicken.vy *= -.15;
-
-    }
-
-}
-
-
-/* =====================================================
-   BLOQUEIO
-===================================================== */
-
-function isBlocked(
-    x,
-    y,
-    r
-){
-
-    for(
-        var i=0;
-        i<world.obstacles.length;
-        i++
-    ){
-
-        if(
-            circleRect(
-                x,
-                y,
-                r,
-                world.obstacles[i]
-            )
-        ){
-
-            return true;
-
-        }
-
-    }
-
-    return false;
-
-}
-
-
-/* =====================================================
-   DASH
-===================================================== */
-
-function dash(){
-
-    if(
-        !playing ||
-        paused ||
-        chicken.dashCooldown>0
-    ){
-
-        return;
-
-    }
-
-
-    var dx=0;
-
-    var dy=0;
-
-
-    if(keys.left)
-        dx--;
-
-    if(keys.right)
-        dx++;
-
-    if(keys.up)
-        dy--;
-
-    if(keys.down)
-        dy++;
-
-
-    /*
-      Se não apertou direção,
-      usa a direção atual.
-    */
-
-    if(dx===0 && dy===0){
-
-        dx =
-            chicken.direction;
-
-    }
-
-
-    var len =
-        Math.hypot(
-            dx,
-            dy
-        ) || 1;
-
-
-    dx/=len;
-
-    dy/=len;
-
-
-    chicken.vx =
-        dx*10;
-
-    chicken.vy =
-        dy*10;
-
-
-    chicken.dash=18;
-
-    chicken.dashCooldown=55;
-
-
-    camera.shake=7;
-
-}
-
-
-/* =====================================================
-   INIMIGOS
-===================================================== */
-
-function updateEnemies(){
-
-    for(
-        var i=0;
-        i<world.enemies.length;
-        i++
-    ){
-
-        var e =
-            world.enemies[i];
-
-
-        var distance =
-            Math.hypot(
-                e.x-chicken.x,
-                e.y-chicken.y
-            );
-
-
-        /*
-          PERSEGUIÇÃO
-        */
-
-        if(
-            !chicken.hidden &&
-            distance<300
-        ){
-
-            e.state="chase";
-
-        }
-
-
-        /*
-          SE PERDEU
-        */
-
-        if(
-            chicken.hidden ||
-            distance>520
-        ){
-
-            if(
-                e.state==="chase"
-            ){
-
-                e.state="patrol";
-
-            }
-
-        }
-
-
-        if(
-            e.state==="patrol"
-        ){
-
-            if(
-                Math.hypot(
-                    e.x-e.targetX,
-                    e.y-e.targetY
-                )<30
-            ){
-
-                e.targetX =
-                    100+
-                    Math.random()*
-                    (world.width-200);
-
-                e.targetY =
-                    100+
-                    Math.random()*
-                    (world.height-200);
-
-            }
-
-        }
-
-
-        if(
-            e.state==="chase"
-        ){
-
-            e.targetX =
-                chicken.x;
-
-            e.targetY =
-                chicken.y;
-
-        }
-
-
-        var dx =
-            e.targetX-e.x;
-
-        var dy =
-            e.targetY-e.y;
-
-
-        var len =
-            Math.hypot(
-                dx,
-                dy
-            ) || 1;
-
-
-        dx/=len;
-
-        dy/=len;
-
-
-        var oldX=e.x;
-
-        var oldY=e.y;
-
-
-        e.x +=
-            dx*e.speed;
-
-        e.y +=
-            dy*e.speed;
-
-
-        if(
-            isBlocked(
-                e.x,
-                e.y,
-                e.r
-            )
-        ){
-
-            e.x=oldX;
-
-            e.y=oldY;
-
-            e.targetX =
-                100+
-                Math.random()*
-                (world.width-200);
-
-            e.targetY =
-                100+
-                Math.random()*
-                (world.height-200);
-
-        }
-
-
-        /*
-          COLISÃO
-        */
-
-        if(
-            distance<
-            e.r+chicken.r &&
-            !chicken.hidden &&
-            chicken.invincible<=0
-        ){
-
-            damage();
-
-        }
-
-    }
-
-}
-
-
-/* =====================================================
-   DANO
-===================================================== */
-
-function damage(){
-
-    lives--;
-
-    chicken.invincible=100;
-
-    chicken.vx=0;
-
-    chicken.vy=0;
-
-    chicken.x=160;
-
-    chicken.y=220;
-
-    camera.shake=15;
-
-    particle(
-        chicken.x,
-        chicken.y,
-        "#ff4b4b",
-        "burst"
-    );
-
-    updateHUD();
-
-
-    if(lives<=0){
-
-        gameOver();
-
-    }else{
-
-        message(
-            "😵 VOCÊ FOI PEGO!"
-        );
-
-    }
-
-}
-
-
-/* =====================================================
-   ITENS
-===================================================== */
-
-function updateItems(){
-
-    /*
-      OVOS
-    */
-
-    for(
-        var i=0;
-        i<world.eggs.length;
-        i++
-    ){
-
-        var e =
-            world.eggs[i];
-
-        e.pulse+=.08;
-
-
-        if(
-            !e.collected &&
-            Math.hypot(
-                e.x-chicken.x,
-                e.y-chicken.y
-            )<38
-        ){
-
-            e.collected=true;
-
-            eggs++;
-
-            score+=100;
-
-            particle(
-                e.x,
-                e.y,
-                "#fff1a0",
-                "burst"
-            );
-
-            message(
-                "🥚 +100"
-            );
-
-            updateHUD();
-
-        }
-
-    }
-
-
-    /*
-      SAÍDA
-    */
-
-    var ex =
-        world.exit;
-
-    if(!ex)return;
-
-
-    if(
-        chicken.x>ex.x-25 &&
-        chicken.x<ex.x+ex.w+25 &&
-        chicken.y>ex.y-25 &&
-        chicken.y<ex.y+ex.h+25
-    ){
-
-        var total=0;
-
-
-        for(
-            var j=0;
-            j<world.eggs.length;
-            j++
-        ){
-
-            if(
-                world.eggs[j].collected
-            ){
-
-                total++;
-
-            }
-
-        }
-
-
-        if(
-            total>=
-            Math.ceil(
-                world.eggs.length*.5
-            )
-        ){
-
-            score+=500;
-
-            victoryMap();
-
-        }else{
-
-            message(
-                "🥚 Pegue pelo menos metade dos ovos!"
-            );
-
-        }
-
-    }
-
-}
-
-
-/* =====================================================
-   PASSAR MAPA
-===================================================== */
-
-function victoryMap(){
-
-    if(
-        selectedMap<6
-    ){
-
-        selectedMap++;
-
-        score+=250;
-
-        createMap();
-
-        message(
-            "🗺️ NOVO MAPA: "+
-            maps[selectedMap].name
-        );
-
-        updateHUD();
-
-    }else{
-
-        victory();
-
-    }
-
-}
-
-
-/* =====================================================
-   VITÓRIA
-===================================================== */
-
-function victory(){
-
-    playing=false;
+    camera.x = 0;
+    camera.y = 0;
 
     resetKeys();
 
-    saveBest();
+    /*
+      Primeiro criamos o mundo.
+      Depois mostramos a mensagem.
+    */
+    createLevel();
 
+    updateHUD();
 
-    document
-        .getElementById("hud")
-        .classList.add(
-            "hidden"
-        );
+    message("🐔 CORRA!");
 
-    document
-        .getElementById("pause")
-        .classList.add(
-            "hidden"
-        );
+  }catch(error){
 
+    console.error(error);
 
-    document
-        .getElementById("endIcon")
-        .textContent =
-        "🐔🏆";
+    showError(error);
 
-
-    document
-        .getElementById("endTitle")
-        .textContent =
-        "VOCÊ ESCAPOU!";
-
-
-    document
-        .getElementById("endText")
-        .innerHTML =
-        "Você conseguiu atravessar todos os mapas!<br><br>"+
-        "🏆 Pontuação: <b>"+
-        score+
-        "</b><br>"+
-        "🥚 Ovos encontrados: <b>"+
-        eggs+
-        "</b><br><br>"+
-        "A galinha está LIVRE! 😂";
-
-
-    document
-        .getElementById("end")
-        .classList.remove(
-            "hidden"
-        );
-
-}
-
-
-/* =====================================================
-   GAME OVER
-===================================================== */
-
-function gameOver(){
-
-    playing=false;
-
-    resetKeys();
-
-    saveBest();
-
-
-    document
-        .getElementById("hud")
-        .classList.add(
-            "hidden"
-        );
-
-    document
-        .getElementById("pause")
-        .classList.add(
-            "hidden"
-        );
-
-
-    document
-        .getElementById("endIcon")
-        .textContent =
-        "😵🐔";
-
-
-    document
-        .getElementById("endTitle")
-        .textContent =
-        "A GALINHA FOI PEGA!";
-
-
-    document
-        .getElementById("endText")
-        .innerHTML =
-        "A fuga terminou!<br><br>"+
-        "🏆 Pontuação: <b>"+
-        score+
-        "</b><br>"+
-        "🗺️ Mapa: <b>"+
-        maps[selectedMap].name+
-        "</b>";
-
-
-    document
-        .getElementById("end")
-        .classList.remove(
-            "hidden"
-        );
-
-}
-
-
-/* =====================================================
-   PAUSA
-===================================================== */
-
-function togglePause(){
-
-    if(!playing)return;
-
-    paused=!paused;
-
-    document
-        .getElementById("pause")
-        .textContent =
-        paused
-            ?"▶️"
-            :"⏸️";
+  }
 
 }
 
@@ -2688,36 +649,1197 @@ function togglePause(){
 
 function goMenu(){
 
-    playing=false;
+  playing = false;
+  paused = false;
 
-    paused=false;
+  resetKeys();
 
-    resetKeys();
+  document
+    .getElementById("end")
+    .classList.add("hidden");
+
+  document
+    .getElementById("hud")
+    .classList.add("hidden");
+
+  document
+    .getElementById("pause")
+    .classList.add("hidden");
+
+  document
+    .getElementById("menu")
+    .classList.remove("hidden");
+
+}
 
 
-    document
-        .getElementById("end")
-        .classList.add(
-            "hidden"
-        );
+/* =====================================================
+   INSTRUÇÕES
+===================================================== */
 
-    document
-        .getElementById("hud")
-        .classList.add(
-            "hidden"
-        );
+function showInstructions(){
 
-    document
-        .getElementById("pause")
-        .classList.add(
-            "hidden"
-        );
+  document
+    .getElementById("instructions")
+    .classList.toggle("hidden");
 
-    document
-        .getElementById("menu")
-        .classList.remove(
-            "hidden"
-        );
+}
+
+
+/* =====================================================
+   PAUSA
+===================================================== */
+
+function togglePause(){
+
+  if(!playing)return;
+
+  paused = !paused;
+
+  document
+    .getElementById("pause")
+    .textContent =
+      paused ? "▶️" : "⏸️";
+
+  if(paused){
+
+    message("⏸️ PAUSADO");
+
+  }
+
+}
+
+
+/* =====================================================
+   CRIAR FASE
+===================================================== */
+
+function createLevel(){
+
+  world.width = 1600 + level * 50;
+  world.height = 950 + level * 30;
+
+  world.obstacles = [];
+  world.bushes = [];
+  world.eggs = [];
+  world.enemies = [];
+
+  chicken.x = 120;
+  chicken.y = 200;
+
+  chicken.dash = 0;
+  chicken.invincible = 0;
+  chicken.hidden = false;
+
+  /*
+    BORDAS
+  */
+
+  world.obstacles.push(
+    {
+      x:-100,
+      y:-100,
+      w:world.width+200,
+      h:80
+    },
+    {
+      x:-100,
+      y:world.height-20,
+      w:world.width+200,
+      h:100
+    },
+    {
+      x:-100,
+      y:-100,
+      w:80,
+      h:world.height+200
+    },
+    {
+      x:world.width-20,
+      y:-100,
+      w:100,
+      h:world.height+200
+    }
+  );
+
+
+  /*
+    CONSTRUÇÕES
+  */
+
+  addObstacle(40,40,230,150);
+  addObstacle(370,100,180,120);
+  addObstacle(680,280,230,120);
+  addObstacle(1030,100,220,150);
+  addObstacle(280,500,220,120);
+  addObstacle(700,650,220,130);
+  addObstacle(1110,500,230,120);
+
+
+  if(level >= 2){
+
+    addObstacle(
+      550,
+      430,
+      100,
+      180
+    );
+
+    addObstacle(
+      930,
+      350,
+      90,
+      150
+    );
+
+  }
+
+
+  if(level >= 4){
+
+    addObstacle(
+      100,
+      350,
+      130,
+      100
+    );
+
+    addObstacle(
+      1280,
+      700,
+      180,
+      90
+    );
+
+  }
+
+
+  if(level >= 6){
+
+    addObstacle(
+      600,
+      160,
+      90,
+      100
+    );
+
+    addObstacle(
+      950,
+      550,
+      100,
+      100
+    );
+
+  }
+
+
+  /*
+    MOITAS
+  */
+
+  for(
+    var i=0;
+    i<18+level*2;
+    i++
+  ){
+
+    var bush = findFreePoint();
+
+    world.bushes.push({
+
+      x:bush.x,
+      y:bush.y,
+
+      r:30+Math.random()*12
+
+    });
+
+  }
+
+
+  /*
+    OVOS
+  */
+
+  for(
+    var j=0;
+    j<7+level;
+    j++
+  ){
+
+    var egg = findFreePoint();
+
+    world.eggs.push({
+
+      x:egg.x,
+      y:egg.y,
+
+      collected:false,
+
+      pulse:Math.random()*10
+
+    });
+
+  }
+
+
+  /*
+    INIMIGOS
+  */
+
+  for(
+    var k=0;
+    k<2+level;
+    k++
+  ){
+
+    var enemy = findFreePoint();
+
+    var isDog =
+      k%3 === 0 &&
+      level >= 3;
+
+    world.enemies.push({
+
+      x:enemy.x,
+      y:enemy.y,
+
+      r:isDog ? 22 : 24,
+
+      type:isDog
+        ? "dog"
+        : "farmer",
+
+      speed:isDog
+        ? 1.7
+        : 1.2,
+
+      targetX:enemy.x,
+      targetY:enemy.y,
+
+      state:"patrol",
+
+      alert:0
+
+    });
+
+  }
+
+
+  /*
+    SAÍDA
+  */
+
+  world.exit = {
+
+    x:world.width-120,
+
+    y:world.height-150,
+
+    w:60,
+
+    h:80
+
+  };
+
+
+  message(
+    "🌾 FASE " +
+    level +
+    " — " +
+    levelName()
+  );
+
+}
+
+
+/* =====================================================
+   OBSTÁCULO
+===================================================== */
+
+function addObstacle(x,y,w,h){
+
+  world.obstacles.push({
+
+    x:x,
+    y:y,
+    w:w,
+    h:h
+
+  });
+
+}
+
+
+/* =====================================================
+   PONTO LIVRE
+===================================================== */
+
+function findFreePoint(){
+
+  /*
+    Menos tentativas e uma saída garantida.
+    Evita travamentos em mapas lotados.
+  */
+
+  for(
+    var i=0;
+    i<180;
+    i++
+  ){
+
+    var p = {
+
+      x:
+        100 +
+        Math.random() *
+        (world.width-200),
+
+      y:
+        100 +
+        Math.random() *
+        (world.height-200)
+
+    };
+
+    var blocked = false;
+
+
+    for(
+      var j=0;
+      j<world.obstacles.length;
+      j++
+    ){
+
+      if(
+        circleRect(
+          p.x,
+          p.y,
+          30,
+          world.obstacles[j]
+        )
+      ){
+
+        blocked = true;
+        break;
+
+      }
+
+    }
+
+
+    if(
+      !blocked &&
+      Math.hypot(
+        p.x-chicken.x,
+        p.y-chicken.y
+      ) > 220
+    ){
+
+      return p;
+
+    }
+
+  }
+
+
+  /*
+    Se não encontrar um ponto,
+    retorna uma posição segura.
+  */
+
+  return {
+
+    x:800,
+    y:450
+
+  };
+
+}
+
+
+/* =====================================================
+   NOME DAS FASES
+===================================================== */
+
+function levelName(){
+
+  var names = [
+
+    "A GALINHEIRA",
+    "CAMPO DE MILHO",
+    "O CACHORRO",
+    "TRATOR DESCONTROLADO",
+    "FUGA NOTURNA",
+    "A ESTRADA"
+
+  ];
+
+  return names[level-1] || "";
+
+}
+
+
+/* =====================================================
+   COLISÃO CÍRCULO / RETÂNGULO
+===================================================== */
+
+function circleRect(cx,cy,r,o){
+
+  var nx = Math.max(
+    o.x,
+    Math.min(
+      cx,
+      o.x+o.w
+    )
+  );
+
+  var ny = Math.max(
+    o.y,
+    Math.min(
+      cy,
+      o.y+o.h
+    )
+  );
+
+  var dx = cx-nx;
+  var dy = cy-ny;
+
+  return (
+    dx*dx +
+    dy*dy
+  ) < r*r;
+
+}
+
+
+/* =====================================================
+   MOVIMENTO DA GALINHA
+===================================================== */
+
+function moveChicken(){
+
+  var dx = 0;
+  var dy = 0;
+
+  if(keys.left) dx--;
+  if(keys.right) dx++;
+
+  if(keys.up) dy--;
+  if(keys.down) dy++;
+
+
+  if(dx || dy){
+
+    var length =
+      Math.hypot(dx,dy);
+
+    dx /= length;
+    dy /= length;
+
+    var speed =
+      chicken.dash > 0
+        ? 9
+        : chicken.speed;
+
+    moveObject(
+      chicken,
+      dx*speed,
+      dy*speed
+    );
+
+    particle(
+      chicken.x-8,
+      chicken.y+15,
+      "#e8ead1"
+    );
+
+  }
+
+
+  if(chicken.dash > 0){
+    chicken.dash--;
+  }
+
+  if(chicken.invincible > 0){
+    chicken.invincible--;
+  }
+
+
+  /*
+    Verifica se está escondida
+  */
+
+  chicken.hidden = false;
+
+  for(
+    var i=0;
+    i<world.bushes.length;
+    i++
+  ){
+
+    var b =
+      world.bushes[i];
+
+    if(
+      Math.hypot(
+        chicken.x-b.x,
+        chicken.y-b.y
+      ) < b.r
+    ){
+
+      chicken.hidden = true;
+      break;
+
+    }
+
+  }
+
+}
+
+
+/* =====================================================
+   MOVIMENTO COM COLISÃO
+===================================================== */
+
+function moveObject(obj,dx,dy){
+
+  obj.x += dx;
+
+  for(
+    var i=0;
+    i<world.obstacles.length;
+    i++
+  ){
+
+    var o =
+      world.obstacles[i];
+
+    if(
+      circleRect(
+        obj.x,
+        obj.y,
+        obj.r,
+        o
+      )
+    ){
+
+      if(dx > 0){
+
+        obj.x =
+          o.x -
+          obj.r;
+
+      }
+
+      if(dx < 0){
+
+        obj.x =
+          o.x +
+          o.w +
+          obj.r;
+
+      }
+
+    }
+
+  }
+
+
+  obj.y += dy;
+
+  for(
+    var j=0;
+    j<world.obstacles.length;
+    j++
+  ){
+
+    var q =
+      world.obstacles[j];
+
+    if(
+      circleRect(
+        obj.x,
+        obj.y,
+        obj.r,
+        q
+      )
+    ){
+
+      if(dy > 0){
+
+        obj.y =
+          q.y -
+          obj.r;
+
+      }
+
+      if(dy < 0){
+
+        obj.y =
+          q.y +
+          q.h +
+          obj.r;
+
+      }
+
+    }
+
+  }
+
+}
+
+
+/* =====================================================
+   IMPULSO
+===================================================== */
+
+function dash(){
+
+  if(!playing || paused)return;
+
+  chicken.dash = 20;
+
+  particle(
+    chicken.x,
+    chicken.y,
+    "#fff36a",
+    "burst"
+  );
+
+}
+
+
+/* =====================================================
+   BARULHO
+===================================================== */
+
+function chickenNoise(){
+
+  if(
+    !playing ||
+    paused ||
+    noiseTimer > 0
+  ){
+
+    return;
+
+  }
+
+  noiseTimer = 100;
+
+  message("🐔 COCÓÓÓÓÓ!");
+
+  for(
+    var i=0;
+    i<world.enemies.length;
+    i++
+  ){
+
+    var e =
+      world.enemies[i];
+
+    if(
+      Math.hypot(
+        e.x-chicken.x,
+        e.y-chicken.y
+      ) < 550
+    ){
+
+      e.state = "chase";
+
+      e.targetX =
+        chicken.x;
+
+      e.targetY =
+        chicken.y;
+
+    }
+
+  }
+
+  particle(
+    chicken.x,
+    chicken.y,
+    "#fff36a",
+    "burst"
+  );
+
+}
+
+
+/* =====================================================
+   INIMIGOS
+===================================================== */
+
+function updateEnemies(){
+
+  if(noiseTimer > 0){
+    noiseTimer--;
+  }
+
+
+  for(
+    var i=0;
+    i<world.enemies.length;
+    i++
+  ){
+
+    var e =
+      world.enemies[i];
+
+    var distance =
+      Math.hypot(
+        e.x-chicken.x,
+        e.y-chicken.y
+      );
+
+
+    /*
+      DETECTAR
+    */
+
+    if(
+      !chicken.hidden &&
+      distance < 260
+    ){
+
+      e.state = "chase";
+
+    }
+
+
+    /*
+      PATRULHA
+    */
+
+    if(e.state === "patrol"){
+
+      if(
+        Math.hypot(
+          e.x-e.targetX,
+          e.y-e.targetY
+        ) < 25
+      ){
+
+        e.targetX =
+          100 +
+          Math.random() *
+          (world.width-200);
+
+        e.targetY =
+          100 +
+          Math.random() *
+          (world.height-200);
+
+      }
+
+    }
+
+
+    /*
+      PERSEGUIÇÃO
+    */
+
+    if(e.state === "chase"){
+
+      e.targetX =
+        chicken.x;
+
+      e.targetY =
+        chicken.y;
+
+
+      if(
+        chicken.hidden ||
+        distance > 500
+      ){
+
+        e.state = "patrol";
+
+      }
+
+    }
+
+
+    var dx =
+      e.targetX-e.x;
+
+    var dy =
+      e.targetY-e.y;
+
+    var len =
+      Math.hypot(dx,dy) || 1;
+
+    dx /= len;
+    dy /= len;
+
+
+    moveEnemy(
+      e,
+      dx*e.speed,
+      dy*e.speed
+    );
+
+
+    /*
+      DANO
+    */
+
+    if(
+      distance <
+      e.r+chicken.r &&
+      !chicken.hidden &&
+      chicken.invincible <= 0
+    ){
+
+      damage();
+
+    }
+
+  }
+
+}
+
+
+/* =====================================================
+   MOVIMENTO DO INIMIGO
+===================================================== */
+
+function moveEnemy(e,dx,dy){
+
+  e.x += dx;
+
+  for(
+    var i=0;
+    i<world.obstacles.length;
+    i++
+  ){
+
+    if(
+      circleRect(
+        e.x,
+        e.y,
+        e.r,
+        world.obstacles[i]
+      )
+    ){
+
+      e.x -= dx;
+
+      e.targetX =
+        100 +
+        Math.random() *
+        (world.width-200);
+
+      e.targetY =
+        100 +
+        Math.random() *
+        (world.height-200);
+
+      break;
+
+    }
+
+  }
+
+
+  e.y += dy;
+
+  for(
+    var j=0;
+    j<world.obstacles.length;
+    j++
+  ){
+
+    if(
+      circleRect(
+        e.x,
+        e.y,
+        e.r,
+        world.obstacles[j]
+      )
+    ){
+
+      e.y -= dy;
+
+      e.targetX =
+        100 +
+        Math.random() *
+        (world.width-200);
+
+      e.targetY =
+        100 +
+        Math.random() *
+        (world.height-200);
+
+      break;
+
+    }
+
+  }
+
+}
+
+
+/* =====================================================
+   DANO
+===================================================== */
+
+function damage(){
+
+  lives--;
+
+  chicken.invincible = 100;
+
+  chicken.x = 120;
+  chicken.y = 200;
+
+  updateHUD();
+
+  particle(
+    chicken.x,
+    chicken.y,
+    "#ff5555",
+    "burst"
+  );
+
+  if(lives <= 0){
+
+    gameOver();
+
+  }else{
+
+    message("😵 VOCÊ FOI PEGO!");
+
+  }
+
+}
+
+
+/* =====================================================
+   ITENS
+===================================================== */
+
+function updateItems(){
+
+  /*
+    OVOS
+  */
+
+  for(
+    var i=0;
+    i<world.eggs.length;
+    i++
+  ){
+
+    var egg =
+      world.eggs[i];
+
+    egg.pulse += .08;
+
+
+    if(
+      !egg.collected &&
+      Math.hypot(
+        egg.x-chicken.x,
+        egg.y-chicken.y
+      ) < 35
+    ){
+
+      egg.collected = true;
+
+      eggs++;
+      score += 100;
+
+      particle(
+        egg.x,
+        egg.y,
+        "#fff2a0",
+        "burst"
+      );
+
+      message("🥚 +100!");
+
+      updateHUD();
+
+    }
+
+  }
+
+
+  /*
+    SAÍDA
+  */
+
+  var ex = world.exit;
+
+  if(!ex)return;
+
+
+  if(
+    chicken.x > ex.x-20 &&
+    chicken.x < ex.x+ex.w+20 &&
+    chicken.y > ex.y-20 &&
+    chicken.y < ex.y+ex.h+20
+  ){
+
+    var collected = 0;
+
+    for(
+      var j=0;
+      j<world.eggs.length;
+      j++
+    ){
+
+      if(
+        world.eggs[j].collected
+      ){
+
+        collected++;
+
+      }
+
+    }
+
+
+    if(
+      collected >=
+      Math.ceil(
+        world.eggs.length*.45
+      )
+    ){
+
+      nextLevel();
+
+    }else{
+
+      message(
+        "🥚 Pegue mais ovos!"
+      );
+
+    }
+
+  }
+
+}
+
+
+/* =====================================================
+   PRÓXIMA FASE
+===================================================== */
+
+function nextLevel(){
+
+  score += 500 * level;
+
+  if(level < 6){
+
+    level++;
+
+    createLevel();
+
+    updateHUD();
+
+  }else{
+
+    victory();
+
+  }
+
+}
+
+
+/* =====================================================
+   VITÓRIA
+===================================================== */
+
+function victory(){
+
+  playing = false;
+
+  resetKeys();
+
+  saveBest();
+
+  document
+    .getElementById("hud")
+    .classList.add("hidden");
+
+  document
+    .getElementById("pause")
+    .classList.add("hidden");
+
+  document
+    .getElementById("endIcon")
+    .textContent = "🐔🏆";
+
+  document
+    .getElementById("endTitle")
+    .textContent = "VOCÊ ESCAPOU!";
+
+  document
+    .getElementById("endText")
+    .innerHTML =
+      "A galinha chegou à estrada!<br><br>" +
+      "🏆 Pontuação: <b>" +
+      score +
+      "</b><br>" +
+      "🥚 Ovos: <b>" +
+      eggs +
+      "</b><br><br>" +
+      "A fazenda nunca mais será a mesma! 😂";
+
+  document
+    .getElementById("end")
+    .classList.remove("hidden");
+
+}
+
+
+/* =====================================================
+   GAME OVER
+===================================================== */
+
+function gameOver(){
+
+  playing = false;
+
+  resetKeys();
+
+  saveBest();
+
+  document
+    .getElementById("hud")
+    .classList.add("hidden");
+
+  document
+    .getElementById("pause")
+    .classList.add("hidden");
+
+  document
+    .getElementById("endIcon")
+    .textContent = "😵🐔";
+
+  document
+    .getElementById("endTitle")
+    .textContent =
+      "A GALINHA FOI PEGA!";
+
+  document
+    .getElementById("endText")
+    .innerHTML =
+      "A fuga terminou!<br><br>" +
+      "🏆 Pontuação: <b>" +
+      score +
+      "</b><br>" +
+      "🌾 Você chegou até a fase <b>" +
+      level +
+      "</b>.";
+
+  document
+    .getElementById("end")
+    .classList.remove("hidden");
 
 }
 
@@ -2728,30 +1850,21 @@ function goMenu(){
 
 function updateHUD(){
 
-    document
-        .getElementById(
-            "lifeText"
-        )
-        .textContent=lives;
+  document
+    .getElementById("lifeText")
+    .textContent = lives;
 
-    document
-        .getElementById(
-            "eggText"
-        )
-        .textContent=eggs;
+  document
+    .getElementById("eggText")
+    .textContent = eggs;
 
-    document
-        .getElementById(
-            "scoreText"
-        )
-        .textContent=score;
+  document
+    .getElementById("scoreText")
+    .textContent = score;
 
-    document
-        .getElementById(
-            "mapText"
-        )
-        .textContent=
-        maps[selectedMap].name;
+  document
+    .getElementById("levelText")
+    .textContent = level;
 
 }
 
@@ -2762,28 +1875,21 @@ function updateHUD(){
 
 function message(text){
 
-    var el =
-        document.getElementById(
-            "msg"
-        );
+  var el =
+    document.getElementById("msg");
 
-    el.textContent=text;
+  el.textContent = text;
 
-    el.style.opacity="1";
+  el.style.opacity = "1";
 
-    clearTimeout(
-        messageTimeout
-    );
+  clearTimeout(messageTimeout);
 
-    messageTimeout =
-        setTimeout(
-            function(){
+  messageTimeout =
+    setTimeout(function(){
 
-                el.style.opacity="0";
+      el.style.opacity = "0";
 
-            },
-            1800
-        );
+    },1800);
 
 }
 
@@ -2793,83 +1899,77 @@ function message(text){
 ===================================================== */
 
 function particle(
-    x,
-    y,
-    color,
-    type
+  x,
+  y,
+  color,
+  type
 ){
 
-    var amount =
-        type==="burst"
-            ?18
-            :2;
+  var amount =
+    type === "burst"
+      ? 18
+      : 3;
 
 
-    for(
-        var i=0;
-        i<amount;
-        i++
-    ){
+  for(
+    var i=0;
+    i<amount;
+    i++
+  ){
 
-        particles.push({
+    particles.push({
 
-            x:x,
+      x:x,
+      y:y,
 
-            y:y,
+      vx:
+        (Math.random()-.5)*7,
 
-            vx:
-                (Math.random()-.5)*7,
+      vy:
+        (Math.random()-.5)*7,
 
-            vy:
-                (Math.random()-.5)*7,
+      life:
+        40 +
+        Math.random()*30,
 
-            life:
-                30+
-                Math.random()*35,
+      size:
+        2 +
+        Math.random()*4,
 
-            size:
-                2+
-                Math.random()*4,
+      color:color
 
-            color:color
+    });
 
-        });
-
-    }
+  }
 
 }
 
 
 function updateParticles(){
 
-    for(
-        var i=particles.length-1;
-        i>=0;
-        i--
-    ){
+  for(
+    var i=particles.length-1;
+    i>=0;
+    i--
+  ){
 
-        var p =
-            particles[i];
+    var p =
+      particles[i];
 
-        p.x+=p.vx;
+    p.x += p.vx;
+    p.y += p.vy;
 
-        p.y+=p.vy;
+    p.vy += .08;
 
-        p.vy+=.08;
+    p.life--;
 
-        p.life--;
+    if(p.life <= 0){
 
-
-        if(p.life<=0){
-
-            particles.splice(
-                i,
-                1
-            );
-
-        }
+      particles.splice(i,1);
 
     }
+
+  }
 
 }
 
@@ -2880,64 +1980,44 @@ function updateParticles(){
 
 function updateCamera(){
 
-    var targetX =
-        chicken.x-W/2;
+  var targetX =
+    chicken.x-W/2;
 
-    var targetY =
-        chicken.y-H/2;
-
-
-    camera.x +=
-        (
-            targetX-camera.x
-        )*.10;
+  var targetY =
+    chicken.y-H/2;
 
 
-    camera.y +=
-        (
-            targetY-camera.y
-        )*.10;
+  camera.x +=
+    (targetX-camera.x)*.08;
+
+  camera.y +=
+    (targetY-camera.y)*.08;
 
 
-    camera.x =
+  camera.x =
+    Math.max(
+      0,
+      Math.min(
+        camera.x,
         Math.max(
-            0,
-            Math.min(
-                camera.x,
-                Math.max(
-                    0,
-                    world.width-W
-                )
-            )
-        );
+          0,
+          world.width-W
+        )
+      )
+    );
 
 
-    camera.y =
+  camera.y =
+    Math.max(
+      0,
+      Math.min(
+        camera.y,
         Math.max(
-            0,
-            Math.min(
-                camera.y,
-                Math.max(
-                    0,
-                    world.height-H
-                )
-            )
-        );
-
-
-    if(camera.shake>0){
-
-        camera.x +=
-            (Math.random()-.5)*
-            camera.shake;
-
-        camera.y +=
-            (Math.random()-.5)*
-            camera.shake;
-
-        camera.shake*=.8;
-
-    }
+          0,
+          world.height-H
+        )
+      )
+    );
 
 }
 
@@ -2948,463 +2028,96 @@ function updateCamera(){
 
 function draw(){
 
-    var map =
-        maps[selectedMap];
+  ctx.clearRect(
+    0,
+    0,
+    W,
+    H
+  );
+
+  ctx.save();
+
+  ctx.translate(
+    -camera.x,
+    -camera.y
+  );
 
 
-    /*
-      CÉU / FUNDO
-    */
+  /*
+    CHÃO
+  */
 
-    ctx.fillStyle =
-        map.sky;
+  ctx.fillStyle =
+    level >= 5
+      ? "#263729"
+      : "#4f7b3c";
 
-    ctx.fillRect(
-        0,
-        0,
-        W,
-        H
+  ctx.fillRect(
+    0,
+    0,
+    world.width,
+    world.height
+  );
+
+
+  /*
+    LINHAS DO CAMPO
+  */
+
+  ctx.strokeStyle =
+    "rgba(220,240,170,.12)";
+
+  ctx.lineWidth = 2;
+
+
+  for(
+    var x=0;
+    x<world.width;
+    x+=64
+  ){
+
+    ctx.beginPath();
+
+    ctx.moveTo(x,0);
+    ctx.lineTo(
+      x,
+      world.height
     );
 
+    ctx.stroke();
 
-    ctx.save();
+  }
 
 
-    ctx.translate(
-        -camera.x,
-        -camera.y
+  for(
+    var y=0;
+    y<world.height;
+    y+=64
+  ){
+
+    ctx.beginPath();
+
+    ctx.moveTo(0,y);
+    ctx.lineTo(
+      world.width,
+      y
     );
 
+    ctx.stroke();
 
-    /*
-      CHÃO
-    */
+  }
 
-    ctx.fillStyle =
-        map.ground;
 
-    ctx.fillRect(
-        0,
-        0,
-        world.width,
-        world.height
-    );
+  drawObstacles();
+  drawBushes();
+  drawEggs();
+  drawExit();
+  drawEnemies();
+  drawChicken();
+  drawParticles();
 
 
-    /*
-      TEXTURA DO CHÃO
-    */
-
-    ctx.fillStyle =
-        map.ground2;
-
-
-    for(
-        var x=0;
-        x<world.width;
-        x+=80
-    ){
-
-        for(
-            var y=0;
-            y<world.height;
-            y+=80
-        ){
-
-            if(
-                (x+y)%160===0
-            ){
-
-                ctx.globalAlpha=.16;
-
-                ctx.fillRect(
-                    x,
-                    y,
-                    35,
-                    4
-                );
-
-            }
-
-        }
-
-    }
-
-    ctx.globalAlpha=1;
-
-
-    /*
-      ESTRADA
-    */
-
-    if(selectedMap===6){
-
-        ctx.fillStyle =
-            "#353838";
-
-        ctx.fillRect(
-            0,
-            500,
-            world.width,
-            380
-        );
-
-
-        ctx.fillStyle =
-            "#d9c35c";
-
-
-        for(
-            var r=0;
-            r<world.width;
-            r+=100
-        ){
-
-            ctx.fillRect(
-                r,
-                680,
-                55,
-                8
-            );
-
-        }
-
-    }
-
-
-    drawTrees();
-
-    drawDecorations();
-
-    drawBushes();
-
-    drawObstacles();
-
-    drawEggs();
-
-    drawExit();
-
-    drawEnemies();
-
-    drawChicken();
-
-    drawParticles();
-
-
-    /*
-      NOITE
-    */
-
-    if(map.night){
-
-        ctx.fillStyle =
-            "rgba(5,8,30,.38)";
-
-        ctx.fillRect(
-            camera.x,
-            camera.y,
-            W,
-            H
-        );
-
-        drawMoon();
-
-    }
-
-
-    ctx.restore();
-
-}
-
-
-/* =====================================================
-   ÁRVORE
-===================================================== */
-
-function drawTrees(){
-
-    var map =
-        maps[selectedMap];
-
-
-    for(
-        var i=0;
-        i<world.trees.length;
-        i++
-    ){
-
-        var t =
-            world.trees[i];
-
-
-        ctx.fillStyle =
-            "#70472c";
-
-        ctx.fillRect(
-            t.x-6,
-            t.y,
-            12,
-            t.size*1.5
-        );
-
-
-        ctx.fillStyle =
-            map.tree;
-
-        ctx.beginPath();
-
-        ctx.arc(
-            t.x,
-            t.y,
-            t.size,
-            0,
-            Math.PI*2
-        );
-
-        ctx.fill();
-
-
-        ctx.fillStyle =
-            map.tree2;
-
-        ctx.beginPath();
-
-        ctx.arc(
-            t.x-10,
-            t.y-8,
-            t.size*.55,
-            0,
-            Math.PI*2
-        );
-
-        ctx.arc(
-            t.x+12,
-            t.y-5,
-            t.size*.5,
-            0,
-            Math.PI*2
-        );
-
-        ctx.fill();
-
-    }
-
-}
-
-
-/* =====================================================
-   DECORAÇÕES
-===================================================== */
-
-function drawDecorations(){
-
-    var map =
-        maps[selectedMap];
-
-
-    for(
-        var i=0;
-        i<world.decorations.length;
-        i++
-    ){
-
-        var d =
-            world.decorations[i];
-
-
-        /*
-          MILHO
-        */
-
-        if(d.type==="corn"){
-
-            ctx.strokeStyle=
-                "#6b8e29";
-
-            ctx.lineWidth=3;
-
-            ctx.beginPath();
-
-            ctx.moveTo(
-                d.x,
-                d.y+20
-            );
-
-            ctx.lineTo(
-                d.x,
-                d.y-15
-            );
-
-            ctx.stroke();
-
-
-            ctx.fillStyle=
-                "#e7c943";
-
-            ctx.beginPath();
-
-            ctx.ellipse(
-                d.x+5,
-                d.y-5,
-                6,
-                12,
-                -.2,
-                0,
-                Math.PI*2
-            );
-
-            ctx.fill();
-
-        }
-
-
-        /*
-          CACTO
-        */
-
-        if(d.type==="cactus"){
-
-            ctx.fillStyle=
-                "#4d8c46";
-
-            ctx.fillRect(
-                d.x-7,
-                d.y-25,
-                14,
-                50
-            );
-
-            ctx.fillRect(
-                d.x-22,
-                d.y-5,
-                15,
-                9
-            );
-
-            ctx.fillRect(
-                d.x+7,
-                d.y+4,
-                15,
-                9
-            );
-
-        }
-
-
-        /*
-          PEDRA
-        */
-
-        if(d.type==="rock"){
-
-            ctx.fillStyle=
-                "#81725f";
-
-            ctx.beginPath();
-
-            ctx.ellipse(
-                d.x,
-                d.y,
-                17,
-                11,
-                -.2,
-                0,
-                Math.PI*2
-            );
-
-            ctx.fill();
-
-        }
-
-
-        /*
-          ESTRELA
-        */
-
-        if(d.type==="star"){
-
-            ctx.fillStyle=
-                "#fff2a0";
-
-            ctx.beginPath();
-
-            ctx.arc(
-                d.x,
-                d.y,
-                2,
-                0,
-                Math.PI*2
-            );
-
-            ctx.fill();
-
-        }
-
-    }
-
-}
-
-
-/* =====================================================
-   MOITAS
-===================================================== */
-
-function drawBushes(){
-
-    var map =
-        maps[selectedMap];
-
-
-    for(
-        var i=0;
-        i<world.bushes.length;
-        i++
-    ){
-
-        var b =
-            world.bushes[i];
-
-
-        ctx.fillStyle =
-            map.tree;
-
-        ctx.beginPath();
-
-        ctx.arc(
-            b.x,
-            b.y,
-            b.r,
-            0,
-            Math.PI*2
-        );
-
-        ctx.fill();
-
-
-        ctx.fillStyle =
-            map.tree2;
-
-        ctx.beginPath();
-
-        ctx.arc(
-            b.x-10,
-            b.y-8,
-            b.r*.55,
-            0,
-            Math.PI*2
-        );
-
-        ctx.arc(
-            b.x+12,
-            b.y-5,
-            b.r*.48,
-            0,
-            Math.PI*2
-        );
-
-        ctx.fill();
-
-    }
+  ctx.restore();
 
 }
 
@@ -3415,98 +2128,154 @@ function drawBushes(){
 
 function drawObstacles(){
 
-    var map =
-        maps[selectedMap];
+  for(
+    var i=0;
+    i<world.obstacles.length;
+    i++
+  ){
+
+    var o =
+      world.obstacles[i];
 
 
-    for(
-        var i=0;
-        i<world.obstacles.length;
-        i++
+    /*
+      não desenhar bordas gigantes
+    */
+
+    if(
+      o.x < 0 ||
+      o.y < 0 ||
+      o.x+o.w > world.width ||
+      o.y+o.h > world.height
     ){
 
-        var o =
-            world.obstacles[i];
-
-
-        /*
-          NÃO desenhar bordas
-        */
-
-        if(
-            o.x<0 ||
-            o.y<0 ||
-            o.x+o.w>world.width ||
-            o.y+o.h>world.height
-        ){
-
-            continue;
-
-        }
-
-
-        ctx.fillStyle =
-            map.obstacle;
-
-        ctx.fillRect(
-            o.x,
-            o.y,
-            o.w,
-            o.h
-        );
-
-
-        ctx.fillStyle =
-            map.roof;
-
-        ctx.fillRect(
-            o.x,
-            o.y,
-            o.w,
-            12
-        );
-
-
-        ctx.strokeStyle =
-            "rgba(0,0,0,.3)";
-
-        ctx.strokeRect(
-            o.x,
-            o.y,
-            o.w,
-            o.h
-        );
-
-
-        if(
-            o.w>130 &&
-            o.h>80
-        ){
-
-            ctx.fillStyle=
-                selectedMap===5
-                    ?"#777c9e"
-                    :"#8cc5c7";
-
-
-            ctx.fillRect(
-                o.x+25,
-                o.y+35,
-                35,
-                30
-            );
-
-
-            ctx.fillRect(
-                o.x+o.w-60,
-                o.y+35,
-                35,
-                30
-            );
-
-        }
+      continue;
 
     }
+
+
+    ctx.fillStyle =
+      "#704e30";
+
+    ctx.fillRect(
+      o.x,
+      o.y,
+      o.w,
+      o.h
+    );
+
+
+    ctx.fillStyle =
+      "#936b42";
+
+    ctx.fillRect(
+      o.x,
+      o.y,
+      o.w,
+      10
+    );
+
+
+    ctx.strokeStyle =
+      "rgba(0,0,0,.3)";
+
+    ctx.strokeRect(
+      o.x,
+      o.y,
+      o.w,
+      o.h
+    );
+
+
+    /*
+      janelas
+    */
+
+    if(
+      o.w > 130 &&
+      o.h > 80
+    ){
+
+      ctx.fillStyle =
+        "#8cc5c7";
+
+      ctx.fillRect(
+        o.x+25,
+        o.y+30,
+        35,
+        30
+      );
+
+      ctx.fillRect(
+        o.x+o.w-60,
+        o.y+30,
+        35,
+        30
+      );
+
+    }
+
+  }
+
+}
+
+
+/* =====================================================
+   MOITAS
+===================================================== */
+
+function drawBushes(){
+
+  for(
+    var i=0;
+    i<world.bushes.length;
+    i++
+  ){
+
+    var b =
+      world.bushes[i];
+
+
+    ctx.fillStyle =
+      "#285e2d";
+
+    ctx.beginPath();
+
+    ctx.arc(
+      b.x,
+      b.y,
+      b.r,
+      0,
+      Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    ctx.fillStyle =
+      "#3e7c38";
+
+    ctx.beginPath();
+
+    ctx.arc(
+      b.x-12,
+      b.y-8,
+      b.r*.55,
+      0,
+      Math.PI*2
+    );
+
+    ctx.arc(
+      b.x+13,
+      b.y-6,
+      b.r*.5,
+      0,
+      Math.PI*2
+    );
+
+    ctx.fill();
+
+  }
 
 }
 
@@ -3517,50 +2286,39 @@ function drawObstacles(){
 
 function drawEggs(){
 
-    for(
-        var i=0;
-        i<world.eggs.length;
-        i++
-    ){
+  for(
+    var i=0;
+    i<world.eggs.length;
+    i++
+  ){
 
-        var e =
-            world.eggs[i];
+    var e =
+      world.eggs[i];
 
-        if(e.collected)
-            continue;
+    if(e.collected)continue;
 
-
-        var bob =
-            Math.sin(
-                e.pulse
-            )*3;
+    var bob =
+      Math.sin(e.pulse)*3;
 
 
-        ctx.fillStyle=
-            "#fff4d2";
+    ctx.fillStyle =
+      "#fff6d5";
 
+    ctx.beginPath();
 
-        ctx.beginPath();
+    ctx.ellipse(
+      e.x,
+      e.y+bob,
+      11,
+      15,
+      0,
+      0,
+      Math.PI*2
+    );
 
-        ctx.ellipse(
-            e.x,
-            e.y+bob,
-            11,
-            15,
-            0,
-            0,
-            Math.PI*2
-        );
+    ctx.fill();
 
-        ctx.fill();
-
-
-        ctx.strokeStyle=
-            "rgba(0,0,0,.15)";
-
-        ctx.stroke();
-
-    }
+  }
 
 }
 
@@ -3571,92 +2329,64 @@ function drawEggs(){
 
 function drawExit(){
 
-    var e =
-        world.exit;
+  /*
+    Proteção extra:
+    mesmo que algo dê errado,
+    o desenho nunca quebra o jogo.
+  */
 
-    if(!e)return;
+  var e = world.exit;
 
-
-    var map =
-        maps[selectedMap];
-
-
-    ctx.fillStyle =
-        map.exit;
-
-    ctx.fillRect(
-        e.x,
-        e.y,
-        e.w,
-        e.h
-    );
+  if(!e)return;
 
 
-    ctx.fillStyle =
-        "#9c7346";
+  ctx.fillStyle =
+    "#4d301d";
 
-    ctx.fillRect(
-        e.x+7,
-        e.y+8,
-        e.w-14,
-        e.h-8
-    );
-
-
-    ctx.fillStyle =
-        "#ffe26a";
-
-    ctx.beginPath();
-
-    ctx.arc(
-        e.x+e.w-12,
-        e.y+e.h/2,
-        4,
-        0,
-        Math.PI*2
-    );
-
-    ctx.fill();
+  ctx.fillRect(
+    e.x,
+    e.y,
+    e.w,
+    e.h
+  );
 
 
-    ctx.fillStyle=
-        "white";
+  ctx.fillStyle =
+    "#93663b";
 
-    ctx.font=
-        "bold 17px Arial";
-
-    ctx.textAlign=
-        "center";
-
-    ctx.fillText(
-        "SAÍDA",
-        e.x+e.w/2,
-        e.y-10
-    );
-
-}
+  ctx.fillRect(
+    e.x+7,
+    e.y+8,
+    e.w-14,
+    e.h-8
+  );
 
 
-/* =====================================================
-   LUA
-===================================================== */
+  ctx.fillStyle =
+    "#ffe269";
 
-function drawMoon(){
+  ctx.beginPath();
 
-    ctx.fillStyle=
-        "#f6efbd";
+  ctx.arc(
+    e.x+e.w-13,
+    e.y+e.h/2,
+    4,
+    0,
+    Math.PI*2
+  );
 
-    ctx.beginPath();
+  ctx.fill();
 
-    ctx.arc(
-        camera.x+W-120,
-        camera.y+120,
-        42,
-        0,
-        Math.PI*2
-    );
 
-    ctx.fill();
+  ctx.fillStyle = "white";
+  ctx.font = "bold 18px Arial";
+  ctx.textAlign = "center";
+
+  ctx.fillText(
+    "SAÍDA",
+    e.x+e.w/2,
+    e.y-10
+  );
 
 }
 
@@ -3667,179 +2397,222 @@ function drawMoon(){
 
 function drawEnemies(){
 
-    for(
-        var i=0;
-        i<world.enemies.length;
-        i++
-    ){
+  for(
+    var i=0;
+    i<world.enemies.length;
+    i++
+  ){
 
-        var e =
-            world.enemies[i];
-
-
-        ctx.save();
-
-        ctx.translate(
-            e.x,
-            e.y
-        );
+    var e =
+      world.enemies[i];
 
 
-        if(
-            e.type==="dog"
-        ){
+    ctx.save();
 
-            ctx.fillStyle=
-                "#70452d";
-
-            ctx.beginPath();
-
-            ctx.arc(
-                0,
-                0,
-                23,
-                0,
-                Math.PI*2
-            );
-
-            ctx.fill();
+    ctx.translate(
+      e.x,
+      e.y
+    );
 
 
-            ctx.fillStyle=
-                "#4c2c1b";
+    /*
+      CACHORRO
+    */
+
+    if(e.type === "dog"){
+
+      ctx.fillStyle =
+        "#70452d";
+
+      ctx.beginPath();
+
+      ctx.arc(
+        0,
+        0,
+        22,
+        0,
+        Math.PI*2
+      );
+
+      ctx.fill();
 
 
-            ctx.beginPath();
+      ctx.fillStyle =
+        "#4b2c1c";
 
-            ctx.moveTo(
-                -13,
-                -12
-            );
+      ctx.beginPath();
 
-            ctx.lineTo(
-                -27,
-                -29
-            );
+      ctx.moveTo(-13,-13);
+      ctx.lineTo(-27,-28);
+      ctx.lineTo(-7,-20);
 
-            ctx.lineTo(
-                -7,
-                -20
-            );
-
-            ctx.fill();
+      ctx.fill();
 
 
-            ctx.beginPath();
+      ctx.beginPath();
 
-            ctx.moveTo(
-                13,
-                -12
-            );
+      ctx.moveTo(13,-13);
+      ctx.lineTo(27,-28);
+      ctx.lineTo(7,-20);
 
-            ctx.lineTo(
-                27,
-                -29
-            );
-
-            ctx.lineTo(
-                7,
-                -20
-            );
-
-            ctx.fill();
+      ctx.fill();
 
 
-            ctx.fillStyle=
-                "white";
+      ctx.fillStyle =
+        "white";
 
-            ctx.beginPath();
+      ctx.beginPath();
 
-            ctx.arc(
-                -7,
-                -3,
-                5,
-                0,
-                Math.PI*2
-            );
+      ctx.arc(
+        -7,
+        -3,
+        5,
+        0,
+        Math.PI*2
+      );
 
-            ctx.arc(
-                7,
-                -3,
-                5,
-                0,
-                Math.PI*2
-            );
+      ctx.arc(
+        7,
+        -3,
+        5,
+        0,
+        Math.PI*2
+      );
 
-            ctx.fill();
-
-
-        }else{
-
-            ctx.fillStyle=
-                "#4a301d";
-
-            ctx.fillRect(
-                -27,
-                -28,
-                54,
-                10
-            );
+      ctx.fill();
 
 
-            ctx.fillStyle=
-                "#9b6037";
+      ctx.fillStyle =
+        "#111";
 
-            ctx.fillRect(
-                -18,
-                -7,
-                36,
-                38
-            );
+      ctx.beginPath();
 
+      ctx.arc(
+        -7,
+        -3,
+        2,
+        0,
+        Math.PI*2
+      );
 
-            ctx.fillStyle=
-                "#d49b68";
+      ctx.arc(
+        7,
+        -3,
+        2,
+        0,
+        Math.PI*2
+      );
 
-            ctx.beginPath();
-
-            ctx.arc(
-                0,
-                -10,
-                20,
-                0,
-                Math.PI*2
-            );
-
-            ctx.fill();
-
-        }
-
-
-        if(
-            e.state==="chase"
-        ){
-
-            ctx.fillStyle=
-                "#ff4545";
-
-            ctx.font=
-                "bold 25px Arial";
-
-            ctx.textAlign=
-                "center";
-
-            ctx.fillText(
-                "!",
-                0,
-                -42
-            );
-
-        }
-
-
-        ctx.restore();
+      ctx.fill();
 
     }
+
+
+    /*
+      FAZENDEIRO
+    */
+
+    else{
+
+      ctx.fillStyle =
+        "#4a301d";
+
+      ctx.fillRect(
+        -27,
+        -27,
+        54,
+        10
+      );
+
+
+      ctx.fillRect(
+        -15,
+        -40,
+        30,
+        17
+      );
+
+
+      ctx.fillStyle =
+        "#9a5c35";
+
+      ctx.fillRect(
+        -18,
+        -8,
+        36,
+        38
+      );
+
+
+      ctx.fillStyle =
+        "#d59a65";
+
+      ctx.beginPath();
+
+      ctx.arc(
+        0,
+        -10,
+        20,
+        0,
+        Math.PI*2
+      );
+
+      ctx.fill();
+
+
+      ctx.fillStyle =
+        "#111";
+
+      ctx.beginPath();
+
+      ctx.arc(
+        -7,
+        -12,
+        3,
+        0,
+        Math.PI*2
+      );
+
+      ctx.arc(
+        7,
+        -12,
+        3,
+        0,
+        Math.PI*2
+      );
+
+      ctx.fill();
+
+    }
+
+
+    /*
+      ALERTA
+    */
+
+    if(e.state === "chase"){
+
+      ctx.fillStyle =
+        "#ff4040";
+
+      ctx.font =
+        "bold 25px Arial";
+
+      ctx.textAlign =
+        "center";
+
+      ctx.fillText(
+        "!",
+        0,
+        -45
+      );
+
+    }
+
+
+    ctx.restore();
+
+  }
 
 }
 
@@ -3850,289 +2623,257 @@ function drawEnemies(){
 
 function drawChicken(){
 
-    ctx.save();
+  ctx.save();
 
-    ctx.translate(
-        chicken.x,
-        chicken.y
-    );
-
-
-    /*
-      Pequena inclinação
-      conforme movimento.
-    */
-
-    var tilt =
-        chicken.vx*.025;
-
-    ctx.rotate(
-        tilt
-    );
+  ctx.translate(
+    chicken.x,
+    chicken.y
+  );
 
 
-    if(
-        chicken.invincible>0 &&
-        chicken.invincible%10<5
-    ){
+  /*
+    INVENCIBILIDADE
+  */
 
-        ctx.globalAlpha=.45;
+  if(
+    chicken.invincible > 0 &&
+    chicken.invincible % 10 < 5
+  ){
 
-    }
+    ctx.globalAlpha = .4;
 
-
-    /*
-      SOMBRA
-    */
-
-    ctx.fillStyle=
-        "rgba(0,0,0,.25)";
-
-    ctx.beginPath();
-
-    ctx.ellipse(
-        0,
-        24,
-        25,
-        8,
-        0,
-        0,
-        Math.PI*2
-    );
-
-    ctx.fill();
+  }
 
 
-    /*
-      CORPO
-    */
+  /*
+    SOMBRA
+  */
 
-    ctx.fillStyle=
-        "#f4f0d8";
+  ctx.fillStyle =
+    "rgba(0,0,0,.25)";
 
-    ctx.beginPath();
+  ctx.beginPath();
 
-    ctx.ellipse(
-        0,
-        3,
-        25,
-        22,
-        0,
-        0,
-        Math.PI*2
-    );
+  ctx.ellipse(
+    0,
+    23,
+    25,
+    8,
+    0,
+    0,
+    Math.PI*2
+  );
 
-    ctx.fill();
-
-
-    /*
-      ASA
-    */
-
-    ctx.fillStyle=
-        "#ddd9bf";
-
-    ctx.beginPath();
-
-    ctx.ellipse(
-        -8,
-        7,
-        12,
-        8,
-        -.4,
-        0,
-        Math.PI*2
-    );
-
-    ctx.fill();
+  ctx.fill();
 
 
-    /*
-      CABEÇA
-    */
+  /*
+    CORPO
+  */
 
-    ctx.fillStyle=
-        "#fff9e7";
+  ctx.fillStyle =
+    "#f4f0d8";
 
-    ctx.beginPath();
+  ctx.beginPath();
 
-    ctx.arc(
-        8,
-        -18,
-        17,
-        0,
-        Math.PI*2
-    );
+  ctx.ellipse(
+    0,
+    3,
+    25,
+    22,
+    0,
+    0,
+    Math.PI*2
+  );
 
-    ctx.fill();
-
-
-    /*
-      CRISTA
-    */
-
-    ctx.fillStyle=
-        "#e84444";
-
-    ctx.beginPath();
-
-    ctx.arc(
-        2,
-        -34,
-        6,
-        0,
-        Math.PI*2
-    );
-
-    ctx.arc(
-        10,
-        -36,
-        6,
-        0,
-        Math.PI*2
-    );
-
-    ctx.arc(
-        18,
-        -33,
-        6,
-        0,
-        Math.PI*2
-    );
-
-    ctx.fill();
+  ctx.fill();
 
 
-    /*
-      BICO
-    */
+  /*
+    ASA
+  */
 
-    ctx.fillStyle=
-        "#f1a332";
+  ctx.fillStyle =
+    "#ddd9bf";
 
-    ctx.beginPath();
+  ctx.beginPath();
 
-    ctx.moveTo(
-        23,
-        -18
-    );
+  ctx.ellipse(
+    -8,
+    7,
+    12,
+    8,
+    -.4,
+    0,
+    Math.PI*2
+  );
 
-    ctx.lineTo(
-        38,
-        -12
-    );
-
-    ctx.lineTo(
-        23,
-        -7
-    );
-
-    ctx.closePath();
-
-    ctx.fill();
+  ctx.fill();
 
 
-    /*
-      OLHO
-    */
+  /*
+    CABEÇA
+  */
 
-    ctx.fillStyle=
-        "#111";
+  ctx.fillStyle =
+    "#fff9e7";
 
-    ctx.beginPath();
+  ctx.beginPath();
 
-    ctx.arc(
-        14,
-        -22,
-        3,
-        0,
-        Math.PI*2
-    );
+  ctx.arc(
+    8,
+    -18,
+    17,
+    0,
+    Math.PI*2
+  );
 
-    ctx.fill();
-
-
-    /*
-      PERNAS
-    */
-
-    var leg =
-        Math.sin(
-            chicken.walk
-        )*3;
+  ctx.fill();
 
 
-    ctx.strokeStyle=
-        "#df9f3b";
+  /*
+    CRISTA
+  */
 
-    ctx.lineWidth=4;
+  ctx.fillStyle =
+    "#e84444";
+
+  ctx.beginPath();
+
+  ctx.arc(
+    2,
+    -34,
+    6,
+    0,
+    Math.PI*2
+  );
+
+  ctx.arc(
+    10,
+    -36,
+    6,
+    0,
+    Math.PI*2
+  );
+
+  ctx.arc(
+    18,
+    -33,
+    6,
+    0,
+    Math.PI*2
+  );
+
+  ctx.fill();
+
+
+  /*
+    BICO
+  */
+
+  ctx.fillStyle =
+    "#f1a332";
+
+  ctx.beginPath();
+
+  ctx.moveTo(23,-18);
+  ctx.lineTo(38,-12);
+  ctx.lineTo(23,-7);
+
+  ctx.closePath();
+
+  ctx.fill();
+
+
+  /*
+    OLHO
+  */
+
+  ctx.fillStyle =
+    "#111";
+
+  ctx.beginPath();
+
+  ctx.arc(
+    14,
+    -22,
+    3,
+    0,
+    Math.PI*2
+  );
+
+  ctx.fill();
+
+
+  /*
+    PERNAS
+  */
+
+  ctx.strokeStyle =
+    "#df9f3b";
+
+  ctx.lineWidth = 4;
+
+  ctx.beginPath();
+
+  ctx.moveTo(-7,21);
+  ctx.lineTo(-9,32);
+
+  ctx.moveTo(8,21);
+  ctx.lineTo(10,32);
+
+  ctx.stroke();
+
+
+  /*
+    IMPULSO
+  */
+
+  if(chicken.dash > 0){
+
+    ctx.strokeStyle =
+      "#fff36a";
+
+    ctx.lineWidth = 4;
 
     ctx.beginPath();
 
-    ctx.moveTo(
-        -7,
-        21
-    );
+    ctx.moveTo(-25,0);
+    ctx.lineTo(-50,0);
 
-    ctx.lineTo(
-        -9+leg,
-        32
-    );
-
-    ctx.moveTo(
-        8,
-        21
-    );
-
-    ctx.lineTo(
-        10-leg,
-        32
-    );
+    ctx.moveTo(-23,10);
+    ctx.lineTo(-43,17);
 
     ctx.stroke();
 
-
-    /*
-      DASH
-    */
-
-    if(
-        chicken.dash>0
-    ){
-
-        ctx.strokeStyle=
-            "#fff36a";
-
-        ctx.lineWidth=4;
-
-        ctx.beginPath();
-
-        ctx.moveTo(
-            -25,
-            0
-        );
-
-        ctx.lineTo(
-            -55,
-            0
-        );
-
-        ctx.moveTo(
-            -23,
-            10
-        );
-
-        ctx.lineTo(
-            -48,
-            18
-        );
-
-        ctx.stroke();
-
-    }
+  }
 
 
-    ctx.restore();
+  /*
+    ESCONDIDA
+  */
+
+  if(chicken.hidden){
+
+    ctx.fillStyle =
+      "rgba(40,100,45,.28)";
+
+    ctx.beginPath();
+
+    ctx.arc(
+      0,
+      0,
+      34,
+      0,
+      Math.PI*2
+    );
+
+    ctx.fill();
+
+  }
+
+
+  ctx.restore();
 
 }
 
@@ -4143,88 +2884,102 @@ function drawChicken(){
 
 function drawParticles(){
 
-    for(
-        var i=0;
-        i<particles.length;
-        i++
-    ){
+  for(
+    var i=0;
+    i<particles.length;
+    i++
+  ){
 
-        var p =
-            particles[i];
+    var p =
+      particles[i];
 
+    ctx.globalAlpha =
+      Math.max(
+        0,
+        p.life/70
+      );
 
-        ctx.globalAlpha=
-            Math.max(
-                0,
-                p.life/65
-            );
+    ctx.fillStyle =
+      p.color;
 
+    ctx.beginPath();
 
-        ctx.fillStyle=
-            p.color;
+    ctx.arc(
+      p.x,
+      p.y,
+      p.size,
+      0,
+      Math.PI*2
+    );
 
+    ctx.fill();
 
-        ctx.beginPath();
+  }
 
-        ctx.arc(
-            p.x,
-            p.y,
-            p.size,
-            0,
-            Math.PI*2
-        );
-
-        ctx.fill();
-
-    }
-
-    ctx.globalAlpha=1;
+  ctx.globalAlpha = 1;
 
 }
 
 
 /* =====================================================
-   COLISÃO CÍRCULO
+   RESETAR CONTROLES
 ===================================================== */
 
-function circleRect(
-    cx,
-    cy,
-    r,
-    o
-){
+function resetKeys(){
 
-    var nx =
-        Math.max(
-            o.x,
-            Math.min(
-                cx,
-                o.x+o.w
-            )
-        );
+  keys.up = false;
+  keys.down = false;
+  keys.left = false;
+  keys.right = false;
+
+}
 
 
-    var ny =
-        Math.max(
-            o.y,
-            Math.min(
-                cy,
-                o.y+o.h
-            )
-        );
+/* =====================================================
+   LOOP PRINCIPAL
+===================================================== */
 
+function gameLoop(){
 
-    var dx =
-        cx-nx;
+  try{
 
-    var dy =
-        cy-ny;
+    if(
+      playing &&
+      !paused
+    ){
 
+      moveChicken();
 
-    return (
-        dx*dx+
-        dy*dy
-    )<r*r;
+      updateEnemies();
+
+      updateItems();
+
+      updateParticles();
+
+      updateCamera();
+
+    }
+
+    draw();
+
+  }catch(error){
+
+    /*
+      O loop não morre silenciosamente.
+      Mostra o erro na tela.
+    */
+
+    console.error(error);
+
+    showError(error);
+
+  }
+
+  /*
+    CONTINUA O LOOP MESMO SE ALGUMA COISA DER ERRADO.
+  */
+
+  requestAnimationFrame(gameLoop);
 
 }
 
@@ -4234,349 +2989,273 @@ function circleRect(
 ===================================================== */
 
 document.addEventListener(
-    "keydown",
-    function(e){
+  "keydown",
+  function(e){
 
-        var k =
-            e.key.toLowerCase();
-
-
-        if(
-            k==="w" ||
-            e.key==="ArrowUp"
-        ){
-
-            keys.up=true;
-
-            e.preventDefault();
-
-        }
+    var key =
+      e.key.toLowerCase();
 
 
-        if(
-            k==="s" ||
-            e.key==="ArrowDown"
-        ){
+    if(
+      key === "w" ||
+      e.key === "ArrowUp"
+    ){
 
-            keys.down=true;
+      keys.up = true;
 
-            e.preventDefault();
-
-        }
-
-
-        if(
-            k==="a" ||
-            e.key==="ArrowLeft"
-        ){
-
-            keys.left=true;
-
-            e.preventDefault();
-
-        }
-
-
-        if(
-            k==="d" ||
-            e.key==="ArrowRight"
-        ){
-
-            keys.right=true;
-
-            e.preventDefault();
-
-        }
-
-
-        if(
-            e.code==="Space"
-        ){
-
-            e.preventDefault();
-
-            dash();
-
-        }
-
-
-        if(k==="e"){
-
-            message(
-                "🐔 COCÓÓÓÓÓ!"
-            );
-
-        }
-
-
-        if(
-            e.key==="Escape"
-        ){
-
-            togglePause();
-
-        }
+      e.preventDefault();
 
     }
+
+
+    if(
+      key === "s" ||
+      e.key === "ArrowDown"
+    ){
+
+      keys.down = true;
+
+      e.preventDefault();
+
+    }
+
+
+    if(
+      key === "a" ||
+      e.key === "ArrowLeft"
+    ){
+
+      keys.left = true;
+
+      e.preventDefault();
+
+    }
+
+
+    if(
+      key === "d" ||
+      e.key === "ArrowRight"
+    ){
+
+      keys.right = true;
+
+      e.preventDefault();
+
+    }
+
+
+    if(e.code === "Space"){
+
+      e.preventDefault();
+
+      dash();
+
+    }
+
+
+    if(key === "e"){
+
+      chickenNoise();
+
+    }
+
+
+    if(e.key === "Escape"){
+
+      togglePause();
+
+    }
+
+  }
 );
 
 
 document.addEventListener(
-    "keyup",
-    function(e){
+  "keyup",
+  function(e){
 
-        var k =
-            e.key.toLowerCase();
-
-
-        if(
-            k==="w" ||
-            e.key==="ArrowUp"
-        ){
-
-            keys.up=false;
-
-        }
+    var key =
+      e.key.toLowerCase();
 
 
-        if(
-            k==="s" ||
-            e.key==="ArrowDown"
-        ){
+    if(
+      key === "w" ||
+      e.key === "ArrowUp"
+    ){
 
-            keys.down=false;
-
-        }
-
-
-        if(
-            k==="a" ||
-            e.key==="ArrowLeft"
-        ){
-
-            keys.left=false;
-
-        }
-
-
-        if(
-            k==="d" ||
-            e.key==="ArrowRight"
-        ){
-
-            keys.right=false;
-
-        }
+      keys.up = false;
 
     }
+
+
+    if(
+      key === "s" ||
+      e.key === "ArrowDown"
+    ){
+
+      keys.down = false;
+
+    }
+
+
+    if(
+      key === "a" ||
+      e.key === "ArrowLeft"
+    ){
+
+      keys.left = false;
+
+    }
+
+
+    if(
+      key === "d" ||
+      e.key === "ArrowRight"
+    ){
+
+      keys.right = false;
+
+    }
+
+  }
+);
+
+
+/*
+  Se a janela perder foco,
+  solta todas as teclas.
+*/
+
+window.addEventListener(
+  "blur",
+  resetKeys
 );
 
 
 /* =====================================================
-   MOBILE
+   CONTROLES MOBILE
 ===================================================== */
 
 var touchButtons =
-    document.querySelectorAll(
-        ".dpad"
-    );
+  document.querySelectorAll(
+    ".dpad"
+  );
 
 
 touchButtons.forEach(
-    function(button){
+  function(button){
 
-        var key =
-            button.dataset.key;
-
-
-        function press(e){
-
-            e.preventDefault();
-
-            keys[key]=true;
-
-            try{
-
-                button.setPointerCapture(
-                    e.pointerId
-                );
-
-            }catch(error){}
-
-        }
+    var key =
+      button.dataset.key;
 
 
-        function release(e){
+    function press(e){
 
-            e.preventDefault();
+      e.preventDefault();
 
-            keys[key]=false;
+      keys[key] = true;
 
-        }
+      try{
 
-
-        button.addEventListener(
-            "pointerdown",
-            press
+        button.setPointerCapture(
+          e.pointerId
         );
 
-        button.addEventListener(
-            "pointerup",
-            release
-        );
-
-        button.addEventListener(
-            "pointercancel",
-            release
-        );
-
-        button.addEventListener(
-            "lostpointercapture",
-            release
-        );
+      }catch(error){}
 
     }
+
+
+    function release(e){
+
+      e.preventDefault();
+
+      keys[key] = false;
+
+    }
+
+
+    button.addEventListener(
+      "pointerdown",
+      press
+    );
+
+    button.addEventListener(
+      "pointerup",
+      release
+    );
+
+    button.addEventListener(
+      "pointercancel",
+      release
+    );
+
+    button.addEventListener(
+      "lostpointercapture",
+      release
+    );
+
+  }
 );
 
+
+/*
+  Solta o controle mesmo
+  se o dedo sair do botão.
+*/
 
 window.addEventListener(
-    "pointerup",
-    function(){
+  "pointerup",
+  function(){
 
-        resetKeys();
+    keys.up = false;
+    keys.down = false;
+    keys.left = false;
+    keys.right = false;
 
-    }
+  }
 );
 
 
-document
-    .getElementById(
-        "dashButton"
-    )
-    .addEventListener(
-        "pointerdown",
-        function(e){
-
-            e.preventDefault();
-
-            dash();
-
-        }
-    );
-
+/* =====================================================
+   BOTÃO IMPULSO
+===================================================== */
 
 document
-    .getElementById(
-        "noiseButton"
-    )
-    .addEventListener(
-        "pointerdown",
-        function(e){
+  .getElementById("dashButton")
+  .addEventListener(
+    "pointerdown",
+    function(e){
 
-            e.preventDefault();
+      e.preventDefault();
 
-            message(
-                "🐔 COCÓÓÓÓÓ!"
-            );
-
-        }
-    );
-
-
-/* =====================================================
-   RESET
-===================================================== */
-
-function resetKeys(){
-
-    keys.up=false;
-
-    keys.down=false;
-
-    keys.left=false;
-
-    keys.right=false;
-
-}
-
-
-/* =====================================================
-   RECORD
-===================================================== */
-
-function saveBest(){
-
-    if(score>bestScore){
-
-        bestScore=score;
-
-        try{
-
-            localStorage.setItem(
-                "fugaGalinhaBest",
-                bestScore
-            );
-
-        }catch(e){}
-
-        document
-            .getElementById(
-                "best"
-            )
-            .textContent=
-            bestScore;
+      dash();
 
     }
-
-}
+  );
 
 
 /* =====================================================
-   LOOP
+   BOTÃO BARULHO
 ===================================================== */
 
-function gameLoop(){
+document
+  .getElementById("noiseButton")
+  .addEventListener(
+    "pointerdown",
+    function(e){
 
-    try{
+      e.preventDefault();
 
-        if(
-            playing &&
-            !paused
-        ){
-
-            moveChicken();
-
-            updateEnemies();
-
-            updateItems();
-
-            updateParticles();
-
-            updateCamera();
-
-        }
-
-        draw();
-
-    }catch(error){
-
-        console.error(error);
+      chickenNoise();
 
     }
-
-
-    requestAnimationFrame(
-        gameLoop
-    );
-
-}
+  );
 
 
 /* =====================================================
-   INICIAR
+   COMEÇAR LOOP
 ===================================================== */
-
-selectMap(1);
 
 updateHUD();
 

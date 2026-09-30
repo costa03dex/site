@@ -1,1 +1,2317 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>O Reino de Luminária</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html,
+body{
+    width:100%;
+    height:100%;
+}
+
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    background:#000;
+    color:#fff;
+    overflow:hidden;
+}
+
+button{
+    font-family:inherit;
+}
+
+#game{
+    position:relative;
+    width:100vw;
+    height:100vh;
+    overflow:hidden;
+    background:#000;
+}
+
+/* =============================
+   TELAS
+============================= */
+
+.screen{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    display:none;
+}
+
+.screen.active{
+    display:flex;
+}
+
+/* =============================
+   TELA INICIAL
+============================= */
+
+#startScreen{
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+
+    background-image:
+        linear-gradient(
+            rgba(0,0,0,.08),
+            rgba(0,0,0,.35)
+        ),
+        url("tela-inicial.png");
+
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+}
+
+.start-content{
+    width:100%;
+    height:100%;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+}
+
+.game-title{
+    font-size:clamp(42px,7vw,82px);
+    text-align:center;
+    color:#fff2a8;
+
+    text-shadow:
+        0 4px 0 #60411e,
+        0 8px 15px rgba(0,0,0,.8);
+
+    margin-bottom:45px;
+}
+
+.menu{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+    width:280px;
+}
+
+.menu button,
+.game-button{
+    border:3px solid #ffe79c;
+
+    background:
+        linear-gradient(
+            #795430,
+            #4b301b
+        );
+
+    color:#fff;
+
+    padding:15px 25px;
+
+    font-size:20px;
+    font-weight:bold;
+
+    cursor:pointer;
+
+    border-radius:10px;
+
+    box-shadow:
+        0 6px 0 #28170c,
+        0 10px 18px rgba(0,0,0,.4);
+
+    transition:.2s;
+}
+
+.menu button:hover,
+.game-button:hover{
+    transform:translateY(-3px);
+    filter:brightness(1.15);
+}
+
+.menu button:active,
+.game-button:active{
+    transform:translateY(3px);
+    box-shadow:0 2px 0 #28170c;
+}
+
+/* =============================
+   MAPA
+============================= */
+
+#mapScreen{
+    flex-direction:column;
+    background:#111;
+}
+
+.topbar{
+    height:68px;
+    min-height:68px;
+
+    background:rgba(41,27,16,.95);
+
+    border-bottom:3px solid #d6ae60;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 28px;
+
+    z-index:20;
+}
+
+.topbar h2{
+    color:#ffe59a;
+    font-size:24px;
+}
+
+.fragment-info{
+    font-size:18px;
+    color:#fff;
+}
+
+.map-container{
+    flex:1;
+    position:relative;
+    overflow:hidden;
+
+    background-image:url("mapa2.png");
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+}
+
+/* =============================
+   LOCAIS DO MAPA
+============================= */
+
+.location{
+    position:absolute;
+
+    width:175px;
+    min-height:85px;
+
+    padding:10px;
+
+    border:3px solid #ffe099;
+
+    background:rgba(58,36,20,.92);
+
+    color:#fff;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    text-align:center;
+
+    font-size:16px;
+    font-weight:bold;
+
+    box-shadow:
+        0 6px 0 rgba(29,17,9,.9),
+        0 10px 15px rgba(0,0,0,.35);
+
+    transition:.2s;
+
+    z-index:5;
+}
+
+.location:hover{
+    transform:scale(1.06);
+    filter:brightness(1.15);
+}
+
+.location small{
+    display:block;
+    margin-top:7px;
+
+    color:#ffe2a1;
+
+    font-size:11px;
+    font-weight:normal;
+}
+
+.location.locked{
+    filter:grayscale(1);
+    opacity:.6;
+    cursor:not-allowed;
+}
+
+.location.completed{
+    border-color:#fff7be;
+}
+
+/*
+AJUSTE ESTAS POSIÇÕES CASO OS BOTÕES
+NÃO FIQUEM EM CIMA DOS LOCAIS CORRETOS
+DO MAPA2.PNG
+*/
+
+#locCampos{
+    left:8%;
+    top:22%;
+}
+
+#locSombria{
+    right:8%;
+    top:18%;
+}
+
+#locCastelo{
+    left:43%;
+    top:37%;
+}
+
+#locVila{
+    left:17%;
+    bottom:13%;
+}
+
+#locCogumelos{
+    right:12%;
+    bottom:13%;
+}
+
+/* =============================
+   CENÁRIOS
+============================= */
+
+#sceneScreen{
+    flex-direction:column;
+    background:#000;
+}
+
+.scene{
+    position:relative;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+}
+
+.scene-bg{
+    position:absolute;
+    inset:0;
+
+    width:100%;
+    height:100%;
+
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+
+    z-index:0;
+}
+
+/* IMAGENS DOS CENÁRIOS */
+
+.campos{
+    background-image:url("campos-dourados.png");
+}
+
+.cogumelos{
+    background-image:url("floresta-cogumelos.png");
+}
+
+.vila{
+    background-image:url("vila-florenca.png");
+}
+
+.sombria{
+    background-image:url("floresta-sombria.png");
+}
+
+.castelo{
+    background-image:url("castelo-luminaria.png");
+}
+
+.casteloDentro{
+    background-image:url("interior-castelo.png");
+}
+
+.trono{
+    background-image:url("sala-trono.png");
+}
+
+.scene-overlay{
+    position:absolute;
+    inset:0;
+
+    background:
+        linear-gradient(
+            rgba(0,0,0,.02),
+            rgba(0,0,0,.12)
+        );
+
+    z-index:1;
+    pointer-events:none;
+}
+
+/* =============================
+   NOME DO LOCAL
+============================= */
+
+.scene-title{
+    position:absolute;
+
+    top:22px;
+    left:25px;
+
+    z-index:10;
+
+    background:rgba(25,15,10,.78);
+
+    border:2px solid #ffe09a;
+
+    border-radius:8px;
+
+    padding:10px 18px;
+
+    color:#ffe8a4;
+
+    font-size:22px;
+    font-weight:bold;
+
+    box-shadow:
+        0 4px 10px rgba(0,0,0,.35);
+}
+
+/* =============================
+   CONTROLES
+============================= */
+
+.scene-controls{
+    position:absolute;
+
+    top:22px;
+    right:25px;
+
+    z-index:15;
+
+    display:flex;
+    gap:8px;
+}
+
+.small-button{
+    border:2px solid #f0cc7b;
+
+    background:rgba(36,22,13,.88);
+
+    color:#fff;
+
+    padding:10px 15px;
+
+    border-radius:7px;
+
+    cursor:pointer;
+
+    font-size:14px;
+    font-weight:bold;
+}
+
+.small-button:hover{
+    filter:brightness(1.2);
+}
+
+/* =============================
+   MISSÃO
+============================= */
+
+.mission{
+    position:absolute;
+
+    top:85px;
+    right:25px;
+
+    z-index:10;
+
+    width:260px;
+
+    background:rgba(21,14,10,.78);
+
+    border:2px solid #f2ce80;
+
+    border-radius:8px;
+
+    padding:15px;
+
+    box-shadow:
+        0 5px 12px rgba(0,0,0,.4);
+}
+
+.mission h3{
+    color:#ffe088;
+    font-size:15px;
+    margin-bottom:8px;
+}
+
+#missionText{
+    font-size:14px;
+    line-height:1.4;
+}
+
+/* =============================
+   PERSONAGEM
+============================= */
+
+.character{
+    position:absolute;
+
+    bottom:160px;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    width:270px;
+    height:330px;
+
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+
+    z-index:5;
+
+    pointer-events:none;
+}
+
+.character img{
+    display:block;
+
+    max-width:100%;
+    max-height:100%;
+
+    object-fit:contain;
+
+    filter:
+        drop-shadow(
+            0 9px 5px rgba(0,0,0,.45)
+        );
+}
+
+/* =============================
+   DIÁLOGO
+============================= */
+
+.dialogue-box{
+    position:absolute;
+
+    bottom:20px;
+    left:30px;
+
+    width:calc(100% - 60px);
+
+    min-height:140px;
+
+    z-index:20;
+
+    background:rgba(24,15,11,.94);
+
+    border:4px solid #deb568;
+
+    border-radius:12px;
+
+    padding:22px 25px 55px;
+
+    box-shadow:
+        0 0 25px rgba(0,0,0,.55);
+}
+
+.speaker{
+    color:#ffd66f;
+
+    font-size:21px;
+    font-weight:bold;
+
+    margin-bottom:8px;
+}
+
+.dialogue{
+    color:#fff;
+
+    font-size:19px;
+
+    line-height:1.5;
+
+    min-height:55px;
+}
+
+.next{
+    position:absolute;
+
+    right:18px;
+    bottom:14px;
+
+    border:2px solid #ffd67d;
+
+    background:#76502f;
+
+    color:white;
+
+    padding:9px 17px;
+
+    border-radius:6px;
+
+    cursor:pointer;
+
+    font-size:14px;
+    font-weight:bold;
+}
+
+.next:hover{
+    filter:brightness(1.2);
+}
+
+/* =============================
+   FINAL
+============================= */
+
+#endingScreen{
+    align-items:center;
+    justify-content:center;
+
+    flex-direction:column;
+
+    text-align:center;
+
+    padding:35px;
+
+    background:
+        radial-gradient(
+            circle at center,
+            #735a95,
+            #21162d 65%,
+            #0c0810
+        );
+}
+
+#endingScreen h1{
+    color:#ffe39a;
+
+    font-size:clamp(38px,6vw,70px);
+
+    margin-bottom:25px;
+
+    text-shadow:
+        0 5px 15px rgba(0,0,0,.6);
+}
+
+#endingScreen p{
+    max-width:850px;
+
+    font-size:21px;
+
+    line-height:1.7;
+}
+
+/* =============================
+   RESPONSIVO
+============================= */
+
+@media(max-width:800px){
+
+    .topbar{
+        height:60px;
+        min-height:60px;
+        padding:0 12px;
+    }
+
+    .topbar h2{
+        font-size:18px;
+    }
+
+    .fragment-info{
+        font-size:14px;
+    }
+
+    .location{
+        width:125px;
+        min-height:65px;
+
+        font-size:12px;
+
+        padding:7px;
+    }
+
+    .scene-title{
+        font-size:16px;
+
+        top:10px;
+        left:10px;
+    }
+
+    .scene-controls{
+        top:10px;
+        right:10px;
+    }
+
+    .mission{
+        top:60px;
+        right:10px;
+
+        width:190px;
+
+        padding:10px;
+    }
+
+    .character{
+        width:190px;
+        height:240px;
+
+        bottom:150px;
+    }
+
+    .dialogue-box{
+        left:12px;
+        bottom:12px;
+
+        width:calc(100% - 24px);
+
+        min-height:130px;
+
+        padding:16px 18px 50px;
+    }
+
+    .speaker{
+        font-size:17px;
+    }
+
+    .dialogue{
+        font-size:15px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div id="game">
+
+<!-- =============================
+     TELA INICIAL
+============================= -->
+
+<section id="startScreen" class="screen active">
+
+    <div class="start-content">
+
+        <h1 class="game-title">
+            O REINO<br>
+            DE LUMINÁRIA
+        </h1>
+
+        <div class="menu">
+
+            <button onclick="startGame()">
+                JOGAR
+            </button>
+
+            <button onclick="continueGame()">
+                CONTINUAR
+            </button>
+
+            <button onclick="showSettings()">
+                CONFIGURAÇÕES
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =============================
+     MAPA
+============================= -->
+
+<section id="mapScreen" class="screen">
+
+    <div class="topbar">
+
+        <h2>Mapa de Luminária</h2>
+
+        <div class="fragment-info">
+            Fragmentos:
+            <strong id="fragmentCount">0</strong>/3
+        </div>
+
+    </div>
+
+    <div class="map-container">
+
+        <button
+            class="location"
+            id="locCampos"
+            onclick="openLocation('campos')">
+
+            CAMPOS DOURADOS
+
+            <small>
+                O começo da aventura
+            </small>
+
+        </button>
+
+        <button
+            class="location locked"
+            id="locCogumelos"
+            onclick="openLocation('cogumelos')">
+
+            FLORESTA DOS COGUMELOS
+
+            <small>
+                Bloqueado
+            </small>
+
+        </button>
+
+        <button
+            class="location"
+            id="locVila"
+            onclick="openLocation('vila')">
+
+            VILA FLORENÇA
+
+            <small>
+                Disponível
+            </small>
+
+        </button>
+
+        <button
+            class="location locked"
+            id="locSombria"
+            onclick="openLocation('sombria')">
+
+            FLORESTA SOMBRIA
+
+            <small>
+                Bloqueado
+            </small>
+
+        </button>
+
+        <button
+            class="location locked"
+            id="locCastelo"
+            onclick="openLocation('castelo')">
+
+            CASTELO DE LUMINÁRIA
+
+            <small>
+                Bloqueado
+            </small>
+
+        </button>
+
+    </div>
+
+</section>
+
+<!-- =============================
+     CENÁRIO
+============================= -->
+
+<section id="sceneScreen" class="screen">
+
+    <div class="scene">
+
+        <div
+            id="sceneBackground"
+            class="scene-bg campos">
+        </div>
+
+        <div class="scene-overlay"></div>
+
+        <div
+            id="sceneTitle"
+            class="scene-title">
+            Campos Dourados
+        </div>
+
+        <div class="scene-controls">
+
+            <button
+                class="small-button"
+                onclick="showMap()">
+                MAPA
+            </button>
+
+        </div>
+
+        <div class="mission">
+
+            <h3>MISSÃO</h3>
+
+            <div id="missionText">
+                Descubra o que aconteceu.
+            </div>
+
+        </div>
+
+        <div
+            id="character"
+            class="character">
+
+            <img
+                id="characterImage"
+                src="raposa.png"
+                alt="Personagem">
+
+        </div>
+
+        <div class="dialogue-box">
+
+            <div
+                id="speaker"
+                class="speaker">
+                Raposa
+            </div>
+
+            <div
+                id="dialogue"
+                class="dialogue">
+                ...
+            </div>
+
+            <button
+                class="next"
+                onclick="nextDialogue()">
+                CONTINUAR ▶
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =============================
+     FINAL
+============================= -->
+
+<section id="endingScreen" class="screen">
+
+    <h1>
+        FIM DO CAPÍTULO 1
+    </h1>
+
+    <p>
+        O Cristal de Luminária foi restaurado
+        e sua luz voltou a iluminar o reino.
+
+        <br><br>
+
+        Os Campos Dourados recuperaram sua cor,
+        as luzes da Vila Florença voltaram a brilhar
+        e as criaturas da Floresta Sombria recuaram.
+
+        <br><br>
+
+        Mas os dois tronos continuam vazios.
+
+        <br><br>
+
+        O Rei e a Rainha ainda estão desaparecidos...
+
+        <br><br>
+
+        A aventura está apenas começando.
+    </p>
+
+    <br><br>
+
+    <button
+        class="game-button"
+        onclick="restartGame()">
+
+        JOGAR NOVAMENTE
+
+    </button>
+
+</section>
+
+</div>
+
+<script>
+
+/* =============================
+   PERSONAGENS
+============================= */
+
+const characters = {
+
+    raposa:{
+        name:"Raposa",
+        image:"raposa.png"
+    },
+
+    lobo:{
+        name:"Lobo",
+        image:"lobo.png"
+    },
+
+    cobra:{
+        name:"Cobra",
+        image:"cobra.png"
+    },
+
+    cachorro:{
+        name:"Cachorro",
+        image:"cachorro.png"
+    },
+
+    hamster:{
+        name:"Hamster",
+        image:"hamster.png"
+    },
+
+    ursa:{
+        name:"Ursa",
+        image:"ursa.png"
+    },
+
+    urso:{
+        name:"Urso",
+        image:"urso.png"
+    },
+
+    passarinha:{
+        name:"Passarinha",
+        image:"passarinha.png"
+    },
+
+    passarinho:{
+        name:"Passarinho",
+        image:"passarinho.png"
+    },
+
+    narrador:{
+        name:"Narrador",
+        image:null
+    }
+
+};
+
+/* =============================
+   HISTÓRIA
+============================= */
+
+const stories = {
+
+/* =============================
+   INTRODUÇÃO
+============================= */
+
+intro:[
+
+    {
+        character:"narrador",
+        text:"Durante centenas de anos, uma luz mágica protegeu o Reino de Luminária."
+    },
+
+    {
+        character:"narrador",
+        text:"Ela fazia os campos florescerem, iluminava as florestas e mantinha as criaturas sombrias afastadas."
+    },
+
+    {
+        character:"narrador",
+        text:"Essa luz vinha de um poderoso cristal guardado no Castelo de Luminária."
+    },
+
+    {
+        character:"narrador",
+        text:"Mas, na noite passada... o cristal desapareceu."
+    },
+
+    {
+        character:"narrador",
+        text:"Os portões do castelo foram fechados e o Rei e a Rainha desapareceram."
+    },
+
+    {
+        character:"raposa",
+        text:"Então é verdade... alguma coisa aconteceu no castelo."
+    },
+
+    {
+        character:"lobo",
+        text:"Se o cristal realmente desapareceu, precisamos encontrá-lo."
+    },
+
+    {
+        character:"hamster",
+        text:"Precisamos mesmo?"
+    },
+
+    {
+        character:"cachorro",
+        text:"Vai ser divertido!"
+    },
+
+    {
+        character:"hamster",
+        text:"Você sempre fala isso antes de alguma coisa tentar comer a gente."
+    },
+
+    {
+        character:"ursa",
+        text:"Chega. Primeiro precisamos descobrir o que aconteceu."
+    },
+
+    {
+        character:"passarinha",
+        text:"Eu vi uma luz estranha vindo dos Campos Dourados ontem à noite."
+    },
+
+    {
+        character:"raposa",
+        text:"Então começaremos por lá."
+    }
+
+],
+
+/* =============================
+   CAMPOS DOURADOS
+============================= */
+
+campos:[
+
+    {
+        character:"cachorro",
+        text:"Uau... os Campos Dourados estão diferentes."
+    },
+
+    {
+        character:"urso",
+        text:"Ontem toda essa região estava completamente dourada."
+    },
+
+    {
+        character:"raposa",
+        text:"Olhem para o chão."
+    },
+
+    {
+        character:"passarinho",
+        text:"Tem alguma coisa brilhando!"
+    },
+
+    {
+        character:"raposa",
+        text:"É um fragmento do Cristal de Luminária."
+    },
+
+    {
+        character:"lobo",
+        text:"Então quem roubou o cristal passou por aqui."
+    },
+
+    {
+        character:"cobra",
+        text:"Sem dúvida."
+    },
+
+    {
+        character:"lobo",
+        text:"Como você sabe?"
+    },
+
+    {
+        character:"cobra",
+        text:"Porque eu já vi esse cristal antes."
+    },
+
+    {
+        character:"raposa",
+        text:"Onde?"
+    },
+
+    {
+        character:"cobra",
+        text:"No Castelo de Luminária."
+    },
+
+    {
+        character:"hamster",
+        text:"Tenho a impressão de que essa cobra sabe mais do que está contando."
+    },
+
+    {
+        character:"passarinha",
+        text:"Olhem! Existe o desenho de um cogumelo naquela carroça."
+    },
+
+    {
+        character:"cobra",
+        text:"Esse símbolo pertence à Floresta dos Cogumelos."
+    }
+
+],
+
+/* =============================
+   FLORESTA DOS COGUMELOS
+============================= */
+
+cogumelos:[
+
+    {
+        character:"hamster",
+        text:"Esses cogumelos são enormes!"
+    },
+
+    {
+        character:"cachorro",
+        text:"Será que são comestíveis?"
+    },
+
+    {
+        character:"hamster",
+        text:"Essa foi exatamente a pergunta errada."
+    },
+
+    {
+        character:"cachorro",
+        text:"ATCHIM!"
+    },
+
+    {
+        character:"raposa",
+        text:"Continuem procurando pistas."
+    },
+
+    {
+        character:"passarinha",
+        text:"Esperem! Tem alguma coisa brilhando ali."
+    },
+
+    {
+        character:"raposa",
+        text:"Outro fragmento do cristal."
+    },
+
+    {
+        character:"lobo",
+        text:"Então realmente estamos seguindo o caminho certo."
+    },
+
+    {
+        character:"passarinho",
+        text:"Encontrei pegadas!"
+    },
+
+    {
+        character:"ursa",
+        text:"Elas simplesmente desaparecem perto daquela árvore."
+    },
+
+    {
+        character:"raposa",
+        text:"Olhem para aquele galho."
+    },
+
+    {
+        character:"passarinha",
+        text:"Uma pena preta..."
+    },
+
+    {
+        character:"passarinho",
+        text:"Eu já vi uma igual."
+    },
+
+    {
+        character:"raposa",
+        text:"Onde?"
+    },
+
+    {
+        character:"passarinho",
+        text:"Na Floresta Sombria."
+    }
+
+],
+
+/* =============================
+   VILA FLORENÇA
+============================= */
+
+vila:[
+
+    {
+        character:"urso",
+        text:"A Vila Florença está muito silenciosa."
+    },
+
+    {
+        character:"ursa",
+        text:"As luminárias mágicas estão se apagando."
+    },
+
+    {
+        character:"raposa",
+        text:"Isso deve estar acontecendo porque o cristal foi removido do castelo."
+    },
+
+    {
+        character:"passarinha",
+        text:"Conversei com alguns moradores."
+    },
+
+    {
+        character:"passarinha",
+        text:"Uma carruagem deixou o castelo na noite em que o cristal desapareceu."
+    },
+
+    {
+        character:"passarinho",
+        text:"E os sinos do castelo tocaram três vezes."
+    },
+
+    {
+        character:"lobo",
+        text:"Talvez os próprios reis tenham levado o cristal."
+    },
+
+    {
+        character:"cobra",
+        text:"Não."
+    },
+
+    {
+        character:"lobo",
+        text:"Como pode ter tanta certeza?"
+    },
+
+    {
+        character:"cobra",
+        text:"Os reis jamais retirariam voluntariamente o cristal do castelo."
+    },
+
+    {
+        character:"raposa",
+        text:"Você ainda está escondendo alguma coisa de nós."
+    }
+
+],
+
+/* =============================
+   FLORESTA SOMBRIA
+============================= */
+
+sombria:[
+
+    {
+        character:"hamster",
+        text:"Podemos voltar?"
+    },
+
+    {
+        character:"lobo",
+        text:"Não."
+    },
+
+    {
+        character:"hamster",
+        text:"Eu tentei."
+    },
+
+    {
+        character:"cachorro",
+        text:"Escutei alguma coisa!"
+    },
+
+    {
+        character:"ursa",
+        text:"Fiquem juntos."
+    },
+
+    {
+        character:"narrador",
+        text:"Vários olhos começam a aparecer entre as árvores."
+    },
+
+    {
+        character:"lobo",
+        text:"Preparem-se!"
+    },
+
+    {
+        character:"narrador",
+        text:"Depois de enfrentar as criaturas sombrias, o grupo encontra uma antiga construção de pedra."
+    },
+
+    {
+        character:"raposa",
+        text:"Existe o símbolo da família real nesta porta."
+    },
+
+    {
+        character:"cobra",
+        text:"É uma passagem secreta."
+    },
+
+    {
+        character:"lobo",
+        text:"Como você sabe disso?"
+    },
+
+    {
+        character:"cobra",
+        text:"Porque eu trabalhava para o Rei e a Rainha."
+    },
+
+    {
+        character:"hamster",
+        text:"Você podia ter contado isso umas três florestas atrás."
+    },
+
+    {
+        character:"cobra",
+        text:"O Rei me fez prometer que jamais revelaria esta passagem."
+    },
+
+    {
+        character:"raposa",
+        text:"Mas agora eles desapareceram."
+    },
+
+    {
+        character:"cobra",
+        text:"Exatamente."
+    },
+
+    {
+        character:"cobra",
+        text:"Esta passagem leva diretamente ao Castelo de Luminária."
+    }
+
+],
+
+/* =============================
+   CASTELO
+============================= */
+
+castelo:[
+
+    {
+        character:"passarinha",
+        text:"Não vejo nenhum guarda."
+    },
+
+    {
+        character:"urso",
+        text:"O castelo nunca ficava completamente vazio."
+    },
+
+    {
+        character:"raposa",
+        text:"Alguma coisa realmente aconteceu aqui."
+    },
+
+    {
+        character:"cobra",
+        text:"A passagem secreta fica atrás daqueles jardins."
+    },
+
+    {
+        character:"lobo",
+        text:"Então vamos entrar."
+    },
+
+    {
+        character:"narrador",
+        text:"O grupo atravessa a passagem secreta e entra no Castelo de Luminária."
+    }
+
+],
+
+/* =============================
+   DENTRO DO CASTELO
+============================= */
+
+casteloDentro:[
+
+    {
+        character:"cachorro",
+        text:"Onde está todo mundo?"
+    },
+
+    {
+        character:"lobo",
+        text:"Fiquem juntos."
+    },
+
+    {
+        character:"passarinha",
+        text:"As portas estão quebradas."
+    },
+
+    {
+        character:"raposa",
+        text:"Tem um livro aberto naquela mesa."
+    },
+
+    {
+        character:"raposa",
+        text:"Aqui diz: O cristal não produz a luz..."
+    },
+
+    {
+        character:"passarinho",
+        text:"Como assim?"
+    },
+
+    {
+        character:"raposa",
+        text:"Ele apenas guarda a energia criada pela união dos povos do reino."
+    },
+
+    {
+        character:"hamster",
+        text:"Então é tipo uma bateria gigante?"
+    },
+
+    {
+        character:"raposa",
+        text:"Na verdade... é exatamente isso."
+    },
+
+    {
+        character:"cobra",
+        text:"Então quebrar o cristal espalhou sua energia."
+    },
+
+    {
+        character:"lobo",
+        text:"Os fragmentos!"
+    },
+
+    {
+        character:"narrador",
+        text:"BOOOOM!"
+    },
+
+    {
+        character:"ursa",
+        text:"Esse barulho veio da sala do trono!"
+    }
+
+],
+
+/* =============================
+   SALA DO TRONO
+============================= */
+
+trono:[
+
+    {
+        character:"passarinha",
+        text:"Os dois tronos estão vazios."
+    },
+
+    {
+        character:"raposa",
+        text:"Mas alguém esteve aqui."
+    },
+
+    {
+        character:"lobo",
+        text:"Olhem o pedestal."
+    },
+
+    {
+        character:"raposa",
+        text:"É onde o Cristal de Luminária ficava."
+    },
+
+    {
+        character:"narrador",
+        text:"O grupo coloca os fragmentos encontrados sobre o pedestal."
+    },
+
+    {
+        character:"hamster",
+        text:"Não aconteceu nada."
+    },
+
+    {
+        character:"raposa",
+        text:"Ainda falta uma parte."
+    },
+
+    {
+        character:"cobra",
+        text:"Eu sabia que isso podia acontecer."
+    },
+
+    {
+        character:"lobo",
+        text:"O que você ainda não contou para a gente?"
+    },
+
+    {
+        character:"cobra",
+        text:"Na noite em que o cristal desapareceu, eu estava dentro do castelo."
+    },
+
+    {
+        character:"raposa",
+        text:"Você estava aqui?"
+    },
+
+    {
+        character:"cobra",
+        text:"Sim. O Rei e a Rainha descobriram que alguém estava tentando controlar a energia do cristal."
+    },
+
+    {
+        character:"passarinha",
+        text:"Então foram eles que quebraram o cristal?"
+    },
+
+    {
+        character:"cobra",
+        text:"Não. Eles tentaram protegê-lo."
+    },
+
+    {
+        character:"lobo",
+        text:"Então onde eles estão?"
+    },
+
+    {
+        character:"cobra",
+        text:"Foram levados antes que eu pudesse ajudá-los."
+    },
+
+    {
+        character:"raposa",
+        text:"Levados por quem?"
+    },
+
+    {
+        character:"narrador",
+        text:"De repente, uma enorme sombra atravessa as janelas da sala do trono."
+    },
+
+    {
+        character:"passarinho",
+        text:"O que foi aquilo?!"
+    },
+
+    {
+        character:"cobra",
+        text:"Aquilo que estava esperando o Cristal de Luminária enfraquecer."
+    },
+
+    {
+        character:"ursa",
+        text:"Então foi essa criatura que levou o Rei e a Rainha?"
+    },
+
+    {
+        character:"cobra",
+        text:"Sim."
+    },
+
+    {
+        character:"lobo",
+        text:"Então vamos derrotá-la."
+    },
+
+    {
+        character:"narrador",
+        text:"Os animais enfrentam a criatura sombria dentro da sala do trono."
+    },
+
+    {
+        character:"narrador",
+        text:"Depois de uma grande batalha, a criatura desaparece em uma explosão de energia."
+    },
+
+    {
+        character:"raposa",
+        text:"Olhem! O último fragmento!"
+    },
+
+    {
+        character:"narrador",
+        text:"Entre os restos de energia deixados pela criatura, o grupo encontra a última parte do cristal."
+    },
+
+    {
+        character:"raposa",
+        text:"Agora temos todas as peças."
+    },
+
+    {
+        character:"narrador",
+        text:"Os fragmentos começam a flutuar e se unem novamente."
+    },
+
+    {
+        character:"narrador",
+        text:"O Cristal de Luminária volta a brilhar."
+    },
+
+    {
+        character:"hamster",
+        text:"Conseguimos!"
+    },
+
+    {
+        character:"cachorro",
+        text:"Eu sabia!"
+    },
+
+    {
+        character:"hamster",
+        text:"Nós quase fomos devorados!"
+    },
+
+    {
+        character:"cachorro",
+        text:"Detalhes."
+    },
+
+    {
+        character:"passarinha",
+        text:"A luz está voltando para o reino!"
+    },
+
+    {
+        character:"urso",
+        text:"Então acabou?"
+    },
+
+    {
+        character:"raposa",
+        text:"Ainda não."
+    },
+
+    {
+        character:"lobo",
+        text:"Por quê?"
+    },
+
+    {
+        character:"raposa",
+        text:"O cristal voltou..."
+    },
+
+    {
+        character:"raposa",
+        text:"Mas o Rei e a Rainha continuam desaparecidos."
+    },
+
+    {
+        character:"cobra",
+        text:"Se quisermos encontrá-los, teremos que sair de Luminária."
+    },
+
+    {
+        character:"passarinho",
+        text:"Então nossa aventura está só começando."
+    }
+
+]
+
+};
+
+/* =============================
+   PROGRESSO
+============================= */
+
+let currentStory = [];
+let currentDialogue = 0;
+let currentLocation = "";
+
+let progress = {
+
+    fragments:0,
+
+    campos:false,
+    cogumelos:false,
+    vila:false,
+    sombria:false,
+    castelo:false,
+
+    unlockedCogumelos:false,
+    unlockedSombria:false,
+    unlockedCastelo:false
+};
+
+/* =============================
+   TROCAR TELA
+============================= */
+
+function showScreen(id){
+
+    document
+        .querySelectorAll(".screen")
+        .forEach(screen => {
+
+            screen.classList.remove("active");
+
+        });
+
+    document
+        .getElementById(id)
+        .classList.add("active");
+
+}
+
+/* =============================
+   NOVO JOGO
+============================= */
+
+function startGame(){
+
+    progress = {
+
+        fragments:0,
+
+        campos:false,
+        cogumelos:false,
+        vila:false,
+        sombria:false,
+        castelo:false,
+
+        unlockedCogumelos:false,
+        unlockedSombria:false,
+        unlockedCastelo:false
+
+    };
+
+    saveGame();
+
+    startStory(
+        "intro",
+        "O Reino de Luminária",
+        "campos",
+        "Descubra o que aconteceu com o Cristal de Luminária."
+    );
+
+}
+
+/* =============================
+   CONTINUAR
+============================= */
+
+function continueGame(){
+
+    const save =
+        localStorage.getItem("luminariaSave");
+
+    if(!save){
+
+        alert(
+            "Ainda não existe nenhum jogo salvo."
+        );
+
+        return;
+    }
+
+    try{
+
+        progress =
+            JSON.parse(save);
+
+    }catch(error){
+
+        alert(
+            "Não foi possível carregar o jogo salvo."
+        );
+
+        return;
+    }
+
+    updateMap();
+
+    showScreen("mapScreen");
+}
+
+/* =============================
+   CONFIGURAÇÕES
+============================= */
+
+function showSettings(){
+
+    alert(
+        "As configurações serão adicionadas depois."
+    );
+
+}
+
+/* =============================
+   ABRIR LOCAL
+============================= */
+
+function openLocation(location){
+
+    if(
+        location === "cogumelos" &&
+        !progress.unlockedCogumelos
+    ){
+
+        alert(
+            "A Floresta dos Cogumelos ainda está bloqueada."
+        );
+
+        return;
+    }
+
+    if(
+        location === "sombria" &&
+        !progress.unlockedSombria
+    ){
+
+        alert(
+            "A Floresta Sombria ainda está bloqueada."
+        );
+
+        return;
+    }
+
+    if(
+        location === "castelo" &&
+        !progress.unlockedCastelo
+    ){
+
+        alert(
+            "O Castelo de Luminária ainda está bloqueado."
+        );
+
+        return;
+    }
+
+    const locationInfo = {
+
+        campos:{
+            title:"Campos Dourados",
+            class:"campos",
+            mission:"Investigue as marcas encontradas nos Campos Dourados."
+        },
+
+        cogumelos:{
+            title:"Floresta dos Cogumelos",
+            class:"cogumelos",
+            mission:"Procure novos fragmentos e descubra para onde seguir."
+        },
+
+        vila:{
+            title:"Vila Florença",
+            class:"vila",
+            mission:"Converse com os moradores e procure informações."
+        },
+
+        sombria:{
+            title:"Floresta Sombria",
+            class:"sombria",
+            mission:"Descubra o segredo escondido na floresta."
+        },
+
+        castelo:{
+            title:"Castelo de Luminária",
+            class:"castelo",
+            mission:"Encontre uma forma de entrar no Castelo de Luminária."
+        }
+
+    };
+
+    const info =
+        locationInfo[location];
+
+    startStory(
+        location,
+        info.title,
+        info.class,
+        info.mission
+    );
+}
+
+/* =============================
+   INICIAR HISTÓRIA
+============================= */
+
+function startStory(
+    story,
+    title,
+    bgClass,
+    mission
+){
+
+    currentStory =
+        stories[story];
+
+    currentDialogue = 0;
+
+    currentLocation = story;
+
+    showScreen("sceneScreen");
+
+    document
+        .getElementById("sceneTitle")
+        .textContent = title;
+
+    document
+        .getElementById("missionText")
+        .textContent = mission;
+
+    const background =
+        document.getElementById(
+            "sceneBackground"
+        );
+
+    background.className =
+        "scene-bg " + bgClass;
+
+    showDialogue();
+}
+
+/* =============================
+   MOSTRAR FALA
+============================= */
+
+function showDialogue(){
+
+    const data =
+        currentStory[currentDialogue];
+
+    const char =
+        characters[data.character];
+
+    const speaker =
+        document.getElementById(
+            "speaker"
+        );
+
+    const img =
+        document.getElementById(
+            "characterImage"
+        );
+
+    const dialogue =
+        document.getElementById(
+            "dialogue"
+        );
+
+    speaker.textContent =
+        char.name;
+
+    dialogue.textContent =
+        data.text;
+
+    if(char.image){
+
+        img.src =
+            char.image;
+
+        img.alt =
+            char.name;
+
+        img.style.display =
+            "block";
+
+    }else{
+
+        img.style.display =
+            "none";
+    }
+}
+
+/* =============================
+   PRÓXIMA FALA
+============================= */
+
+function nextDialogue(){
+
+    currentDialogue++;
+
+    if(
+        currentDialogue >=
+        currentStory.length
+    ){
+
+        finishStory();
+
+        return;
+    }
+
+    showDialogue();
+}
+
+/* =============================
+   FINALIZAR LOCAL
+============================= */
+
+function finishStory(){
+
+    switch(currentLocation){
+
+        case "intro":
+
+            showMap();
+
+            break;
+
+
+        case "campos":
+
+            if(!progress.campos){
+
+                progress.campos = true;
+
+                progress.fragments++;
+
+                progress.unlockedCogumelos = true;
+
+                alert(
+                    "Você encontrou um Fragmento do Cristal!\n\nFloresta dos Cogumelos desbloqueada!"
+                );
+            }
+
+            showMap();
+
+            break;
+
+
+        case "cogumelos":
+
+            if(!progress.cogumelos){
+
+                progress.cogumelos = true;
+
+                progress.fragments++;
+
+                progress.unlockedSombria = true;
+
+                alert(
+                    "Você encontrou outro Fragmento do Cristal!\n\nFloresta Sombria desbloqueada!"
+                );
+            }
+
+            showMap();
+
+            break;
+
+
+        case "vila":
+
+            progress.vila = true;
+
+            showMap();
+
+            break;
+
+
+        case "sombria":
+
+            if(!progress.sombria){
+
+                progress.sombria = true;
+
+                progress.unlockedCastelo = true;
+
+                alert(
+                    "A passagem secreta foi descoberta!\n\nCastelo de Luminária desbloqueado!"
+                );
+            }
+
+            showMap();
+
+            break;
+
+
+        case "castelo":
+
+            progress.castelo = true;
+
+            saveGame();
+
+            startStory(
+                "casteloDentro",
+                "Interior do Castelo",
+                "casteloDentro",
+                "Explore o castelo e descubra o que aconteceu."
+            );
+
+            break;
+
+
+        case "casteloDentro":
+
+            startStory(
+                "trono",
+                "Sala do Trono",
+                "trono",
+                "Descubra o que aconteceu com o Rei e a Rainha."
+            );
+
+            break;
+
+
+        case "trono":
+
+            progress.fragments = 3;
+
+            saveGame();
+
+            showScreen(
+                "endingScreen"
+            );
+
+            break;
+    }
+
+    saveGame();
+}
+
+/* =============================
+   MOSTRAR MAPA
+============================= */
+
+function showMap(){
+
+    saveGame();
+
+    updateMap();
+
+    showScreen(
+        "mapScreen"
+    );
+}
+
+/* =============================
+   ATUALIZAR MAPA
+============================= */
+
+function updateMap(){
+
+    document
+        .getElementById(
+            "fragmentCount"
+        )
+        .textContent =
+        progress.fragments;
+
+    updateLocation(
+        "locCampos",
+        true,
+        progress.campos
+    );
+
+    updateLocation(
+        "locVila",
+        true,
+        progress.vila
+    );
+
+    updateLocation(
+        "locCogumelos",
+        progress.unlockedCogumelos,
+        progress.cogumelos
+    );
+
+    updateLocation(
+        "locSombria",
+        progress.unlockedSombria,
+        progress.sombria
+    );
+
+    updateLocation(
+        "locCastelo",
+        progress.unlockedCastelo,
+        progress.castelo
+    );
+}
+
+/* =============================
+   ATUALIZAR BOTÃO DO MAPA
+============================= */
+
+function updateLocation(
+    id,
+    unlocked,
+    completed
+){
+
+    const button =
+        document.getElementById(id);
+
+    const small =
+        button.querySelector("small");
+
+    button.classList.remove(
+        "locked",
+        "completed"
+    );
+
+    if(!unlocked){
+
+        button.classList.add(
+            "locked"
+        );
+
+        small.textContent =
+            "Bloqueado";
+
+        return;
+    }
+
+    if(completed){
+
+        button.classList.add(
+            "completed"
+        );
+
+        small.textContent =
+            "Visitado";
+
+    }else{
+
+        small.textContent =
+            "Disponível";
+    }
+}
+
+/* =============================
+   SALVAR
+============================= */
+
+function saveGame(){
+
+    localStorage.setItem(
+        "luminariaSave",
+        JSON.stringify(progress)
+    );
+}
+
+/* =============================
+   REINICIAR
+============================= */
+
+function restartGame(){
+
+    localStorage.removeItem(
+        "luminariaSave"
+    );
+
+    location.reload();
+}
+
+</script>
+
+</body>
+</html>

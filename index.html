@@ -2,17 +2,27 @@
 <html lang="pt-BR">
 
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>O Reino de Luminária</title>
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+O Reino de Luminária
+</title>
 
 <style>
 
+/* ==============================
+RESET
+============================== */
+
 *{
-    box-sizing:border-box;
     margin:0;
     padding:0;
+    box-sizing:border-box;
 }
 
 html,
@@ -22,9 +32,9 @@ body{
 }
 
 body{
-    font-family:Arial, Helvetica, sans-serif;
     background:#000;
     color:white;
+    font-family:Arial, Helvetica, sans-serif;
     overflow:hidden;
 }
 
@@ -32,23 +42,33 @@ button{
     font-family:inherit;
 }
 
+/* ==============================
+JOGO
+============================== */
+
 #game{
     width:100vw;
     height:100vh;
+
     position:relative;
+
     overflow:hidden;
+
     background:#000;
 }
 
-/* ============================
+/* ==============================
 TELAS
-============================ */
+============================== */
 
 .screen{
     position:absolute;
+
     inset:0;
+
     width:100%;
     height:100%;
+
     display:none;
 }
 
@@ -56,49 +76,55 @@ TELAS
     display:flex;
 }
 
-/* ============================
+/* ==============================
 TELA INICIAL
-
-SOMENTE A PNG
-============================ */
+============================== */
 
 #startScreen{
-    background-image:url("tela-inicial.png");
-
-    background-size:cover;
-    background-position:center;
-    background-repeat:no-repeat;
 
     align-items:flex-end;
     justify-content:center;
 
+    background-image:
+    url("tela-inicial.png");
+
+    background-size:cover;
+
+    background-position:center;
+
+    background-repeat:no-repeat;
+
     cursor:pointer;
 }
 
-/* texto pequeno para indicar espaço */
-
 .start-hint{
-    margin-bottom:30px;
 
-    padding:10px 22px;
+    margin-bottom:32px;
 
-    color:white;
+    padding:11px 24px;
+
+    background:
+    rgba(0,0,0,.55);
+
+    border-radius:9px;
+
+    color:#fff;
 
     font-size:18px;
+
     font-weight:bold;
 
-    background:rgba(0,0,0,.55);
+    text-shadow:
+    0 2px 4px #000;
 
-    border-radius:8px;
-
-    animation:piscar 1.3s infinite;
-
-    text-shadow:0 2px 4px #000;
+    animation:
+    piscar 1.3s infinite;
 }
 
 @keyframes piscar{
 
-    0%,100%{
+    0%,
+    100%{
         opacity:1;
     }
 
@@ -108,139 +134,226 @@ SOMENTE A PNG
 
 }
 
-/* ============================
+/* ==============================
 MAPA
-============================ */
+============================== */
 
 #mapScreen{
+
     flex-direction:column;
+
     background:#000;
 }
 
 .topbar{
-    height:65px;
 
-    background:rgba(35,24,15,.95);
+    height:64px;
 
-    border-bottom:3px solid #d4ac62;
+    min-height:64px;
 
     display:flex;
+
     align-items:center;
+
     justify-content:space-between;
 
-    padding:0 25px;
+    padding:
+    0 25px;
+
+    background:
+    rgba(39,24,13,.96);
+
+    border-bottom:
+    3px solid #d8ad5d;
 
     z-index:30;
 }
 
 .topbar h2{
-    color:#ffe49a;
+
+    color:#ffe19a;
+
+    font-size:22px;
 }
 
 .fragment-info{
+
+    color:white;
+
     font-size:17px;
 }
 
-/* MAPA PNG */
+/* ==============================
+IMAGEM DO MAPA
+============================== */
 
 .map-container{
+
     flex:1;
 
     position:relative;
 
-    background-image:url("mapa2.png");
+    overflow:hidden;
 
-    background-size:cover;
-    background-position:center;
-    background-repeat:no-repeat;
+    background-image:
+    url("mapa2.png");
+
+    background-size:
+    100% 100%;
+
+    background-position:
+    center;
+
+    background-repeat:
+    no-repeat;
 }
 
-/* ============================
-BOTÕES DO MAPA
-============================ */
+/* ==============================
+ÁREAS CLICÁVEIS DO MAPA
+============================== */
 
 .location{
+
     position:absolute;
 
-    width:170px;
+    background:transparent;
 
-    padding:12px;
+    border:none;
 
-    background:rgba(55,35,20,.9);
+    box-shadow:none;
 
-    border:3px solid #f8da8c;
+    color:transparent;
 
-    border-radius:10px;
-
-    color:white;
-
-    font-size:14px;
-    font-weight:bold;
+    font-size:0;
 
     cursor:pointer;
 
     z-index:10;
 
-    box-shadow:
-        0 5px 0 rgba(20,10,5,.85);
-}
+    border-radius:15px;
 
-.location:hover{
-    transform:scale(1.05);
+    transition:.2s;
 }
 
 .location small{
-    display:block;
-
-    margin-top:5px;
-
-    font-size:11px;
-
-    color:#ffe4ab;
+    display:none;
 }
+
+.location:hover{
+
+    background:
+    rgba(255,255,255,.12);
+
+    outline:
+    3px solid
+    rgba(255,230,140,.85);
+
+    transform:
+    scale(1.03);
+}
+
+/* bloqueado */
 
 .location.locked{
-    filter:grayscale(1);
-    opacity:.55;
+
     cursor:not-allowed;
+
+    opacity:1;
+
+    filter:none;
 }
 
-/* posições */
+.location.locked:hover{
 
-#locCampos{
-    left:8%;
-    top:22%;
+    background:
+    rgba(0,0,0,.18);
+
+    outline:
+    3px solid
+    rgba(110,110,110,.75);
+
+    transform:none;
 }
 
-#locSombria{
-    right:8%;
-    top:18%;
-}
+/* ==============================
+POSIÇÕES NO MAPA2.PNG
+============================== */
 
-#locCastelo{
-    left:43%;
-    top:37%;
-}
-
-#locVila{
-    left:17%;
-    bottom:13%;
-}
+/* FLORESTA DOS COGUMELOS */
 
 #locCogumelos{
-    right:12%;
-    bottom:13%;
+
+    left:7.2%;
+
+    top:51.8%;
+
+    width:19.4%;
+
+    height:6.3%;
 }
 
-/* ============================
-CENÁRIOS
-============================ */
+/* CASTELO */
+
+#locCastelo{
+
+    left:41.2%;
+
+    top:26.7%;
+
+    width:18.4%;
+
+    height:6.2%;
+}
+
+/* VILA */
+
+#locVila{
+
+    left:42.4%;
+
+    top:53.2%;
+
+    width:16.5%;
+
+    height:6.1%;
+}
+
+/* FLORESTA SOMBRIA */
+
+#locSombria{
+
+    left:77%;
+
+    top:53.4%;
+
+    width:16.4%;
+
+    height:6.2%;
+}
+
+/* CAMPOS DOURADOS */
+
+#locCampos{
+
+    left:41.4%;
+
+    top:81.8%;
+
+    width:19.2%;
+
+    height:6.5%;
+}
+
+/* ==============================
+CENÁRIO
+============================== */
 
 #sceneScreen{
     background:#000;
 }
 
 .scene{
+
     position:relative;
 
     width:100%;
@@ -250,94 +363,137 @@ CENÁRIOS
 }
 
 .scene-bg{
+
     position:absolute;
 
     inset:0;
 
-    background-size:cover;
-    background-position:center;
-    background-repeat:no-repeat;
+    width:100%;
+
+    height:100%;
+
+    background-size:
+    cover;
+
+    background-position:
+    center;
+
+    background-repeat:
+    no-repeat;
 
     z-index:0;
 }
 
-/* imagens */
+/* ==============================
+PNG DOS CENÁRIOS
+============================== */
 
 .campos{
-    background-image:url("campos-dourados.png");
+
+    background-image:
+    url("campos-dourados.png");
 }
 
 .cogumelos{
-    background-image:url("floresta-cogumelos.png");
+
+    background-image:
+    url("floresta-cogumelos.png");
 }
 
 .vila{
-    background-image:url("vila-florenca.png");
+
+    background-image:
+    url("vila-florenca.png");
 }
 
 .sombria{
-    background-image:url("floresta-sombria.png");
+
+    background-image:
+    url("floresta-sombria.png");
 }
 
 .castelo{
-    background-image:url("castelo-luminaria.png");
+
+    background-image:
+    url("castelo-luminaria.png");
 }
 
 .casteloDentro{
-    background-image:url("interior-castelo.png");
+
+    background-image:
+    url("interior-castelo.png");
 }
 
 .trono{
-    background-image:url("sala-trono.png");
+
+    background-image:
+    url("sala-trono.png");
 }
 
-/* ============================
+/* ==============================
 NOME DO LOCAL
-============================ */
+============================== */
 
 .scene-title{
+
     position:absolute;
 
     top:20px;
+
     left:25px;
 
     z-index:15;
 
-    padding:10px 17px;
+    padding:
+    10px 17px;
 
-    background:rgba(25,15,10,.8);
+    background:
+    rgba(26,16,10,.78);
 
-    border:2px solid #f5d588;
+    border:
+    2px solid #f4d184;
 
-    border-radius:8px;
+    border-radius:
+    8px;
 
-    color:#ffe7a0;
+    color:
+    #ffe6a0;
 
-    font-size:21px;
-    font-weight:bold;
+    font-size:
+    21px;
+
+    font-weight:
+    bold;
 }
 
-/* ============================
+/* ==============================
 BOTÃO MAPA
-============================ */
+============================== */
 
 .scene-controls{
+
     position:absolute;
 
     top:20px;
+
     right:25px;
 
     z-index:20;
 }
 
 .small-button{
-    padding:10px 15px;
 
-    border:2px solid #f0cc7b;
+    padding:
+    10px 15px;
 
-    border-radius:7px;
+    border:
+    2px solid #f0cc7b;
 
-    background:rgba(30,20,12,.88);
+    border-radius:
+    7px;
+
+    background:
+    rgba(31,20,12,.88);
 
     color:white;
 
@@ -346,14 +502,16 @@ BOTÃO MAPA
     cursor:pointer;
 }
 
-/* ============================
+/* ==============================
 MISSÃO
-============================ */
+============================== */
 
 .mission{
+
     position:absolute;
 
     right:25px;
+
     top:75px;
 
     width:260px;
@@ -362,36 +520,57 @@ MISSÃO
 
     z-index:15;
 
-    background:rgba(20,13,8,.8);
+    background:
+    rgba(20,13,8,.8);
 
-    border:2px solid #eac472;
+    border:
+    2px solid #eac472;
 
-    border-radius:8px;
+    border-radius:
+    8px;
 }
 
 .mission h3{
-    color:#ffe18c;
 
-    margin-bottom:6px;
+    margin-bottom:
+    6px;
+
+    color:
+    #ffe18c;
 }
 
-/* ============================
+#missionText{
+
+    font-size:
+    14px;
+
+    line-height:
+    1.4;
+}
+
+/* ==============================
 PERSONAGEM
-============================ */
+============================== */
 
 .character{
+
     position:absolute;
 
     left:50%;
+
     bottom:155px;
 
-    transform:translateX(-50%);
+    transform:
+    translateX(-50%);
 
     width:280px;
+
     height:330px;
 
     display:flex;
+
     justify-content:center;
+
     align-items:flex-end;
 
     z-index:5;
@@ -400,85 +579,112 @@ PERSONAGEM
 }
 
 .character img{
+
     max-width:100%;
+
     max-height:100%;
 
     object-fit:contain;
 
     filter:
-        drop-shadow(
-            0 8px 6px rgba(0,0,0,.5)
-        );
+    drop-shadow(
+        0 8px 6px
+        rgba(0,0,0,.5)
+    );
 }
 
-/* ============================
-DIÁLOGOS
-============================ */
+/* ==============================
+DIÁLOGO
+============================== */
 
 .dialogue-box{
+
     position:absolute;
 
     left:30px;
+
     bottom:20px;
 
-    width:calc(100% - 60px);
+    width:
+    calc(100% - 60px);
 
-    min-height:140px;
+    min-height:
+    140px;
 
     z-index:25;
 
     padding:
-        20px
-        25px
-        55px;
+    20px
+    25px
+    55px;
 
-    background:rgba(24,15,10,.95);
+    background:
+    rgba(24,15,10,.95);
 
-    border:4px solid #dcb364;
+    border:
+    4px solid #dcb364;
 
-    border-radius:12px;
+    border-radius:
+    12px;
 }
 
 .speaker{
-    color:#ffd56d;
 
-    font-size:21px;
-    font-weight:bold;
+    margin-bottom:
+    8px;
 
-    margin-bottom:8px;
+    color:
+    #ffd56d;
+
+    font-size:
+    21px;
+
+    font-weight:
+    bold;
 }
 
 .dialogue{
-    font-size:19px;
 
-    line-height:1.5;
+    font-size:
+    19px;
+
+    line-height:
+    1.5;
 }
 
 .next{
+
     position:absolute;
 
     right:18px;
+
     bottom:13px;
 
-    padding:8px 15px;
+    padding:
+    8px 15px;
 
-    background:#76502f;
+    background:
+    #76502f;
 
-    border:2px solid #ffd67d;
+    border:
+    2px solid #ffd67d;
 
-    border-radius:6px;
+    border-radius:
+    6px;
 
     color:white;
 
     cursor:pointer;
 }
 
-/* ============================
+/* ==============================
 FINAL
-============================ */
+============================== */
 
 #endingScreen{
+
     align-items:center;
+
     justify-content:center;
 
     flex-direction:column;
@@ -488,95 +694,148 @@ FINAL
     padding:40px;
 
     background:
-        radial-gradient(
-            circle,
-            #755d96,
-            #1d1329
-        );
+    radial-gradient(
+        circle,
+        #755d96,
+        #1d1329
+    );
 }
 
 #endingScreen h1{
-    color:#ffe19a;
 
-    font-size:55px;
+    margin-bottom:
+    25px;
 
-    margin-bottom:25px;
+    color:
+    #ffe19a;
+
+    font-size:
+    55px;
 }
 
 #endingScreen p{
-    max-width:800px;
 
-    font-size:21px;
+    max-width:
+    800px;
 
-    line-height:1.7;
+    font-size:
+    21px;
+
+    line-height:
+    1.7;
 }
 
 .game-button{
-    margin-top:25px;
 
-    padding:14px 25px;
+    margin-top:
+    25px;
 
-    border:3px solid #ffe39a;
+    padding:
+    14px 25px;
 
-    border-radius:9px;
+    border:
+    3px solid #ffe39a;
 
-    background:#55371f;
+    border-radius:
+    9px;
+
+    background:
+    #55371f;
 
     color:white;
 
-    font-size:18px;
+    font-size:
+    18px;
 
     cursor:pointer;
 }
 
-/* ============================
-CELULAR
-============================ */
+/* ==============================
+RESPONSIVO
+============================== */
 
 @media(max-width:800px){
 
-    .location{
-        width:120px;
-        font-size:11px;
+    .topbar{
+
+        height:55px;
+
+        min-height:55px;
+
+        padding:
+        0 10px;
+    }
+
+    .topbar h2{
+
+        font-size:
+        16px;
+    }
+
+    .fragment-info{
+
+        font-size:
+        13px;
     }
 
     .character{
-        width:200px;
-        height:250px;
 
-        bottom:145px;
+        width:
+        200px;
+
+        height:
+        250px;
+
+        bottom:
+        145px;
     }
 
     .dialogue-box{
-        left:10px;
 
-        width:calc(100% - 20px);
+        left:
+        10px;
 
-        bottom:10px;
+        bottom:
+        10px;
+
+        width:
+        calc(100% - 20px);
+    }
+
+    .speaker{
+
+        font-size:
+        17px;
     }
 
     .dialogue{
-        font-size:15px;
+
+        font-size:
+        15px;
     }
 
     .mission{
-        width:190px;
 
-        right:10px;
+        width:
+        190px;
+
+        right:
+        10px;
     }
 
 }
 
 </style>
+
 </head>
 
 <body>
 
 <div id="game">
 
-<!-- =================================
+<!-- ==============================
 TELA INICIAL
-================================= -->
+============================== -->
 
 <section
 id="startScreen"
@@ -584,14 +843,16 @@ class="screen active"
 onclick="startGameFromScreen()">
 
 <div class="start-hint">
+
 APERTE ESPAÇO PARA COMEÇAR
+
 </div>
 
 </section>
 
-<!-- =================================
+<!-- ==============================
 MAPA
-================================= -->
+============================== -->
 
 <section
 id="mapScreen"
@@ -600,7 +861,7 @@ class="screen">
 <div class="topbar">
 
 <h2>
-Mapa de Luminária
+Mapa do Reino
 </h2>
 
 <div class="fragment-info">
@@ -622,79 +883,45 @@ Fragmentos:
 <button
 class="location"
 id="locCampos"
+aria-label="Campos Dourados"
 onclick="openLocation('campos')">
-
-CAMPOS DOURADOS
-
-<small>
-Comece por aqui
-</small>
-
 </button>
-
 
 <button
 class="location locked"
 id="locCogumelos"
+aria-label="Floresta dos Cogumelos"
 onclick="openLocation('cogumelos')">
-
-FLORESTA DOS COGUMELOS
-
-<small>
-Bloqueado
-</small>
-
 </button>
-
 
 <button
 class="location"
 id="locVila"
+aria-label="Vila Florença"
 onclick="openLocation('vila')">
-
-VILA FLORENÇA
-
-<small>
-Disponível
-</small>
-
 </button>
-
 
 <button
 class="location locked"
 id="locSombria"
+aria-label="Floresta Sombria"
 onclick="openLocation('sombria')">
-
-FLORESTA SOMBRIA
-
-<small>
-Bloqueado
-</small>
-
 </button>
-
 
 <button
 class="location locked"
 id="locCastelo"
+aria-label="Castelo de Luminária"
 onclick="openLocation('castelo')">
-
-CASTELO DE LUMINÁRIA
-
-<small>
-Bloqueado
-</small>
-
 </button>
 
 </div>
 
 </section>
 
-<!-- =================================
+<!-- ==============================
 CENÁRIO
-================================= -->
+============================== -->
 
 <section
 id="sceneScreen"
@@ -780,9 +1007,9 @@ CONTINUAR ▶
 
 </section>
 
-<!-- =================================
+<!-- ==============================
 FINAL
-================================= -->
+============================== -->
 
 <section
 id="endingScreen"
@@ -828,77 +1055,74 @@ JOGAR NOVAMENTE
 
 <script>
 
-/* =================================
+/* ==============================
 PERSONAGENS
-================================= */
+============================== */
 
 const characters={
 
 raposa:{
-name:"Raposa",
-image:"raposa.png"
+    name:"Raposa",
+    image:"raposa.png"
 },
 
 lobo:{
-name:"Lobo",
-image:"lobo.png"
+    name:"Lobo",
+    image:"lobo.png"
 },
 
 cachorro:{
-name:"Cachorro",
-image:"cachorro.png"
+    name:"Cachorro",
+    image:"cachorro.png"
 },
 
 cobra:{
-name:"Cobra",
-image:"cobra.png"
+    name:"Cobra",
+    image:"cobra.png"
 },
 
 hamster:{
-name:"Hamster",
-image:"hamster.png"
+    name:"Hamster",
+    image:"hamster.png"
 },
 
 ursa:{
-name:"Ursa",
-image:"ursa.png"
+    name:"Ursa",
+    image:"ursa.png"
 },
 
 urso:{
-name:"Urso",
-image:"urso.png"
+    name:"Urso",
+    image:"urso.png"
 },
 
 passarinha:{
-name:"Passarinha",
-image:"passarinha.png"
+    name:"Passarinha",
+    image:"passarinha.png"
 },
 
 passarinho:{
-name:"Passarinho",
-image:"passarinho.png"
+    name:"Passarinho",
+    image:"passarinho.png"
 },
 
 narrador:{
-name:"Narrador",
-image:null
+    name:"Narrador",
+    image:null
 }
 
 };
 
-
-/* =================================
+/* ==============================
 HISTÓRIA
-================================= */
+============================== */
 
 const stories={
 
-
-/* =================================
+/* ==============================
 INTRO
-
-SÓ RAPOSA E LOBO
-================================= */
+RAPOSA + LOBO
+============================== */
 
 intro:[
 
@@ -909,7 +1133,7 @@ text:"Durante muitos anos, o Reino de Luminária foi protegido por um poderoso c
 
 {
 character:"narrador",
-text:"Mas, durante a noite, algo aconteceu."
+text:"Mas, durante a noite, algo estranho aconteceu."
 },
 
 {
@@ -929,7 +1153,7 @@ text:"Vi. Ela veio da direção do castelo."
 
 {
 character:"raposa",
-text:"Alguma coisa aconteceu em Luminária."
+text:"Alguma coisa aconteceu no reino."
 },
 
 {
@@ -944,12 +1168,10 @@ text:"Vamos começar pelos Campos Dourados."
 
 ],
 
-
-/* =================================
+/* ==============================
 CAMPOS DOURADOS
-
 RAPOSA + LOBO + CACHORRO
-================================= */
+============================== */
 
 campos:[
 
@@ -1030,18 +1252,16 @@ text:"Precisamos descobrir para onde os outros fragmentos foram."
 
 ],
 
-
-/* =================================
-COGUMELOS
-
+/* ==============================
+FLORESTA DOS COGUMELOS
 RAPOSA + LOBO + HAMSTER
-================================= */
+============================== */
 
 cogumelos:[
 
 {
 character:"lobo",
-text:"Fiquem atentos. Esta floresta é enorme."
+text:"Fique atenta. Esta floresta é enorme."
 },
 
 {
@@ -1131,12 +1351,10 @@ text:"Eu ficaria muito feliz em NÃO ir junto."
 
 ],
 
-
-/* =================================
+/* ==============================
 VILA FLORENÇA
-
 RAPOSA + LOBO + URSA + URSO
-================================= */
+============================== */
 
 vila:[
 
@@ -1212,17 +1430,15 @@ text:"Tenham cuidado."
 
 {
 character:"urso",
-text:"Alguma coisa muito estranha está acontecendo em Luminária."
+text:"Alguma coisa muito estranha está acontecendo."
 }
 
 ],
 
-
-/* =================================
+/* ==============================
 FLORESTA SOMBRIA
-
 RAPOSA + LOBO + COBRA
-================================= */
+============================== */
 
 sombria:[
 
@@ -1323,12 +1539,10 @@ text:"Então é assim que vamos entrar."
 
 ],
 
-
-/* =================================
+/* ==============================
 CASTELO
-
-RAPOSA + LOBO + PASSARINHA + PASSARINHO
-================================= */
+RAPOSA + LOBO + PASSARINHOS
+============================== */
 
 castelo:[
 
@@ -1404,10 +1618,9 @@ text:"Vamos entrar."
 
 ],
 
-
-/* =================================
-DENTRO DO CASTELO
-================================= */
+/* ==============================
+INTERIOR DO CASTELO
+============================== */
 
 casteloDentro:[
 
@@ -1443,12 +1656,12 @@ text:"O que diz?"
 
 {
 character:"raposa",
-text:"O cristal não cria a magia de Luminária."
+text:"O cristal não cria a magia do reino."
 },
 
 {
 character:"raposa",
-text:"Ele guarda e concentra a energia do reino."
+text:"Ele guarda e concentra a energia de Luminária."
 },
 
 {
@@ -1483,10 +1696,9 @@ text:"Da sala do trono."
 
 ],
 
-
-/* =================================
+/* ==============================
 SALA DO TRONO
-================================= */
+============================== */
 
 trono:[
 
@@ -1639,264 +1851,275 @@ text:"Nossa aventura está apenas começando."
 
 };
 
-
-/* =================================
+/* ==============================
 VARIÁVEIS
-================================= */
+============================== */
 
 let currentStory=[];
+
 let currentDialogue=0;
+
 let currentLocation="";
 
 let gameStarted=false;
 
 let progress={
 
-fragments:0,
+    fragments:0,
 
-campos:false,
-cogumelos:false,
-vila:false,
-sombria:false,
-castelo:false,
+    campos:false,
 
-unlockedCogumelos:false,
-unlockedSombria:false,
-unlockedCastelo:false
+    cogumelos:false,
+
+    vila:false,
+
+    sombria:false,
+
+    castelo:false,
+
+    unlockedCogumelos:false,
+
+    unlockedSombria:false,
+
+    unlockedCastelo:false
 
 };
 
-
-/* =================================
+/* ==============================
 ESPAÇO PARA COMEÇAR
-================================= */
+============================== */
 
 document.addEventListener(
 "keydown",
 function(event){
 
-if(
-event.code==="Space" &&
-document
-.getElementById("startScreen")
-.classList.contains("active")
-){
+    if(
+        event.code==="Space" &&
+        document
+        .getElementById("startScreen")
+        .classList
+        .contains("active")
+    ){
 
-event.preventDefault();
+        event.preventDefault();
 
-startGameFromScreen();
+        startGameFromScreen();
 
-}
+    }
 
 }
 );
 
-
-/* também funciona clicando */
+/* ==============================
+COMEÇAR
+============================== */
 
 function startGameFromScreen(){
 
-if(gameStarted){
-return;
+    if(gameStarted){
+        return;
+    }
+
+    gameStarted=true;
+
+    startGame();
 }
 
-gameStarted=true;
-
-startGame();
-
-}
-
-
-/* =================================
-TELA
-================================= */
+/* ==============================
+TROCAR TELA
+============================== */
 
 function showScreen(id){
 
-document
-.querySelectorAll(".screen")
-.forEach(function(screen){
+    document
+    .querySelectorAll(".screen")
+    .forEach(function(screen){
 
-screen.classList.remove("active");
+        screen
+        .classList
+        .remove("active");
 
-});
+    });
 
-document
-.getElementById(id)
-.classList.add("active");
-
+    document
+    .getElementById(id)
+    .classList
+    .add("active");
 }
 
-
-/* =================================
+/* ==============================
 NOVO JOGO
-================================= */
+============================== */
 
 function startGame(){
 
-progress={
+    progress={
 
-fragments:0,
+        fragments:0,
 
-campos:false,
-cogumelos:false,
-vila:false,
-sombria:false,
-castelo:false,
+        campos:false,
 
-unlockedCogumelos:false,
-unlockedSombria:false,
-unlockedCastelo:false
+        cogumelos:false,
 
-};
+        vila:false,
 
-saveGame();
+        sombria:false,
 
-startStory(
+        castelo:false,
 
-"intro",
+        unlockedCogumelos:false,
 
-"O Reino de Luminária",
+        unlockedSombria:false,
 
-"campos",
+        unlockedCastelo:false
 
-"Descubra o que aconteceu em Luminária."
+    };
 
-);
+    saveGame();
 
+    startStory(
+
+        "intro",
+
+        "O Reino de Luminária",
+
+        "campos",
+
+        "Descubra o que aconteceu em Luminária."
+
+    );
 }
 
-
-/* =================================
-LOCAL
-================================= */
+/* ==============================
+ABRIR LOCAL
+============================== */
 
 function openLocation(location){
 
-if(
-location==="cogumelos" &&
-!progress.unlockedCogumelos
-){
+    if(
+        location==="cogumelos" &&
+        !progress.unlockedCogumelos
+    ){
 
-alert(
-"A Floresta dos Cogumelos ainda está bloqueada."
-);
+        alert(
+        "A Floresta dos Cogumelos ainda está bloqueada."
+        );
 
-return;
+        return;
+    }
 
+    if(
+        location==="sombria" &&
+        !progress.unlockedSombria
+    ){
+
+        alert(
+        "A Floresta Sombria ainda está bloqueada."
+        );
+
+        return;
+    }
+
+    if(
+        location==="castelo" &&
+        !progress.unlockedCastelo
+    ){
+
+        alert(
+        "O Castelo de Luminária ainda está bloqueado."
+        );
+
+        return;
+    }
+
+    const info={
+
+        campos:{
+
+            title:
+            "Campos Dourados",
+
+            class:
+            "campos",
+
+            mission:
+            "Investigue o que aconteceu nos Campos Dourados."
+
+        },
+
+        cogumelos:{
+
+            title:
+            "Floresta dos Cogumelos",
+
+            class:
+            "cogumelos",
+
+            mission:
+            "Procure novos fragmentos do cristal."
+
+        },
+
+        vila:{
+
+            title:
+            "Vila Florença",
+
+            class:
+            "vila",
+
+            mission:
+            "Descubra o que os moradores viram."
+
+        },
+
+        sombria:{
+
+            title:
+            "Floresta Sombria",
+
+            class:
+            "sombria",
+
+            mission:
+            "Descubra o segredo escondido na floresta."
+
+        },
+
+        castelo:{
+
+            title:
+            "Castelo de Luminária",
+
+            class:
+            "castelo",
+
+            mission:
+            "Entre no castelo e procure os reis."
+
+        }
+
+    };
+
+    const locationData=
+    info[location];
+
+    startStory(
+
+        location,
+
+        locationData.title,
+
+        locationData.class,
+
+        locationData.mission
+
+    );
 }
 
-
-if(
-location==="sombria" &&
-!progress.unlockedSombria
-){
-
-alert(
-"A Floresta Sombria ainda está bloqueada."
-);
-
-return;
-
-}
-
-
-if(
-location==="castelo" &&
-!progress.unlockedCastelo
-){
-
-alert(
-"O Castelo de Luminária ainda está bloqueado."
-);
-
-return;
-
-}
-
-
-const info={
-
-campos:{
-
-title:"Campos Dourados",
-
-class:"campos",
-
-mission:
-"Investigue o que aconteceu nos Campos Dourados."
-
-},
-
-cogumelos:{
-
-title:"Floresta dos Cogumelos",
-
-class:"cogumelos",
-
-mission:
-"Encontre pistas sobre os fragmentos."
-
-},
-
-vila:{
-
-title:"Vila Florença",
-
-class:"vila",
-
-mission:
-"Descubra o que os moradores viram."
-
-},
-
-sombria:{
-
-title:"Floresta Sombria",
-
-class:"sombria",
-
-mission:
-"Descubra o segredo da floresta."
-
-},
-
-castelo:{
-
-title:"Castelo de Luminária",
-
-class:"castelo",
-
-mission:
-"Entre no castelo e procure os reis."
-
-}
-
-};
-
-
-const locationData=
-info[location];
-
-
-startStory(
-
-location,
-
-locationData.title,
-
-locationData.class,
-
-locationData.mission
-
-);
-
-}
-
-
-/* =================================
+/* ==============================
 INICIAR HISTÓRIA
-================================= */
+============================== */
 
 function startStory(
 story,
@@ -1905,461 +2128,397 @@ background,
 mission
 ){
 
-currentStory=
-stories[story];
+    currentStory=
+    stories[story];
 
-currentDialogue=0;
+    currentDialogue=0;
 
-currentLocation=
-story;
+    currentLocation=
+    story;
 
+    showScreen(
+    "sceneScreen"
+    );
 
-showScreen(
-"sceneScreen"
-);
+    document
+    .getElementById(
+    "sceneTitle"
+    )
+    .textContent=
+    title;
 
+    document
+    .getElementById(
+    "missionText"
+    )
+    .textContent=
+    mission;
 
-document
-.getElementById(
-"sceneTitle"
-)
-.textContent=
-title;
+    document
+    .getElementById(
+    "sceneBackground"
+    )
+    .className=
+    "scene-bg "+background;
 
-
-document
-.getElementById(
-"missionText"
-)
-.textContent=
-mission;
-
-
-document
-.getElementById(
-"sceneBackground"
-)
-.className=
-"scene-bg "+background;
-
-
-showDialogue();
-
+    showDialogue();
 }
 
-
-/* =================================
+/* ==============================
 MOSTRAR DIÁLOGO
-================================= */
+============================== */
 
 function showDialogue(){
 
-const data=
-currentStory[currentDialogue];
+    const data=
+    currentStory[
+    currentDialogue
+    ];
 
+    const char=
+    characters[
+    data.character
+    ];
 
-const char=
-characters[data.character];
+    document
+    .getElementById(
+    "speaker"
+    )
+    .textContent=
+    char.name;
 
+    document
+    .getElementById(
+    "dialogue"
+    )
+    .textContent=
+    data.text;
 
-document
-.getElementById(
-"speaker"
-)
-.textContent=
-char.name;
+    const image=
+    document
+    .getElementById(
+    "characterImage"
+    );
 
+    if(char.image){
 
-document
-.getElementById(
-"dialogue"
-)
-.textContent=
-data.text;
+        image.src=
+        char.image;
 
+        image.alt=
+        char.name;
 
-const image=
-document
-.getElementById(
-"characterImage"
-);
+        image.style.display=
+        "block";
 
+    }else{
 
-if(char.image){
-
-image.src=
-char.image;
-
-image.style.display=
-"block";
-
-}else{
-
-image.style.display=
-"none";
-
+        image.style.display=
+        "none";
+    }
 }
 
-}
-
-
-/* =================================
+/* ==============================
 PRÓXIMA FALA
-================================= */
+============================== */
 
 function nextDialogue(){
 
-currentDialogue++;
+    currentDialogue++;
 
+    if(
+        currentDialogue>=
+        currentStory.length
+    ){
 
-if(
-currentDialogue>=currentStory.length
-){
+        finishStory();
 
-finishStory();
+        return;
+    }
 
-return;
-
+    showDialogue();
 }
 
-
-showDialogue();
-
-}
-
-
-/* =================================
-FINAL DAS FASES
-================================= */
+/* ==============================
+FINALIZAR FASE
+============================== */
 
 function finishStory(){
 
-switch(currentLocation){
+    switch(currentLocation){
 
+        case "intro":
 
-case "intro":
+            showMap();
 
-showMap();
+        break;
 
-break;
+        case "campos":
 
+            if(
+                !progress.campos
+            ){
 
-/* CAMPOS */
+                progress.campos=
+                true;
 
-case "campos":
+                progress.fragments++;
 
-if(!progress.campos){
+                progress
+                .unlockedCogumelos=
+                true;
 
-progress.campos=true;
+                alert(
+                "Você encontrou o primeiro Fragmento!\n\nFloresta dos Cogumelos desbloqueada!"
+                );
+            }
 
-progress.fragments++;
+            showMap();
 
-progress.unlockedCogumelos=true;
+        break;
 
-alert(
-"Você encontrou o primeiro Fragmento!\n\nFloresta dos Cogumelos desbloqueada!"
-);
+        case "cogumelos":
 
+            if(
+                !progress.cogumelos
+            ){
+
+                progress.cogumelos=
+                true;
+
+                progress.fragments++;
+
+                progress
+                .unlockedSombria=
+                true;
+
+                alert(
+                "Você encontrou o segundo Fragmento!\n\nFloresta Sombria desbloqueada!"
+                );
+            }
+
+            showMap();
+
+        break;
+
+        case "vila":
+
+            progress.vila=
+            true;
+
+            showMap();
+
+        break;
+
+        case "sombria":
+
+            if(
+                !progress.sombria
+            ){
+
+                progress.sombria=
+                true;
+
+                progress
+                .unlockedCastelo=
+                true;
+
+                alert(
+                "Passagem secreta descoberta!\n\nCastelo de Luminária desbloqueado!"
+                );
+            }
+
+            showMap();
+
+        break;
+
+        case "castelo":
+
+            progress.castelo=
+            true;
+
+            saveGame();
+
+            startStory(
+
+                "casteloDentro",
+
+                "Interior do Castelo",
+
+                "casteloDentro",
+
+                "Explore o interior do castelo."
+
+            );
+
+        break;
+
+        case "casteloDentro":
+
+            startStory(
+
+                "trono",
+
+                "Sala do Trono",
+
+                "trono",
+
+                "Descubra o que aconteceu com o Rei e a Rainha."
+
+            );
+
+        break;
+
+        case "trono":
+
+            progress.fragments=
+            3;
+
+            saveGame();
+
+            showScreen(
+            "endingScreen"
+            );
+
+        break;
+    }
+
+    saveGame();
 }
 
-showMap();
-
-break;
-
-
-/* COGUMELOS */
-
-case "cogumelos":
-
-if(!progress.cogumelos){
-
-progress.cogumelos=true;
-
-progress.fragments++;
-
-progress.unlockedSombria=true;
-
-alert(
-"Você encontrou o segundo Fragmento!\n\nFloresta Sombria desbloqueada!"
-);
-
-}
-
-showMap();
-
-break;
-
-
-/* VILA */
-
-case "vila":
-
-progress.vila=true;
-
-showMap();
-
-break;
-
-
-/* SOMBRIA */
-
-case "sombria":
-
-if(!progress.sombria){
-
-progress.sombria=true;
-
-progress.unlockedCastelo=true;
-
-alert(
-"Passagem secreta descoberta!\n\nCastelo de Luminária desbloqueado!"
-);
-
-}
-
-showMap();
-
-break;
-
-
-/* CASTELO */
-
-case "castelo":
-
-progress.castelo=true;
-
-saveGame();
-
-
-startStory(
-
-"casteloDentro",
-
-"Interior do Castelo",
-
-"casteloDentro",
-
-"Explore o interior do castelo."
-
-);
-
-break;
-
-
-/* INTERIOR */
-
-case "casteloDentro":
-
-
-startStory(
-
-"trono",
-
-"Sala do Trono",
-
-"trono",
-
-"Descubra o que aconteceu com o Rei e a Rainha."
-
-);
-
-break;
-
-
-/* FINAL */
-
-case "trono":
-
-progress.fragments=3;
-
-saveGame();
-
-showScreen(
-"endingScreen"
-);
-
-break;
-
-}
-
-
-saveGame();
-
-}
-
-
-/* =================================
+/* ==============================
 MAPA
-================================= */
+============================== */
 
 function showMap(){
 
-saveGame();
+    saveGame();
 
-updateMap();
+    updateMap();
 
-showScreen(
-"mapScreen"
-);
-
+    showScreen(
+    "mapScreen"
+    );
 }
 
-
-/* =================================
+/* ==============================
 ATUALIZAR MAPA
-================================= */
+============================== */
 
 function updateMap(){
 
-document
-.getElementById(
-"fragmentCount"
-)
-.textContent=
-progress.fragments;
+    document
+    .getElementById(
+    "fragmentCount"
+    )
+    .textContent=
+    progress.fragments;
 
+    updateLocation(
 
-updateLocation(
+        "locCampos",
 
-"locCampos",
+        true
 
-true,
+    );
 
-progress.campos
+    updateLocation(
 
-);
+        "locVila",
 
+        true
 
-updateLocation(
+    );
 
-"locVila",
+    updateLocation(
 
-true,
+        "locCogumelos",
 
-progress.vila
+        progress
+        .unlockedCogumelos
 
-);
+    );
 
+    updateLocation(
 
-updateLocation(
+        "locSombria",
 
-"locCogumelos",
+        progress
+        .unlockedSombria
 
-progress.unlockedCogumelos,
+    );
 
-progress.cogumelos
+    updateLocation(
 
-);
+        "locCastelo",
 
+        progress
+        .unlockedCastelo
 
-updateLocation(
-
-"locSombria",
-
-progress.unlockedSombria,
-
-progress.sombria
-
-);
-
-
-updateLocation(
-
-"locCastelo",
-
-progress.unlockedCastelo,
-
-progress.castelo
-
-);
-
+    );
 }
 
-
-/* =================================
-LOCAL BLOQUEADO
-================================= */
+/* ==============================
+BLOQUEAR/DESBLOQUEAR
+============================== */
 
 function updateLocation(
 id,
-unlocked,
-completed
+unlocked
 ){
 
-const button=
-document.getElementById(id);
+    const button=
+    document
+    .getElementById(id);
 
+    button
+    .classList
+    .remove("locked");
 
-const small=
-button.querySelector("small");
+    if(
+        !unlocked
+    ){
 
-
-button.classList.remove(
-"locked"
-);
-
-
-if(!unlocked){
-
-button.classList.add(
-"locked"
-);
-
-small.textContent=
-"Bloqueado";
-
-return;
-
+        button
+        .classList
+        .add("locked");
+    }
 }
 
-
-if(completed){
-
-small.textContent=
-"Visitado";
-
-}else{
-
-small.textContent=
-"Disponível";
-
-}
-
-}
-
-
-/* =================================
+/* ==============================
 SALVAR
-================================= */
+============================== */
 
 function saveGame(){
 
-localStorage.setItem(
+    localStorage
+    .setItem(
 
-"luminariaSave",
+        "luminariaSave",
 
-JSON.stringify(progress)
+        JSON.stringify(
+        progress
+        )
 
-);
-
+    );
 }
 
-
-/* =================================
+/* ==============================
 REINICIAR
-================================= */
+============================== */
 
 function restartGame(){
 
-localStorage.removeItem(
-"luminariaSave"
-);
+    localStorage
+    .removeItem(
+    "luminariaSave"
+    );
 
-location.reload();
-
+    location.reload();
 }
 
 </script>
 
 </body>
+
 </html>

@@ -1,1 +1,671 @@
 
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#22192b">
+<title>Reino de Floriz — O Mistério do Colar de Aurélia</title>
+<style>
+:root{font-family:Georgia,'Times New Roman',serif;color:#fff5df;background:#161320}
+*{box-sizing:border-box}
+body{margin:0;min-height:100svh;display:grid;place-items:center;background:radial-gradient(circle at center,#473154,#12121c);overflow-x:hidden}
+button{font:inherit;cursor:pointer;color:inherit}
+button:focus-visible,[role=button]:focus-visible{outline:3px solid #ffe39b;outline-offset:2px}
+#game{position:relative;width:min(100vw,177.7778svh);aspect-ratio:16/9;max-height:100svh;overflow:hidden;background:#1b1724;box-shadow:0 0 60px #000a;isolation:isolate}
+.screen,.backdrop{position:absolute;inset:0}
+.screen{display:none}
+.screen.active{display:block}
+.backdrop{background-size:cover;background-position:center;transition:background-image .3s}
+.shade{position:absolute;inset:0;background:linear-gradient(0deg,#12101edb,transparent 72%);pointer-events:none}
+.menu-controls{position:absolute;left:50%;bottom:9%;transform:translateX(-50%);width:min(35%,420px);display:grid;gap:10px}
+.btn{border:2px solid #e7c584;border-radius:12px;background:linear-gradient(130deg,#603b68ee,#32253cee);padding:10px 14px;box-shadow:0 3px 0 #25172c,0 0 18px #0005;text-shadow:0 1px 2px #111;transition:transform .15s,filter .15s}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.17)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.primary{background:linear-gradient(130deg,#8e4b79,#643657)}
+.title{font-size:clamp(18px,3vw,44px);text-align:center;text-shadow:0 2px 8px black;margin:0}
+.panel{background:#20182be8;border:2px solid #dbb778;border-radius:15px;box-shadow:0 10px 40px #0008}
+.select-wrap{position:absolute;inset:7% 9%;display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:12px}
+.hero-grid{display:flex;gap:3%;width:100%;flex:1;min-height:0}
+.hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:end;overflow:hidden;padding:10px;background:#201a31bd;border:2px solid #a58664;border-radius:15px}
+.hero img{width:95%;height:72%;object-fit:contain;filter:drop-shadow(0 8px 12px #0009)}
+.hero b{font-size:clamp(15px,2.2vw,27px)}
+.hero small{text-align:center;font-size:clamp(10px,1.3vw,15px);margin:4px 0}
+.topbar{position:absolute;top:1.6%;left:1.5%;right:1.5%;display:flex;align-items:center;justify-content:space-between;gap:8px;z-index:3;pointer-events:none}
+.topbar>*{pointer-events:auto}
+.topbar .btn{padding:7px 10px;font-size:clamp(10px,1.3vw,16px)}
+.location{padding:7px 13px;border-radius:12px;background:#241a32df;border:1px solid #dbbd80;text-align:center;font-size:clamp(11px,1.35vw,17px)}
+.actors{position:absolute;inset:10% 0 21%;display:flex;justify-content:space-evenly;align-items:end;pointer-events:none}
+.actor{max-width:31%;max-height:100%;object-fit:contain;filter:brightness(.65) drop-shadow(0 10px 10px #000b);transition:filter .2s,transform .2s}
+.actor.speaking{filter:brightness(1.13) drop-shadow(0 0 12px #ffd891);transform:translateY(-8px)}
+.actor.three{max-width:27%}
+.dialog{position:absolute;bottom:2%;left:3%;right:3%;min-height:21%;padding:12px 16px;z-index:5;background:#181420ed;border:2px solid #d9b875;border-radius:16px;box-shadow:0 4px 22px #000a;display:flex;flex-direction:column}
+.speaker{color:#f5c980;font-weight:bold;font-size:clamp(13px,1.8vw,23px)}
+.line{font-size:clamp(12px,1.58vw,21px);line-height:1.35;flex:1;white-space:pre-wrap;margin:5px 0;overflow:auto}
+.dialog-actions{display:flex;justify-content:flex-end;gap:8px}
+.dialog-actions .btn{font-size:clamp(11px,1.25vw,15px);padding:5px 12px}
+.choicebox{position:absolute;left:16%;right:16%;top:21%;z-index:8;padding:16px;display:none;max-height:70%;overflow:auto}
+.choicebox h2{text-align:center;font-size:clamp(14px,1.9vw,23px);margin:0 0 10px}
+.choicebox .btn{width:100%;display:block;text-align:left;margin:8px 0;font-size:clamp(12px,1.5vw,19px)}
+#mapArt{position:absolute;inset:0;width:100%;height:100%;object-fit:fill}
+.hotspot{position:absolute;background:#ffec9f08;border:2px solid transparent;border-radius:45%;display:grid;place-items:center;transition:.2s}
+.hotspot:hover,.hotspot:focus-visible{border-color:#fff6c9;background:#ffef7b2f;box-shadow:0 0 16px #ffe99b}
+.hotspot.done:after{content:'✓';color:#fff;background:#265c46c9;border:1px solid #fff4aa;border-radius:50%;padding:1px 7px;position:absolute;top:0;right:0}
+.hotspot.pending:after{content:'!';color:#fff;background:#855229;border:1px solid #fff4aa;border-radius:50%;padding:1px 8px;position:absolute;top:0;right:0}
+#mapHint{position:absolute;bottom:2%;left:50%;transform:translateX(-50%);width:max-content;max-width:80%;text-align:center;padding:9px 15px;background:#1d172bdd;border:1px solid #dfbb81;border-radius:12px;font-size:clamp(10px,1.2vw,16px)}
+.journal{position:absolute;inset:8% 12%;z-index:12;padding:22px;overflow:auto;display:none}
+.journal h2{text-align:center}
+.journal li{margin:10px 0}
+.note{font-size:clamp(12px,1.4vw,18px)}
+.ending{position:absolute;inset:0;background:radial-gradient(circle,#f6d88d66,#141123e8),url('sala-trono.png') center/cover;display:grid;place-items:center;text-align:center;padding:15px}
+.ending .panel{padding:25px;max-width:75%}
+.ending h1{font-size:clamp(20px,3.4vw,44px)}
+.ending p{font-size:clamp(12px,1.5vw,19px)}
+.ending .btn{margin:6px}
+#toast{position:absolute;top:13%;left:50%;transform:translateX(-50%);z-index:30;background:#261e33ef;border:1px solid #f3cf87;border-radius:9px;padding:8px 14px;display:none;text-align:center}
+.fader{position:absolute;inset:0;background:#090714;opacity:0;pointer-events:none;z-index:20;transition:opacity .24s}
+.fader.on{opacity:1}
+@media(max-aspect-ratio:1/1){
+body{display:flex;align-items:center}
+#game{width:100vw;height:auto;max-height:none}
+.menu-controls{width:46%;bottom:4%;gap:4px}
+.btn{padding:6px 8px;border-radius:8px}
+.dialog{min-height:29%;bottom:1%;padding:6px 9px}
+.actors{bottom:28%}
+.choicebox{left:5%;right:5%;top:12%;max-height:75%}
+.topbar{top:1%}
+.location{max-width:48%}
+.select-wrap{inset:3% 5%}
+.hero img{height:65%}
+.journal{inset:3% 5%}
+}
+@media(hover:none){.btn{min-height:32px}}
+</style>
+</head>
+<body>
+<main id="game" aria-label="Jogo Reino de Floriz">
+<section id="menu" class="screen active">
+<div class="backdrop" style="background-image:url('tela-inicial.png')"></div>
+<div class="menu-controls">
+<button class="btn primary" id="newBtn">COMEÇAR AVENTURA</button>
+<button class="btn" id="continueBtn">CONTINUAR AVENTURA</button>
+</div>
+</section>
+
+<section id="select" class="screen">
+<div class="backdrop" style="background-image:url('castelo-luminaria.png')"></div>
+<div class="shade"></div>
+<div class="select-wrap">
+<h1 class="title">Escolha seu protagonista</h1>
+<div class="hero-grid">
+<button class="hero" data-hero="nila">
+<img src="nila.png" alt="Nila, a raposa">
+<b>NILA — A RAPOSA</b>
+<small>Inteligente, curiosa e observadora.</small>
+</button>
+<button class="hero" data-hero="finn">
+<img src="finn.png" alt="Finn, o lobo">
+<b>FINN — O LOBO</b>
+<small>Corajoso, leal e determinado.</small>
+</button>
+</div>
+<button class="btn" id="selectBack">VOLTAR</button>
+</div>
+</section>
+
+<section id="map" class="screen">
+<img id="mapArt" src="mapa2.png" alt="Mapa das cinco regiões de Floriz">
+<div class="topbar">
+<button class="btn" id="mapMenu">MENU</button>
+<span class="location" id="mapCount">Investigação 0/4</span>
+<button class="btn" id="mapJournal">DIÁRIO</button>
+</div>
+<button class="hotspot" data-region="cogumelos" aria-label="Floresta dos Cogumelos" style="left:4%;top:19%;width:29%;height:46%"></button>
+<button class="hotspot" data-region="castelo" aria-label="Castelo de Luminária" style="left:36%;top:3%;width:24%;height:32%"></button>
+<button class="hotspot" data-region="vila" aria-label="Vila Florença" style="left:36%;top:36%;width:29%;height:26%"></button>
+<button class="hotspot" data-region="sombria" aria-label="Floresta Sombria" style="left:68%;top:15%;width:29%;height:47%"></button>
+<button class="hotspot" data-region="campos" aria-label="Campos Dourados" style="left:34%;top:62%;width:37%;height:29%"></button>
+<div id="mapHint">Selecione uma região diretamente no mapa.</div>
+</section>
+
+<section id="scene" class="screen">
+<div class="backdrop" id="sceneBg"></div>
+<div class="shade"></div>
+<div class="topbar">
+<button class="btn" id="sceneMap">MAPA</button>
+<span id="sceneLocation" class="location"></span>
+<button class="btn" id="sceneJournal">DIÁRIO</button>
+</div>
+<div class="actors" id="actors"></div>
+<div class="dialog">
+<div class="speaker" id="speaker"></div>
+<div class="line" id="line" aria-live="polite"></div>
+<div class="dialog-actions">
+<button class="btn" id="nextBtn">AVANÇAR ▸</button>
+</div>
+</div>
+<div class="choicebox panel" id="choices">
+<h2>COMO VOCÊ VAI REAGIR DIANTE DISSO?</h2>
+<button class="btn" id="option0"></button>
+<button class="btn" id="option1"></button>
+</div>
+</section>
+
+<section id="end" class="screen">
+<div class="ending">
+<div class="panel">
+<h1>FIM — REINO DE FLORIZ</h1>
+<h2>O Mistério do Colar de Aurélia</h2>
+<p>A magia voltou ao reino. Mas o mistério de Zyn continua...</p>
+<button class="btn primary" id="again">JOGAR NOVAMENTE</button>
+<button class="btn" id="endMenu">VOLTAR AO MENU</button>
+</div>
+</div>
+</section>
+
+<aside id="journal" class="journal panel">
+<button class="btn" id="closeJournal" style="float:right">FECHAR</button>
+<h2>Diário de investigação</h2>
+<p id="journalHero"></p>
+<ul id="journalList"></ul>
+</aside>
+<div id="toast"></div>
+<div id="fader" class="fader"></div>
+</main>
+
+<script>
+'use strict';
+const $=id=>document.getElementById(id), KEY='floriz-save-v1';
+const heroes={nila:'Nila',finn:'Finn'};
+const portraits={Nila:'nila.png',Finn:'finn.png',Benjamin:'benjamin.png',Rosalie:'rosalia.png',Milo:'milo.png',Zyn:'zyn.png',Ayla:'ursa.png',Boris:'urso.png',Theo:'theo.png'};
+const regions={
+vila:{name:'Vila Florença',bg:'vila-florenca.png',people:['Nila','Boris','Ayla'],clue:'Boris e Ayla estão preocupados com o futuro da família e esperam um filhote.'},
+sombria:{name:'Floresta Sombria',bg:'floresta-sombria.png',people:['Finn','Zyn'],clue:'Zyn conhece a magia antiga, Aurélia, Morvath e possíveis fraquezas do colar.'},
+cogumelos:{name:'Floresta dos Cogumelos',bg:'floresta-cogumelos.png',people:['Nila','Theo'],clue:'A floresta de Theo conserva magia incomum; ele reagiu com nervosismo à investigação.'},
+campos:{name:'Campos Dourados',bg:'campos-dourados.png',people:['Finn','Milo'],clue:'As plantações de Milo estão morrendo. Ele não demonstra motivo para roubar magia.'}
+};
+const D=(who,text)=>({type:'say',who,text});
+const N=text=>D('Narrador',text);
+const B=(id,a,b,ra,rb)=>({type:'choice',id,options:[a,b],replies:[ra,rb]});
+const BG=(image,place)=>({type:'background',image,place});
+const C=(k)=>({type:'clue',key:k});
+  
+const scripts={
+intro:[
+BG('sala-trono.png','Castelo de Luminária — Salão do Trono'),
+N('O salão, antes iluminado pela magia, encontra-se sombrio. Benjamin anda preocupado, enquanto Rosalie chora segurando um lenço.'),
+N('As grandes portas se abrem. Nila e Finn entram no salão.'),
+D('Benjamin','Finalmente chegaram! Precisamos urgentemente da ajuda de vocês.'),
+D('Rosalie','(aos prantos) O colar... O colar de Aurelia! Sua magia desapareceu!'),
+D('Nila','Desapareceu? Como assim?'),
+D('Benjamin','Alguém roubou seu poder durante a madrugada. Sem ele, Floriz está condenada.'),
+D('Rosalie','(soluçando) Nossas florestas... Nossos rios... Tudo está morrendo!'),
+D('Finn','Existe algum suspeito?'),
+D('Benjamin','Infelizmente, não. É por isso que precisamos de vocês.'),
+B('realeza','Prometer investigar imediatamente.','Perguntar se a câmara do colar foi vigiada.',
+D('Benjamin','Sua coragem nos dá esperança. Precisamos de investigadores como vocês.'),
+D('Benjamin','A câmara estava protegida, mas alguém conseguiu alcançar a magia mesmo assim.')),
+D('Nila','Então iremos investigar. Encontraremos o responsável.'),
+D('Benjamin','Vocês têm apenas três dias. Percorram o reino e interroguem quem for necessário.'),
+D('Rosalie','(enxugando as lágrimas) Por favor... Salvem Floriz!'),
+D('Finn','Faremos o possível, Vossa Majestade.'),
+B('promessa','Tranquilizar a rainha antes de partir.','Pedir autorização para examinar todo o reino.',
+D('Rosalie','Obrigada... Vocês devolveram um pouco da minha esperança.'),
+D('Benjamin','Têm minha autorização. Nenhuma região deverá ficar fora desta investigação.')),
+N('Nila e Finn fazem uma breve reverência e deixam o salão.'),
+BG('castelo-luminaria.png','Entrada do Castelo de Luminária'),
+N('Do lado de fora, os dois investigadores observam o mapa do reino.'),
+D('Finn','São cinco lugares para investigar. Precisamos ser rápidos.'),
+D('Nila','Vamos nos separar. Assim cobrimos mais território.'),
+D('Finn','Certo. Eu sigo pelo caminho do norte.'),
+D('Nila','E eu vou começar pela Vila Florença.'),
+D('Finn','Tenha cuidado, Nila.'),
+D('Nila','(sorrindo de canto) Preocupe-se com você, lobinho.'),
+N('Finn revira os olhos, sorrindo discretamente. Eles seguem caminhos diferentes. Escolha no mapa qual investigação acompanhar primeiro.')
+],
+
+vila:[
+N('Nila caminha pela vila até encontrar um comércio de mel, um dos mais antigos da região. Um sino toca sobre a porta.'),
+D('Boris','(animado) Ora, ora! Seja muito bem-vinda ao Mel Dourado!'),
+D('Boris','Temos mel de girassol, mel silvestre e o nosso famoso mel de flores encantadas!'),
+D('Nila','Não vim comprar mel.'),
+D('Boris','Ah! Então talvez queira experimentar nossas geleias?'),
+B('vila1','Explicar com gentileza o motivo da visita.','Perguntar logo sobre a magia desaparecida.',
+D('Boris','Oh! Uma investigação real? Claro, vamos ajudar no que pudermos!'),
+D('Boris','O sumiço da magia? Que notícia terrível para toda a vila!')),
+D('Boris','Minha esposa, é claro! Ayla! Querida, pode vir aqui um instante?'),
+N('Ayla surge por uma porta atrás do balcão.'),
+D('Ayla','O que houve, meu amor?'),
+D('Boris','Esta jovem está investigando o desaparecimento da magia.'),
+D('Ayla','Oh, que horror... Como podemos ajudar?'),
+N('Nila cruza os braços, observando atentamente o casal.'),
+D('Nila','Vou ser direta. Vocês possuem o maior comércio de mel da vila. Talvez o poder do colar pudesse beneficiar seus negócios.'),
+D('Boris','(assustado) O QUÊ?! Está dizendo que nós roubamos a magia?!'),
+B('vila2','Pedir desculpas e explicar que está investigando.','Insistir em perguntar sobre as vantagens da magia.',
+D('Boris','Ah, entendo... Só queremos proteger nossa família!'),
+D('Ayla','O comércio não significa nada se todo o reino estiver sofrendo.')),
+D('Ayla','Nossa família vai crescer.'),
+D('Boris','(sorrindo) Vamos ter um filhote!'),
+N('Nila permanece em silêncio por alguns segundos, visivelmente sem graça.'),
+D('Nila','Ah... Entendo.'),
+D('Ayla','Ainda estamos no comecinho da gestação!'),
+D('Nila','Bem... Parabéns aos dois.'),
+D('Boris','Muito obrigado! Estamos muito felizes!'),
+D('Nila','(desviando o olhar) Certo. Acho que já tenho as informações necessárias.'),
+D('Ayla','Espero que encontre o responsável, querida.'),
+D('Boris','E volte quando quiser! Na próxima, experimente nosso mel!'),
+D('Nila','Veremos. Tenham um bom dia.'),
+C('vila')
+],
+
+sombria:[
+N('A Floresta Sombria é fria e silenciosa. Entre árvores retorcidas e névoa espessa, Finn encontra uma toca gigantesca entre raízes.'),
+D('???','Sssssss...'),
+N('Uma enorme cobra branca surge lentamente da escuridão.'),
+D('Zyn','(sussurrando) Ora... Uma visita tão longe de casa...'),
+D('Finn','Sou Finn, investigador do Reino de Floriz. Preciso fazer algumas perguntas.'),
+D('Zyn','(balançando o chocalho) Sssss... Perguntas? Ou acusações?'),
+B('sombria1','Responder que procura apenas a verdade.','Pedir um relato sobre a noite do roubo.',
+D('Zyn','Sssss... A verdade costuma ser mais perigosa do que parece.'),
+D('Zyn','A noite guarda segredos que nem todo viajante está pronto para ouvir.')),
+D('Finn','O que sabe sobre o Colar de Aurelia?'),
+D('Zyn','Ah... O último suspiro de uma deusa morta. Um poder tão belo... e tão perigoso.'),
+D('Finn','Parece conhecer bastante sobre ele.'),
+D('Zyn','Conhecimento não é crime, jovem lobo.'),
+D('Finn','Onde estava na noite em que a magia desapareceu?'),
+D('Zyn','(sorrindo discretamente) Sssss... É o que você pensa.'),
+N('Finn recua um passo, desconfortável.'),
+B('sombria2','Perguntar diretamente sobre a magia antiga.','Pressionar Zyn sobre o lugar em que estava.',
+D('Zyn','A magia antiga deixa marcas. Nem todas pertencem a quem você imagina.'),
+D('Zyn','Sssss... Não confunda silêncio com culpa, pequeno lobo.')),
+D('Finn','Você sabe como alguém poderia roubar o poder do colar?'),
+D('Zyn','Toda magia possui uma fraqueza. Até mesmo a de Aurelia.'),
+D('Finn','Que fraqueza?'),
+D('Zyn','(balançando o chocalho) Sssss... Talvez devesse perguntar por que Aurelia precisou morrer para vencer Morvath.'),
+D('Finn','O que está insinuando?'),
+D('Zyn','Nada... Apenas que algumas histórias escondem mais do que revelam.'),
+N('Zyn começa a retornar lentamente para sua toca.'),
+D('Finn','Espere! Ainda não terminamos!'),
+D('Zyn','(sussurrando) Mas eu já terminei, pequeno lobo...'),
+C('sombria')
+],
+
+cogumelos:[
+D('Theo','Olááá! Bem-vinda à Floresta de Cogumelos! Sou Theo, o maior guardião destas terras!'),
+D('Nila','Maior guardião? Você mal chega ao meu joelho.'),
+D('Theo','(rindo) Hihi! O tamanho não define a força de um guardião!'),
+B('cog1','Elogiar o zelo de Theo pela floresta.','Perguntar imediatamente sobre a magia incomum.',
+D('Theo','Hihi! Finalmente alguém reconhece meu grande trabalho!'),
+D('Theo','Ah... A magia? Bom, não tem nada de estranho por aqui!')),
+D('Nila','Certo, guardião. Explique por que sua floresta ainda possui tanta magia.'),
+D('Theo','Ah! É porque cuidamos muito bem dela!'),
+D('Nila','Mesmo depois do roubo do Colar de Aurelia?'),
+N('Theo hesita por um instante.'),
+D('Theo','O-o colar? Que coisa terrível, não é?'),
+D('Nila','Curioso. Você parece pouco preocupado.'),
+D('Theo','(nervoso) E-eu?! Imagina! Estou preocupadíssimo!'),
+D('Nila','Então não se importará se eu investigar a floresta.'),
+D('Theo','(assustado) INVESTIGAR?! Quer dizer... Claro! Mas não há nada para encontrar aqui!'),
+D('Nila','Eu nem disse que estava procurando alguma coisa.'),
+N('Theo fica imóvel. Seu sorriso começa a desaparecer.'),
+D('Theo','Hihi... Foi só um jeito de falar!'),
+B('cog2','Fingir acreditar nele para observar sua reação.','Confrontá-lo sobre seu nervosismo.',
+D('Theo','Viu só? Tudo perfeitamente normal! Hihi... normalíssimo!'),
+D('Theo','N-nervoso? Eu? Só estou com frio, isso sim!')),
+D('Nila','(aproximando-se) Está escondendo alguma coisa, Theo?'),
+D('Theo','E-eu sou só um hamster indefeso!'),
+D('Nila','Foi exatamente o que eu pensei que diria.'),
+N('Theo abaixa a cabeça, apertando nervosamente os próprios patinhos.'),
+D('Theo','Você não vai acusar um pobrezinho como eu... Vai?'),
+N('Nila o encara em silêncio.'),
+D('Nila','Ainda não.'),
+C('cogumelos')
+],
+
+campos:[
+N('Um cachorro de pelos dourados, usando chapéu e macacão, aproxima-se alegremente.'),
+D('Milo','Ô de casa! Bão dia, moços! Seja bem-vindo às minhas terrinha!'),
+D('Finn','Bom dia. Você é o responsável por esta fazenda?'),
+D('Milo','Sô eu mesmo! Milo, às suas orde!'),
+D('Finn','Sou Finn, investigador real. Preciso fazer algumas perguntas sobre o roubo da magia.'),
+N('O sorriso de Milo desaparece.'),
+D('Milo','Vixe, moço... Nem me fale dessa desgracera...'),
+B('campos1','Perguntar se Milo precisa de ajuda.','Perguntar se viu algo suspeito de madrugada.',
+D('Milo','Ocê é muito bão, moço. Mas só a magia pode sarvá essas plantinha.'),
+D('Milo','Nadica de nada! Eu tava era dormindo, agarradim no meu travesseiro!')),
+D('Finn','Você percebeu alguma coisa estranha na noite do roubo?'),
+D('Milo','Nadica de nada! Eu tava era dormindo, agarradim no meu travesseiro!'),
+D('Finn','E conhece alguém que teria motivos para roubar o poder do colar?'),
+D('Milo','Uai, mas quem é que ia fazê uma maldade dessas?!'),
+N('Milo observa suas plantações murchas, cabisbaixo.'),
+D('Milo','Minhas plantinha tão morrendo, moço... Cuidei delas com tanto carinho...'),
+B('campos2','Consolar Milo e prometer que fará o possível.','Perguntar se notou movimentação estranha perto dos campos.',
+D('Milo','Ocê me dá uma esperança danada, moço. Muito obrigado!'),
+D('Milo','Num vi ninguém, não. Só notei que tudo começou a murchá depois daquela noite.')),
+D('Finn','Sinto muito, Milo.'),
+D('Milo','(emocionado) Ocê acha que as florzinha vão vortá a crescê?'),
+D('Finn','Estamos fazendo o possível para recuperar a magia.'),
+D('Milo','Então que Aurelia abençoe ocês, viu? Se precisa de ajuda, é só chamá!'),
+D('Finn','Obrigado. Tenha um bom dia.'),
+D('Milo','Vai com cuidado, moço! E num esquece de comê direito!'),
+N('Finn sorri discretamente e segue seu caminho.'),
+C('campos')
+],
+
+final:[
+BG('sala-trono.png','Castelo — Sala do Trono'),
+N('Nila e Finn retornam ao castelo após suas investigações. O rei Benjamin os aguarda.'),
+D('Benjamin','Então? Descobriram alguma coisa?'),
+D('Nila','Os ursos não parecem culpados. São apenas comerciantes tentando sobreviver.'),
+D('Finn','Concordo. E Milo é inocente. Aquele cachorro não seria capaz de roubar nem uma flor!'),
+D('Nila','Para mim, o culpado é Theo. A floresta dele possui magia demais, e ele ficou extremamente nervoso durante o interrogatório!'),
+D('Finn','(cruzando os braços) Você está ignorando Zyn! Aquela cobra sabia detalhes que ninguém deveria saber!'),
+B('castelo1','Defender a suspeita de Nila sobre Theo.','Defender a suspeita de Finn sobre Zyn.',
+D('Nila','Exato! O nervosismo de Theo e a magia de sua floresta não são coincidência!'),
+D('Finn','Isso! Zyn conhece segredos que nem os próprios moradores do reino conhecem!')),
+D('Nila','E você está ignorando um hamster praticamente confessando o crime com os próprios nervos!'),
+D('Finn','Ele não confessou nada!'),
+D('Nila','Mas é suspeito!'),
+D('Finn','E Zyn não é?!'),
+N('Antes que Nila responda, um alarme ensurdecedor ecoa pelos corredores.'),
+D('Benjamin','O que foi isso?!'),
+D('Nila','O alarme da câmara do colar!'),
+D('Finn','Vamos!'),
+BG('interior-castelo.png','Corredores do Castelo'),
+N('Os dois correm pelos corredores do castelo.'),
+B('castelo2','Correr diretamente à câmara do colar.','Alertar o rei e seguir com cautela.',
+D('Finn','Depressa! Não podemos deixar o ladrão fugir!'),
+D('Benjamin','Os guardas já estão a caminho. Sigam-me!')),
+N('Ao chegarem, Nila e Finn encontram vários guardas reais segurando Theo, que se debate desesperadamente diante do pedestal do colar.'),
+D('Theo','ME SOLTEM! EU PRECISO DE MAIS MAGIA!'),
+D('Nila','Eu sabia!'),
+D('Finn','Theo?!'),
+N('O rei Benjamin chega logo atrás deles e arregala os olhos.'),
+D('Benjamin','Pelas asas de Aurelia... O que está acontecendo aqui?!'),
+D('Guarda real','Encontramos este indivíduo tentando roubar novamente a magia do colar, Majestade!'),
+D('Theo','Eu só queria mais poder! Minha floresta poderia ser a mais mágica de todo o reino!'),
+D('Nila','Então era por isso que sua floresta estava tão cheia de magia...'),
+D('Theo','(furioso) Eu merecia aquele poder! Ninguém desconfiaria de um hamster indefeso!'),
+D('Benjamin','Você enganou todo o reino!'),
+D('Theo','(baixando as orelhas) ...Droga.'),
+N('Os guardas o levam para as masmorras reais.'),
+BG('sala-trono.png','Castelo — O Retorno da Magia'),
+N('O colar, agora recuperado, começa a emitir um brilho azul intenso.'),
+D('Benjamin','A magia está voltando! Vocês conseguiram!'),
+D('Nila','(sorrindo para Finn) Parece que eu estava certa.'),
+D('Finn','Ah, cale a boca, raposa.'),
+N('Os dois riem, aliviados.'),
+N('Enquanto Nila conversa com o rei, Finn percebe uma estranha energia roxa envolvendo uma das patas de Theo, antes que os guardas o levem definitivamente.'),
+N('A energia parece tentar arrancar do hamster a magia roubada, impedindo-o de absorver ainda mais poder.'),
+D('Finn','(sussurrando) Essa magia...'),
+N('Ele reconhece a energia. Era semelhante à presença sombria que sentira na Floresta Sombria.'),
+D('Finn','Zyn...'),
+N('Finn olha para a porta por onde Theo desapareceu, pensativo.'),
+D('Nila','Finn? Está tudo bem?'),
+D('Finn','(disfarçando) Sim. Só estou cansado.'),
+D('Nila','Então vamos comemorar! Salvamos Floriz!'),
+D('Finn','É... Salvamos.'),
+N('Finn olha uma última vez para o brilho roxo, que desaparece lentamente do chão.'),
+D('Finn','(pensamento) Zyn estava tentando impedir Theo... Mas por quê? E como ainda possui magia?'),
+N('Ele guarda suas suspeitas para si.'),
+N('O colar brilha intensamente, iluminando o castelo. Entretanto, Finn sabe que aquela história ainda esconde segredos.')
+]
+};
+
+let state=null,seq=[],typing=null,shown='',currentStep=null,replyReturn=null;
+
+function fresh(hero){
+return {
+hero,phase:'intro',region:null,index:0,visited:[],clues:[],
+choices:{},finished:false,background:'sala-trono.png',
+place:'Castelo de Luminária — Salão do Trono'
+};
+}
+
+function save(){
+if(state)localStorage.setItem(KEY,JSON.stringify(state));
+updateContinue();
+}
+
+function updateContinue(){
+$('continueBtn').disabled=!localStorage.getItem(KEY);
+}
+
+function screen(id){
+document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active',s.id===id));
+}
+
+function toast(s){
+$('toast').textContent=s;
+$('toast').style.display='block';
+clearTimeout(toast.timer);
+toast.timer=setTimeout(()=>$('toast').style.display='none',2400);
+}
+
+function startNew(){
+if(localStorage.getItem(KEY)&&!confirm('Iniciar uma nova aventura e apagar o progresso anterior?'))return;
+screen('select');
+}
+
+function selectHero(id){
+state=fresh(id);
+save();
+loadScript('intro');
+}
+
+function resume(){
+try{
+state=JSON.parse(localStorage.getItem(KEY));
+if(!state||!heroes[state.hero])throw Error();
+if(state.finished){screen('end');return;}
+if(state.phase==='map'){showMap();return;}
+loadScript(state.phase==='intro'?'intro':state.phase==='final'?'final':state.region);
+}catch(e){
+localStorage.removeItem(KEY);
+updateContinue();
+toast('Não foi possível recuperar o progresso.');
+}
+}
+
+function loadScript(key){
+seq=scripts[key];
+if(!seq){showMap();return;}
+screen('scene');
+$('choices').style.display='none';
+paintBg(state.background,state.place);
+advance(false);
+}
+
+function paintBg(bg,place){
+state.background=bg;
+state.place=place;
+$('sceneBg').style.backgroundImage=`url('${bg}')`;
+$('sceneLocation').textContent=place;
+save();
+}
+
+function drawActors(who){
+let names=[];
+if(state.phase==='intro')names=['Nila','Finn','Benjamin','Rosalie'];
+else if(state.phase==='final'){
+names=who==='Theo'||who==='Guarda real'?['Nila','Finn','Theo']:who==='Benjamin'?['Nila','Finn','Benjamin']:['Nila','Finn'];
+}else names=regions[state.region]?.people||[];
+if(!names.includes(who)&&portraits[who])names=[...names.slice(0,2),who];
+if(names.length>3)names=who==='Rosalie'?['Nila','Benjamin','Rosalie']:who==='Benjamin'?['Nila','Finn','Benjamin']:['Nila','Finn','Rosalie'];
+$('actors').replaceChildren(...names.map(name=>{
+let img=document.createElement('img');
+img.src=portraits[name];
+img.alt=name;
+img.className='actor '+(names.length===3?'three ':'')+(name===who?'speaking':'');
+img.onerror=()=>{img.style.display='none';};
+return img;
+}));
+}
+
+function stopType(){
+if(typing){clearInterval(typing);typing=null;}
+$('line').textContent=shown;
+}
+
+function say(who,text){
+currentStep={who,text};
+shown=text;
+$('speaker').textContent=who==='Narrador'?'NARRADOR':who.toUpperCase();
+drawActors(who);
+$('line').textContent='';
+let pos=0;
+typing=setInterval(()=>{
+pos=Math.min(text.length,pos+3);
+$('line').textContent=text.slice(0,pos);
+if(pos>=text.length){clearInterval(typing);typing=null;}
+},22);
+}
+
+function advance(fromButton=true){
+if($('journal').style.display==='block'||$('choices').style.display==='block')return;
+if(typing){stopType();return;}
+while(state.index<seq.length){
+const x=seq[state.index++];
+save();
+if(x.type==='background'){paintBg(x.image,x.place);continue;}
+if(x.type==='clue'){
+if(!state.clues.includes(x.key))state.clues.push(x.key);
+save();
+toast('Nova pista registrada no diário!');
+continue;
+}
+if(x.type==='choice'){
+if(state.choices[x.id]!==undefined)continue;
+showChoice(x);
+return;
+}
+say(x.who,x.text);
+return;
+}
+finishScript();
+}
+
+function showChoice(x){
+$('choices').style.display='block';
+$('nextBtn').disabled=true;
+x.options.forEach((t,i)=>{
+let b=$('option'+i);
+b.textContent=`OPÇÃO ${i+1} — ${t}`;
+b.onclick=()=>{
+state.choices[x.id]=i;
+save();
+$('choices').style.display='none';
+$('nextBtn').disabled=false;
+replyReturn=x.replies[i];
+say(replyReturn.who,replyReturn.text);
+};
+});
+}
+
+function finishScript(){
+if(state.phase==='intro'){
+state.phase='map';
+state.region=null;
+state.index=0;
+save();
+showMap();
+return;
+}
+if(state.phase==='final'){
+state.finished=true;
+save();
+screen('end');
+return;
+}
+if(state.region&&!state.visited.includes(state.region))state.visited.push(state.region);
+state.phase='map';
+state.region=null;
+state.index=0;
+save();
+showMap();
+}
+
+function showMap(){
+if(typing)stopType();
+state.phase='map';
+state.index=0;
+save();
+screen('map');
+$('mapCount').textContent=`Investigação ${state.visited.length}/4`;
+document.querySelectorAll('.hotspot').forEach(b=>{
+const r=b.dataset.region;
+b.classList.toggle('done',state.visited.includes(r));
+b.classList.toggle('pending',r!=='castelo'&&!state.visited.includes(r));
+});
+$('mapHint').textContent=state.visited.length===4?'Todas as pistas reunidas! Volte ao Castelo de Luminária.':'Selecione uma região para investigar; as marcas mostram o progresso.';
+}
+
+function visit(r){
+if(r==='castelo'){
+if(state.visited.length!==4){
+toast(`Investigue as 4 regiões antes da conclusão (${state.visited.length}/4).`);
+return;
+}
+state.phase='final';
+state.index=0;
+state.region=null;
+paintBg('sala-trono.png','Castelo — Sala do Trono');
+save();
+loadScript('final');
+return;
+}
+if(!regions[r])return;
+if(state.visited.includes(r)){
+if(!confirm('Esta região já foi investigada. Deseja rever a cena?'))return;
+}
+state.phase='region';
+state.region=r;
+state.index=0;
+paintBg(regions[r].bg,regions[r].name);
+save();
+loadScript(r);
+}
+
+function journal(){
+if(!state)return;
+$('journalHero').textContent='Investigador escolhido: '+heroes[state.hero]+' | Regiões investigadas: '+state.visited.length+'/4';
+$('journalList').replaceChildren(...Object.entries(regions).map(([k,v])=>{
+let li=document.createElement('li');
+li.textContent=v.name+': '+(state.clues.includes(k)?v.clue:'Pista ainda não encontrada.');
+return li;
+}));
+$('journal').style.display='block';
+}
+
+function exitToMap(){
+toast('Termine esta investigação para registrar as pistas e voltar ao mapa.');
+}
+
+$('newBtn').onclick=startNew;
+$('continueBtn').onclick=resume;
+$('selectBack').onclick=()=>screen('menu');
+document.querySelectorAll('[data-hero]').forEach(b=>b.onclick=()=>selectHero(b.dataset.hero));
+$('nextBtn').onclick=()=>advance();
+$('sceneMap').onclick=exitToMap;
+$('mapMenu').onclick=()=>{screen('menu');updateContinue();};
+$('mapJournal').onclick=$('sceneJournal').onclick=journal;
+$('closeJournal').onclick=()=>$('journal').style.display='none';
+document.querySelectorAll('[data-region]').forEach(b=>b.onclick=()=>visit(b.dataset.region));
+$('again').onclick=()=>{state=null;startNew();};
+$('endMenu').onclick=()=>{screen('menu');updateContinue();};
+document.addEventListener('keydown',e=>{
+if(e.code!=='Space'&&e.code!=='Enter')return;
+if(e.target.tagName==='BUTTON')return;
+if($('journal').style.display==='block')return;
+if($('menu').classList.contains('active')){
+e.preventDefault();
+startNew();
+}else if($('scene').classList.contains('active')&&$('choices').style.display!=='block'){
+e.preventDefault();
+advance();
+}
+});
+updateContinue();
+</script>
+</body>
+</html>

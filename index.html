@@ -11,14 +11,12 @@
 *{box-sizing:border-box}
 body{margin:0;min-height:100svh;display:grid;place-items:center;background:radial-gradient(circle at center,#473154,#12121c);overflow-x:hidden}
 button{font:inherit;cursor:pointer;color:inherit}
-button:focus-visible,[role=button]:focus-visible{outline:3px solid #ffe39b;outline-offset:2px}
+button:focus-visible{outline:3px solid #ffe39b;outline-offset:2px}
 #game{position:relative;width:min(100vw,177.7778svh);aspect-ratio:16/9;max-height:100svh;overflow:hidden;background:#1b1724;box-shadow:0 0 60px #000a;isolation:isolate}
 .screen,.backdrop{position:absolute;inset:0}
-.screen{display:none}
-.screen.active{display:block}
-.backdrop{background-size:cover;background-position:center;transition:background-image .3s}
+.screen{display:none}.screen.active{display:block}
+.backdrop{background-size:cover;background-position:center}
 .shade{position:absolute;inset:0;background:linear-gradient(0deg,#12101edb,transparent 72%);pointer-events:none}
-.menu-controls{position:absolute;left:50%;bottom:9%;transform:translateX(-50%);width:min(35%,420px);display:grid;gap:10px}
 .btn{border:2px solid #e7c584;border-radius:12px;background:linear-gradient(130deg,#603b68ee,#32253cee);padding:10px 14px;box-shadow:0 3px 0 #25172c,0 0 18px #0005;text-shadow:0 1px 2px #111;transition:transform .15s,filter .15s}
 .btn:hover{transform:translateY(-2px);filter:brightness(1.17)}
 .btn:disabled{opacity:.45;cursor:not-allowed}
@@ -54,10 +52,9 @@ button:focus-visible,[role=button]:focus-visible{outline:3px solid #ffe39b;outli
 .hotspot.pending:after{content:'!';color:#fff;background:#855229;border:1px solid #fff4aa;border-radius:50%;padding:1px 8px;position:absolute;top:0;right:0}
 #mapHint{position:absolute;bottom:2%;left:50%;transform:translateX(-50%);width:max-content;max-width:80%;text-align:center;padding:9px 15px;background:#1d172bdd;border:1px solid #dfbb81;border-radius:12px;font-size:clamp(10px,1.2vw,16px)}
 .journal{position:absolute;inset:8% 12%;z-index:12;padding:22px;overflow:auto;display:none}
-.journal h2{text-align:center}
-.journal li{margin:10px 0}
+.journal h2{text-align:center}.journal li{margin:10px 0}
 .note{font-size:clamp(12px,1.4vw,18px)}
-.ending{position:absolute;inset:0;background:radial-gradient(circle,#f6d88d66,#141123e8),url('sala-trono.png') center/cover;display:grid;place-items:center;text-align:center;padding:15px}
+.ending{position:absolute;inset:0;background:linear-gradient(#0b09258c,#100b24bd),url('final.png') center/cover;display:grid;place-items:center;text-align:center;padding:15px}
 .ending .panel{padding:25px;max-width:75%}
 .ending h1{font-size:clamp(20px,3.4vw,44px)}
 .ending p{font-size:clamp(12px,1.5vw,19px)}
@@ -68,7 +65,6 @@ button:focus-visible,[role=button]:focus-visible{outline:3px solid #ffe39b;outli
 @media(max-aspect-ratio:1/1){
 body{display:flex;align-items:center}
 #game{width:100vw;height:auto;max-height:none}
-.menu-controls{width:46%;bottom:4%;gap:4px}
 .btn{padding:6px 8px;border-radius:8px}
 .dialog{min-height:29%;bottom:1%;padding:6px 9px}
 .actors{bottom:28%}
@@ -80,6 +76,26 @@ body{display:flex;align-items:center}
 .journal{inset:3% 5%}
 }
 @media(hover:none){.btn{min-height:32px}}
+#menu .menu-controls{position:absolute;inset:0;transform:none;width:100%;display:block;pointer-events:none}
+#menu .cover-hit{position:absolute;left:36.4%;width:27.2%;height:10%;padding:0;margin:0;border:0;background:transparent;box-shadow:none;border-radius:22px;pointer-events:auto;color:transparent;font-size:0;text-shadow:none;touch-action:manipulation}
+#menu .cover-hit:hover{background:rgba(255,239,184,.13);box-shadow:inset 0 0 0 2px rgba(255,244,205,.75),0 0 20px rgba(255,239,184,.32);filter:none;transform:none}
+#menu .cover-hit:focus-visible{outline:3px solid #fff7bd;outline-offset:2px}
+#menu .cover-hit:disabled{opacity:1;cursor:not-allowed;background:rgba(25,21,30,.20);box-shadow:none}
+#newBtn{top:50.2%}
+#continueBtn{top:63.6%}
+#settingsBtn{top:76.2%}
+#settingsPanel{position:absolute;z-index:15;left:25%;right:25%;top:20%;max-height:70%;overflow:auto;padding:clamp(12px,2.5vw,28px);display:none;text-align:center}
+#settingsPanel h2{margin-top:0;font-size:clamp(18px,2.4vw,30px)}
+#settingsPanel p{font-size:clamp(12px,1.5vw,18px)}
+#settingsPanel .btn{margin:5px}
+@media(max-aspect-ratio:1/1){
+#menu .menu-controls{inset:0;width:100%;bottom:auto;gap:0}
+#settingsPanel{left:8%;right:8%;top:12%}
+}
+#scene.epilogue-mode .shade{background:rgba(8,7,22,.60)}
+#scene.epilogue-mode .dialog{background:rgba(15,12,28,.91)}
+.coming-soon{color:#ffe39c;font-weight:bold;font-size:clamp(17px,2.8vw,34px)!important;text-shadow:0 0 15px #e6ad76;letter-spacing:.06em;animation:glowFloriz 2.4s ease-in-out infinite alternate}
+@keyframes glowFloriz{from{opacity:.75;text-shadow:0 0 6px #e6ad76}to{opacity:1;text-shadow:0 0 22px #f5c77e}}
 </style>
 </head>
 <body>
@@ -87,11 +103,19 @@ body{display:flex;align-items:center}
 <section id="menu" class="screen active">
 <div class="backdrop" style="background-image:url('tela-inicial.png')"></div>
 <div class="menu-controls">
-<button class="btn primary" id="newBtn">COMEÇAR AVENTURA</button>
-<button class="btn" id="continueBtn">CONTINUAR AVENTURA</button>
+<button class="cover-hit" id="newBtn" aria-label="Novo jogo" title="Novo jogo">NOVO JOGO</button>
+<button class="cover-hit" id="continueBtn" aria-label="Continuar aventura" title="Continuar">CONTINUAR</button>
+<button class="cover-hit" id="settingsBtn" aria-label="Configurações" title="Configurações">CONFIGURAÇÕES</button>
 </div>
 </section>
-
+<div id="settingsPanel" class="panel" role="dialog" aria-modal="true" aria-label="Configurações">
+<h2>CONFIGURAÇÕES</h2>
+<p>Velocidade de exibição dos diálogos</p>
+<button class="btn" id="speedNormal">NORMAL</button>
+<button class="btn" id="speedInstant">INSTANTÂNEA</button>
+<p id="speedLabel"></p>
+<button class="btn primary" id="closeSettings">VOLTAR À CAPA</button>
+</div>
 <section id="select" class="screen">
 <div class="backdrop" style="background-image:url('castelo-luminaria.png')"></div>
 <div class="shade"></div>
@@ -112,7 +136,6 @@ body{display:flex;align-items:center}
 <button class="btn" id="selectBack">VOLTAR</button>
 </div>
 </section>
-
 <section id="map" class="screen">
 <img id="mapArt" src="mapa2.png" alt="Mapa das cinco regiões de Floriz">
 <div class="topbar">
@@ -127,7 +150,6 @@ body{display:flex;align-items:center}
 <button class="hotspot" data-region="campos" aria-label="Campos Dourados" style="left:34%;top:62%;width:37%;height:29%"></button>
 <div id="mapHint">Selecione uma região diretamente no mapa.</div>
 </section>
-
 <section id="scene" class="screen">
 <div class="backdrop" id="sceneBg"></div>
 <div class="shade"></div>
@@ -140,9 +162,7 @@ body{display:flex;align-items:center}
 <div class="dialog">
 <div class="speaker" id="speaker"></div>
 <div class="line" id="line" aria-live="polite"></div>
-<div class="dialog-actions">
-<button class="btn" id="nextBtn">AVANÇAR ▸</button>
-</div>
+<div class="dialog-actions"><button class="btn" id="nextBtn">AVANÇAR ▸</button></div>
 </div>
 <div class="choicebox panel" id="choices">
 <h2>COMO VOCÊ VAI REAGIR DIANTE DISSO?</h2>
@@ -150,19 +170,18 @@ body{display:flex;align-items:center}
 <button class="btn" id="option1"></button>
 </div>
 </section>
-
 <section id="end" class="screen">
 <div class="ending">
 <div class="panel">
 <h1>FIM — REINO DE FLORIZ</h1>
 <h2>O Mistério do Colar de Aurélia</h2>
-<p>A magia voltou ao reino. Mas o mistério de Zyn continua...</p>
+<p>A magia voltou a Floriz. Nila e Finn salvaram o reino, mas o segredo de Zyn permanece...</p>
+<p class="coming-soon">EM BREVE... CONTINUAÇÃO!</p>
 <button class="btn primary" id="again">JOGAR NOVAMENTE</button>
 <button class="btn" id="endMenu">VOLTAR AO MENU</button>
 </div>
 </div>
 </section>
-
 <aside id="journal" class="journal panel">
 <button class="btn" id="closeJournal" style="float:right">FECHAR</button>
 <h2>Diário de investigação</h2>
@@ -172,12 +191,15 @@ body{display:flex;align-items:center}
 <div id="toast"></div>
 <div id="fader" class="fader"></div>
 </main>
-
 <script>
 'use strict';
-const $=id=>document.getElementById(id), KEY='floriz-save-v1';
+const $=id=>document.getElementById(id),KEY='floriz-save-v1';
 const heroes={nila:'Nila',finn:'Finn'};
-const portraits={Nila:'nila.png',Finn:'finn.png',Benjamin:'benjamin.png',Rosalie:'rosalia.png',Milo:'milo.png',Zyn:'zyn.png',Ayla:'ursa.png',Boris:'urso.png',Theo:'theo.png'};
+const portraits={
+Nila:'nila.png',Finn:'finn.png',Benjamin:'benjamin.png',
+Rosalie:'rosalia.png',Milo:'milo.png',Zyn:'zyn.png',
+Ayla:'ursa.png',Boris:'urso.png',Theo:'theo.png'
+};
 const regions={
 vila:{name:'Vila Florença',bg:'vila-florenca.png',people:['Nila','Boris','Ayla'],clue:'Boris e Ayla estão preocupados com o futuro da família e esperam um filhote.'},
 sombria:{name:'Floresta Sombria',bg:'floresta-sombria.png',people:['Finn','Zyn'],clue:'Zyn conhece a magia antiga, Aurélia, Morvath e possíveis fraquezas do colar.'},
@@ -188,9 +210,42 @@ const D=(who,text)=>({type:'say',who,text});
 const N=text=>D('Narrador',text);
 const B=(id,a,b,ra,rb)=>({type:'choice',id,options:[a,b],replies:[ra,rb]});
 const BG=(image,place)=>({type:'background',image,place});
-const C=(k)=>({type:'clue',key:k});
-  
+const C=k=>({type:'clue',key:k});
 const scripts={
+
+prologo:[
+BG('mapa2.png','Prólogo — A História do Reino de Floriz'),
+N('Muito antes desta aventura, cinco regiões prosperavam em harmonia no Reino de Floriz: os Campos Dourados, a Floresta Sombria, a Vila Florença, a Floresta dos Cogumelos e o Castelo de Luminária.'),
+N('As plantações floresciam, os rios corriam cristalinos e uma antiga magia envolvia cada canto do reino.'),
+N('No coração dessa harmonia estava o Colar de Aurélia, uma relíquia cujo poder sustentava a vida de Floriz.'),
+BG('castelo-luminaria.png','Prólogo — A Lenda de Aurélia'),
+N('Contava-se uma antiga lenda sobre Aurélia e o confronto com Morvath. Mas nem mesmo os habitantes de Floriz conheciam toda a verdade por trás daquela história.'),
+N('O que todos sabiam era que a magia do colar era preciosa — e que o reino dependia dela.'),
+BG('floresta-sombria.png','Prólogo — Uma Sombra se Aproxima'),
+N('Até que, em uma madrugada silenciosa, o poder do colar desapareceu misteriosamente.'),
+N('Sem essa energia, flores começaram a murchar, plantações enfraqueceram e o equilíbrio da natureza ficou ameaçado.'),
+BG('sala-trono.png','Prólogo — O Chamado Real'),
+N('Desesperados, o rei Benjamin e a rainha Rosalie chamaram dois investigadores: Nila, uma raposa observadora, e Finn, um lobo determinado.'),
+N('Agora, cabe a eles percorrer o reino, ouvir seus habitantes e reunir pistas antes que seja tarde demais.'),
+N('É aqui que sua aventura começa...')
+],
+
+epilogo:[
+BG('final.png','Epílogo — O Reino de Floriz'),
+N('Depois que Theo foi levado pelos guardas, o brilho azul do Colar de Aurélia voltou a se espalhar pelo Castelo de Luminária.'),
+N('Nos Campos Dourados, a vida começou a retornar às plantações. Milo viu surgir os primeiros sinais de recuperação e voltou a acreditar em dias melhores.'),
+N('Na Vila Florença, Boris e Ayla puderam respirar aliviados. O comércio e a família que estavam construindo ainda tinham um futuro pela frente.'),
+N('Na Floresta dos Cogumelos, a verdade sobre a magia acumulada por Theo finalmente veio à tona. O reino começava a se reerguer após o roubo.'),
+N('Nila e Finn haviam descoberto o responsável e ajudado a salvar Floriz. Para os habitantes do reino, o pior já tinha passado.'),
+N('Mas Finn não conseguia esquecer a energia roxa ao redor de Theo. Ela lembrava a presença que havia sentido junto de Zyn, na Floresta Sombria.'),
+D('Finn','(pensamento) Se Zyn tentava impedir Theo... por que não contou a verdade?'),
+N('A magia do colar havia retornado. Ainda assim, algumas perguntas continuavam sem resposta.'),
+N('Por que Zyn estava tentando impedir Theo? E como ainda possuía magia?'),
+N('Enquanto a luz do colar iluminava novamente o castelo, um novo mistério permanecia escondido nas sombras.'),
+N('O Mistério do Colar de Aurélia chegou ao fim... mas a história do Reino de Floriz ainda não terminou.'),
+N('EM BREVE... CONTINUAÇÃO!')
+],
+
 intro:[
 BG('sala-trono.png','Castelo de Luminária — Salão do Trono'),
 N('O salão, antes iluminado pela magia, encontra-se sombrio. Benjamin anda preocupado, enquanto Rosalie chora segurando um lenço.'),
@@ -412,13 +467,21 @@ N('O colar brilha intensamente, iluminando o castelo. Entretanto, Finn sabe que 
 ]
 };
 
+let instantText=localStorage.getItem("floriz-text-speed")==="instant";
 let state=null,seq=[],typing=null,shown='',currentStep=null,replyReturn=null;
 
 function fresh(hero){
 return {
-hero,phase:'intro',region:null,index:0,visited:[],clues:[],
-choices:{},finished:false,background:'sala-trono.png',
-place:'Castelo de Luminária — Salão do Trono'
+hero,
+phase:'prologo',
+region:null,
+index:0,
+visited:[],
+clues:[],
+choices:{},
+finished:false,
+background:'mapa2.png',
+place:'Prólogo — A História do Reino de Floriz'
 };
 }
 
@@ -432,34 +495,53 @@ $('continueBtn').disabled=!localStorage.getItem(KEY);
 }
 
 function screen(id){
-document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active',s.id===id));
+document.querySelectorAll('.screen').forEach(s=>
+s.classList.toggle('active',s.id===id)
+);
+$('scene').classList.toggle(
+'epilogue-mode',
+id==='scene'&&state?.phase==='epilogo'
+);
 }
 
 function toast(s){
 $('toast').textContent=s;
 $('toast').style.display='block';
 clearTimeout(toast.timer);
-toast.timer=setTimeout(()=>$('toast').style.display='none',2400);
+toast.timer=setTimeout(()=>{
+$('toast').style.display='none';
+},2400);
 }
 
 function startNew(){
-if(localStorage.getItem(KEY)&&!confirm('Iniciar uma nova aventura e apagar o progresso anterior?'))return;
+if(localStorage.getItem(KEY)&&!confirm(
+'Iniciar uma nova aventura e apagar o progresso anterior?'
+))return;
 screen('select');
 }
 
 function selectHero(id){
 state=fresh(id);
 save();
-loadScript('intro');
+loadScript('prologo');
 }
 
 function resume(){
 try{
 state=JSON.parse(localStorage.getItem(KEY));
 if(!state||!heroes[state.hero])throw Error();
-if(state.finished){screen('end');return;}
-if(state.phase==='map'){showMap();return;}
-loadScript(state.phase==='intro'?'intro':state.phase==='final'?'final':state.region);
+if(state.finished){
+screen('end');
+return;
+}
+if(state.phase==='map'){
+showMap();
+return;
+}
+loadScript(
+['prologo','intro','final','epilogo'].includes(state.phase)
+?state.phase:state.region
+);
 }catch(e){
 localStorage.removeItem(KEY);
 updateContinue();
@@ -469,7 +551,10 @@ toast('Não foi possível recuperar o progresso.');
 
 function loadScript(key){
 seq=scripts[key];
-if(!seq){showMap();return;}
+if(!seq){
+showMap();
+return;
+}
 screen('scene');
 $('choices').style.display='none';
 paintBg(state.background,state.place);
@@ -486,50 +571,94 @@ save();
 
 function drawActors(who){
 let names=[];
-if(state.phase==='intro')names=['Nila','Finn','Benjamin','Rosalie'];
-else if(state.phase==='final'){
-names=who==='Theo'||who==='Guarda real'?['Nila','Finn','Theo']:who==='Benjamin'?['Nila','Finn','Benjamin']:['Nila','Finn'];
-}else names=regions[state.region]?.people||[];
-if(!names.includes(who)&&portraits[who])names=[...names.slice(0,2),who];
-if(names.length>3)names=who==='Rosalie'?['Nila','Benjamin','Rosalie']:who==='Benjamin'?['Nila','Finn','Benjamin']:['Nila','Finn','Rosalie'];
+if(state.phase==='prologo'||state.phase==='epilogo'){
+names=[];
+}else if(state.phase==='intro'){
+names=['Nila','Finn','Benjamin','Rosalie'];
+}else if(state.phase==='final'){
+names=who==='Theo'||who==='Guarda real'
+?['Nila','Finn','Theo']
+:who==='Benjamin'
+?['Nila','Finn','Benjamin']
+:['Nila','Finn'];
+}else{
+names=regions[state.region]?.people||[];
+}
+if(!names.includes(who)&&portraits[who]){
+names=[...names.slice(0,2),who];
+}
+if(names.length>3){
+names=who==='Rosalie'
+?['Nila','Benjamin','Rosalie']
+:who==='Benjamin'
+?['Nila','Finn','Benjamin']
+:['Nila','Finn','Rosalie'];
+}
 $('actors').replaceChildren(...names.map(name=>{
 let img=document.createElement('img');
 img.src=portraits[name];
 img.alt=name;
-img.className='actor '+(names.length===3?'three ':'')+(name===who?'speaking':'');
-img.onerror=()=>{img.style.display='none';};
+img.className='actor '+
+(names.length===3?'three ':'')+
+(name===who?'speaking':'');
+img.onerror=()=>{
+img.style.display='none';
+};
 return img;
 }));
 }
 
 function stopType(){
-if(typing){clearInterval(typing);typing=null;}
+if(typing){
+clearInterval(typing);
+typing=null;
+}
 $('line').textContent=shown;
 }
 
 function say(who,text){
 currentStep={who,text};
 shown=text;
-$('speaker').textContent=who==='Narrador'?'NARRADOR':who.toUpperCase();
+$('speaker').textContent=
+who==='Narrador'?'NARRADOR':who.toUpperCase();
 drawActors(who);
 $('line').textContent='';
+if(instantText){
+$('line').textContent=text;
+typing=null;
+return;
+}
 let pos=0;
 typing=setInterval(()=>{
 pos=Math.min(text.length,pos+3);
 $('line').textContent=text.slice(0,pos);
-if(pos>=text.length){clearInterval(typing);typing=null;}
+if(pos>=text.length){
+clearInterval(typing);
+typing=null;
+}
 },22);
 }
 
 function advance(fromButton=true){
-if($('journal').style.display==='block'||$('choices').style.display==='block')return;
-if(typing){stopType();return;}
+if(
+$('journal').style.display==='block'||
+$('choices').style.display==='block'
+)return;
+if(typing){
+stopType();
+return;
+}
 while(state.index<seq.length){
 const x=seq[state.index++];
 save();
-if(x.type==='background'){paintBg(x.image,x.place);continue;}
+if(x.type==='background'){
+paintBg(x.image,x.place);
+continue;
+}
 if(x.type==='clue'){
-if(!state.clues.includes(x.key))state.clues.push(x.key);
+if(!state.clues.includes(x.key)){
+state.clues.push(x.key);
+}
 save();
 toast('Nova pista registrada no diário!');
 continue;
@@ -563,6 +692,15 @@ say(replyReturn.who,replyReturn.text);
 }
 
 function finishScript(){
+if(state.phase==='prologo'){
+state.phase='intro';
+state.index=0;
+state.background='sala-trono.png';
+state.place='Castelo de Luminária — Salão do Trono';
+save();
+loadScript('intro');
+return;
+}
 if(state.phase==='intro'){
 state.phase='map';
 state.region=null;
@@ -572,12 +710,23 @@ showMap();
 return;
 }
 if(state.phase==='final'){
+state.phase='epilogo';
+state.index=0;
+state.background='final.png';
+state.place='Epílogo — O Reino de Floriz';
+save();
+loadScript('epilogo');
+return;
+}
+if(state.phase==='epilogo'){
 state.finished=true;
 save();
 screen('end');
 return;
 }
-if(state.region&&!state.visited.includes(state.region))state.visited.push(state.region);
+if(state.region&&!state.visited.includes(state.region)){
+state.visited.push(state.region);
+}
 state.phase='map';
 state.region=null;
 state.index=0;
@@ -591,13 +740,20 @@ state.phase='map';
 state.index=0;
 save();
 screen('map');
-$('mapCount').textContent=`Investigação ${state.visited.length}/4`;
+$('mapCount').textContent=
+`Investigação ${state.visited.length}/4`;
 document.querySelectorAll('.hotspot').forEach(b=>{
 const r=b.dataset.region;
 b.classList.toggle('done',state.visited.includes(r));
-b.classList.toggle('pending',r!=='castelo'&&!state.visited.includes(r));
+b.classList.toggle(
+'pending',
+r!=='castelo'&&!state.visited.includes(r)
+);
 });
-$('mapHint').textContent=state.visited.length===4?'Todas as pistas reunidas! Volte ao Castelo de Luminária.':'Selecione uma região para investigar; as marcas mostram o progresso.';
+$('mapHint').textContent=
+state.visited.length===4
+?'Todas as pistas reunidas! Volte ao Castelo de Luminária.'
+:'Selecione uma região para investigar; as marcas mostram o progresso.';
 }
 
 function visit(r){
@@ -616,7 +772,9 @@ return;
 }
 if(!regions[r])return;
 if(state.visited.includes(r)){
-if(!confirm('Esta região já foi investigada. Deseja rever a cena?'))return;
+if(!confirm(
+'Esta região já foi investigada. Deseja rever a cena?'
+))return;
 }
 state.phase='region';
 state.region=r;
@@ -628,12 +786,19 @@ loadScript(r);
 
 function journal(){
 if(!state)return;
-$('journalHero').textContent='Investigador escolhido: '+heroes[state.hero]+' | Regiões investigadas: '+state.visited.length+'/4';
-$('journalList').replaceChildren(...Object.entries(regions).map(([k,v])=>{
+$('journalHero').textContent=
+'Investigador escolhido: '+heroes[state.hero]+
+' | Regiões investigadas: '+state.visited.length+'/4';
+$('journalList').replaceChildren(
+...Object.entries(regions).map(([k,v])=>{
 let li=document.createElement('li');
-li.textContent=v.name+': '+(state.clues.includes(k)?v.clue:'Pista ainda não encontrada.');
+li.textContent=v.name+': '+
+(state.clues.includes(k)
+?v.clue
+:'Pista ainda não encontrada.');
 return li;
-}));
+})
+);
 $('journal').style.display='block';
 }
 
@@ -641,30 +806,83 @@ function exitToMap(){
 toast('Termine esta investigação para registrar as pistas e voltar ao mapa.');
 }
 
+$('settingsBtn').onclick=()=>{
+$('settingsPanel').style.display='block';
+$('speedLabel').textContent=instantText
+?'Velocidade atual: instantânea'
+:'Velocidade atual: normal';
+};
+
+$('closeSettings').onclick=()=>{
+$('settingsPanel').style.display='none';
+};
+
+$('speedNormal').onclick=()=>{
+instantText=false;
+localStorage.setItem('floriz-text-speed','normal');
+$('speedLabel').textContent='Velocidade atual: normal';
+};
+
+$('speedInstant').onclick=()=>{
+instantText=true;
+localStorage.setItem('floriz-text-speed','instant');
+$('speedLabel').textContent='Velocidade atual: instantânea';
+};
+
 $('newBtn').onclick=startNew;
 $('continueBtn').onclick=resume;
 $('selectBack').onclick=()=>screen('menu');
-document.querySelectorAll('[data-hero]').forEach(b=>b.onclick=()=>selectHero(b.dataset.hero));
+
+document.querySelectorAll('[data-hero]').forEach(b=>
+b.onclick=()=>selectHero(b.dataset.hero)
+);
+
 $('nextBtn').onclick=()=>advance();
 $('sceneMap').onclick=exitToMap;
-$('mapMenu').onclick=()=>{screen('menu');updateContinue();};
+
+$('mapMenu').onclick=()=>{
+screen('menu');
+updateContinue();
+};
+
 $('mapJournal').onclick=$('sceneJournal').onclick=journal;
-$('closeJournal').onclick=()=>$('journal').style.display='none';
-document.querySelectorAll('[data-region]').forEach(b=>b.onclick=()=>visit(b.dataset.region));
-$('again').onclick=()=>{state=null;startNew();};
-$('endMenu').onclick=()=>{screen('menu');updateContinue();};
+
+$('closeJournal').onclick=()=>{
+$('journal').style.display='none';
+};
+
+document.querySelectorAll('[data-region]').forEach(b=>
+b.onclick=()=>visit(b.dataset.region)
+);
+
+$('again').onclick=()=>{
+state=null;
+startNew();
+};
+
+$('endMenu').onclick=()=>{
+screen('menu');
+updateContinue();
+};
+
 document.addEventListener('keydown',e=>{
 if(e.code!=='Space'&&e.code!=='Enter')return;
 if(e.target.tagName==='BUTTON')return;
+if($('settingsPanel').style.display==='block')return;
 if($('journal').style.display==='block')return;
+
 if($('menu').classList.contains('active')){
 e.preventDefault();
 startNew();
-}else if($('scene').classList.contains('active')&&$('choices').style.display!=='block'){
+}else if(
+$('scene').classList.contains('active')&&
+$('choices').style.display!=='block'
+){
 e.preventDefault();
 advance();
 }
 });
+
 updateContinue();
 </script>
 </body>
